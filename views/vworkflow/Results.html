@@ -1,0 +1,71 @@
+{% import (
+  "fmt"
+
+  "github.com/kyleu/loadtoad/app"
+  "github.com/kyleu/loadtoad/app/controller/cutil"
+  "github.com/kyleu/loadtoad/app/loadtoad"
+  "github.com/kyleu/loadtoad/app/util"
+  "github.com/kyleu/loadtoad/views/components"
+  "github.com/kyleu/loadtoad/views/layout"
+) %}
+
+{% code type Results struct {
+  layout.Basic
+  Workflow *loadtoad.Workflow
+  Results loadtoad.WorkflowResults
+} %}
+
+{% func (p *Results) Body(as *app.State, ps *cutil.PageState) %}
+  <div class="card">
+    <div class="right"><a href="#modal-workflow"><button type="button">JSON</button></a></div>
+    {%= components.JSONModal("workflow", "Workflow", p.Workflow, 3) %}
+    <h3>{%= components.SVGRefIcon(`play`, ps) %} {%s p.Workflow.Title() %} Results</h3>
+    <div class="mts"><em>{%d len(p.Results) %} {%s util.StringPluralMaybe("result", len(p.Results)) %} in {%s util.MicrosToMillis(p.Results.Duration()) %}</em></div>
+  </div>
+  {%- for rIdx, r := range p.Results -%}
+  {%= renderResult(rIdx, r, ps) %}
+  {%- endfor -%}
+{% endfunc %}
+
+{% func renderBool(b bool, ps *cutil.PageState) %}
+  {%- if b -%}
+    <span class="success">{%= components.SVGRef("check", 16, 16, "", ps) %}</span>
+  {%- else -%}
+    <span class="error">{%= components.SVGRef("times", 16, 16, "", ps) %}</span>
+  {%- endif -%}
+{% endfunc %}
+
+{% func renderResult(rIdx int, r *loadtoad.WorkflowResult, ps *cutil.PageState) %}
+  <div class="card">
+    <div class="right"><a href="#modal-result-{%d rIdx %}"><button type="button">JSON</button></a></div>
+    {%= components.JSONModal(fmt.Sprintf("result-%d", rIdx), r.Title(), r, 3) %}
+    <h3>{%= components.SVGRefIcon(`file`, ps) %}{%s r.Title() %}</h3>
+    <div class="clear"></div>
+    <div class="mts">
+      <table>
+        <thead>
+          <tr>
+            <th class="shrink"></th>
+            <th class="shrink">Old</th>
+            <th class="shrink">New</th>
+            <th>Result</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th>Status</th>
+            <td>{%d r.Entry.Response.Status %}</td>
+            <td>{%d r.Response.Status %}</td>
+            <td>{%= renderBool(r.Response.Status == 200, ps) %}</td>
+          </tr>
+          <tr>
+            <th>Duration</th>
+            <td>{%s util.MicrosToMillis(int(r.Entry.Time * 1000)) %}</td>
+            <td>{%s util.MicrosToMillis(r.Duration) %}</td>
+            <td>{%= renderBool(r.Duration < int(r.Entry.Time * 1000), ps) %}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endfunc %}

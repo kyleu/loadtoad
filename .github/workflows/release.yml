@@ -1,0 +1,60 @@
+# Content managed by Project Forge, see [projectforge.md] for details.
+name: release
+on:
+  push:
+    tags:
+      - 'DISABLED_v*'
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v2"
+        with:
+          fetch-depth: 0
+      - name: "Golang"
+        uses: "actions/setup-go@v2"
+        with:
+          go-version: "1.20"
+      - name: "Login"
+        uses: "docker/login-action@v1"
+        with:
+          registry: "ghcr.io"
+          username: "${{ github.repository_owner }}"
+          password: "${{ secrets.CR_PAT }}"
+      - name: "Cache"
+        uses: "actions/cache@v2"
+        with:
+          path: "~/go/pkg/mod"
+          key: "${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}"
+          restore-keys: |
+            ${{ runner.os }}-go-
+      - name: "Dependencies"
+        run: "bin/bootstrap.sh"
+      - name: "Config"
+        env:
+          OWNER: "${{ github.repository_owner }}"
+          TOKEN: "${{ secrets.CR_PAT }}"
+        run: "git config --global url.\"https://${OWNER}:${TOKEN}@github.com\".insteadOf \"https://github.com\""
+      - name: "Templates"
+        run: "bin/templates.sh"
+      - name: "Modules"
+        run: "go mod download"
+        env:
+          GOPRIVATE: "github.com/${{ github.repository_owner }}"
+          GITHUB_TOKEN: "${{ secrets.CR_PAT }}"
+          OWNER: "${{ github.repository_owner }}"
+          TOKEN: "${{ secrets.CR_PAT }}"
+      - name: "Release"
+        uses: "goreleaser/goreleaser-action@v4"
+        with:
+          distribution: "goreleaser"
+          version: "latest"
+          args: "-f ./tools/release/.goreleaser.yml release --clean"
+        env:
+          GOPRIVATE: "github.com/${{ github.repository_owner }}"
+          GITHUB_TOKEN: "${{ secrets.CR_PAT }}"
+          OWNER: "${{ github.repository_owner }}"
+          TOKEN: "${{ secrets.CR_PAT }}"

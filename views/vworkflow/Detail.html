@@ -1,0 +1,24 @@
+{% import (
+  "github.com/kyleu/loadtoad/app"
+  "github.com/kyleu/loadtoad/app/controller/cutil"
+  "github.com/kyleu/loadtoad/app/loadtoad"
+  "github.com/kyleu/loadtoad/views/components"
+  "github.com/kyleu/loadtoad/views/layout"
+) %}
+
+{% code type Detail struct {
+  layout.Basic
+  Workflow *loadtoad.Workflow
+} %}
+
+{% func (p *Detail) Body(as *app.State, ps *cutil.PageState) %}
+  <div class="card">
+    <div class="right"><a href="#modal-workflow"><button type="button">JSON</button></a></div>
+    {%= components.JSONModal("workflow", "Workflow", p.Workflow, 3) %}
+    <h3>{%= components.SVGRefIcon(`sitemap`, ps) %} {%s p.Workflow.Title() %}</h3>
+    <div class="mt">
+      <a href="{%s p.Workflow.WebPath() %}/run"><button>Run</button></a>
+    </div>
+  </div>
+{% endfunc %}
+

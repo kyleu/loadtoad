@@ -1,0 +1,38 @@
+{% import (
+  "github.com/kyleu/loadtoad/app"
+  "github.com/kyleu/loadtoad/app/controller/cutil"
+  "github.com/kyleu/loadtoad/app/loadtoad"
+  "github.com/kyleu/loadtoad/views/components"
+  "github.com/kyleu/loadtoad/views/layout"
+) %}
+
+{% code type List struct {
+  layout.Basic
+  Workflows loadtoad.Workflows
+} %}
+
+{% func (p *List) Body(as *app.State, ps *cutil.PageState) %}
+  <div class="card">
+    <h3>{%= components.SVGRefIcon(`sitemap`, ps) %} Workflows</h3>
+    <div class="mt">{%= Table(p.Workflows, ps) %}</div>
+  </div>
+{% endfunc %}
+
+{% func Table(workflows loadtoad.Workflows, ps *cutil.PageState) %}
+  <table class="min-200">
+    <thead>
+      <tr>
+        <th class="shrink">Name</th>
+        <th>Requests</th>
+      </tr>
+    </thead>
+    <tbody>
+      {%- for _, w := range workflows -%}
+      <tr>
+        <td><a href="{%s w.WebPath() %}">{%s w.Title() %}</a></td>
+        <td>{%d len(w.RequestKeys) %}</td>
+      </tr>
+      {%- endfor -%}
+    </tbody>
+  </table>
+{% endfunc %}

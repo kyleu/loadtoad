@@ -1,0 +1,45 @@
+<!-- Content managed by Project Forge, see [projectforge.md] for details. -->
+{% import (
+  "fmt"
+
+  "github.com/samber/lo"
+
+  "github.com/kyleu/loadtoad/app"
+  "github.com/kyleu/loadtoad/app/controller/cutil"
+  "github.com/kyleu/loadtoad/app/util"
+  "github.com/kyleu/loadtoad/views/components"
+  "github.com/kyleu/loadtoad/views/layout"
+) %}
+
+{% code type Session struct { layout.Basic } %}
+
+{% func (p *Session) Body(as *app.State, ps *cutil.PageState) %}
+  <div class="card">
+    <h3>Session</h3>
+    <em>{%d len(ps.Session) %} values</em>
+  </div>
+  {%- if len(ps.Session) > 0 -%}
+  <div class="card">
+    <h3>Values</h3>
+    <table class="mt expanded">
+      <tbody>
+        {%- for _, k := range util.ArraySorted(lo.Keys(ps.Session)) -%}
+          {%- code v := ps.Session[k] -%}
+          <tr>
+            <th class="shrink">{%s k %}</th>
+            <td>{%s fmt.Sprint(v) %}</td>
+          </tr>
+        {%- endfor -%}
+      </tbody>
+    </table>
+  </div>
+  {%- else -%}
+  <div class="card">
+    <em>Empty session</em>
+  </div>
+  {%- endif -%}
+  <div class="card">
+    <h3>Profile</h3>
+    <div class="mt">{%= components.JSON(ps.Profile) %}</div>
+  </div>
+{% endfunc %}

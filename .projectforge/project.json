@@ -1,0 +1,73 @@
+{
+  "key": "loadtoad",
+  "name": "Load Toad",
+  "icon": "frog",
+  "version": "0.0.1",
+  "package": "github.com/kyleu/loadtoad",
+  "port": 15550,
+  "modules": [
+    "core",
+    "filesystem",
+    "websocket"
+  ],
+  "tags": [
+    "kyleu"
+  ],
+  "info": {
+    "org": "kyleu",
+    "authorID": "kyleu",
+    "authorName": "Kyle U",
+    "authorEmail": "loadtoad@kyleu.com",
+    "license": "CC0",
+    "homepage": "https://github.com/kyleu/loadtoad",
+    "sourcecode": "https://github.com/kyleu/loadtoad",
+    "summary": "Load testing from HAR files",
+    "description": "..."
+  },
+  "theme": {
+    "light": {
+      "brd": "1px solid #dddddd",
+      "ld": "none",
+      "fg": "#000000",
+      "fgm": "#777777",
+      "bg": "#ffffff",
+      "bgm": "#e1f1e1",
+      "lf": "#3d6a41",
+      "lvf": "#2b462d",
+      "nf": "#000000",
+      "nb": "#63b76c",
+      "mf": "#000000",
+      "msf": "#000000",
+      "mb": "#a4d4a5",
+      "msb": "#63b76c",
+      "mbd": "rgba(77, 77, 77, .7)",
+      "ok": "#008000",
+      "err": "#ff0000"
+    },
+    "dark": {
+      "brd": "1px solid #666666",
+      "ld": "none",
+      "fg": "#ffffff",
+      "fgm": "#777777",
+      "bg": "#121212",
+      "bgm": "#0f2209",
+      "lf": "#6d9166",
+      "lvf": "#9cb597",
+      "nf": "#ffffff",
+      "nb": "#004d0a",
+      "mf": "#eeeeee",
+      "msf": "#ffffff",
+      "mb": "#0d300c",
+      "msb": "#004d0a",
+      "mbd": "rgba(33, 33, 33, .7)",
+      "ok": "#008000",
+      "err": "#ff0000"
+    }
+  },
+  "build": {
+    "publish": true,
+    "desktop": true,
+    "notarize": true,
+    "signing": true
+  }
+}

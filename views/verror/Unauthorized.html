@@ -1,0 +1,21 @@
+<!-- Content managed by Project Forge, see [projectforge.md] for details. -->
+{% import (
+  "github.com/kyleu/loadtoad/app"
+  "github.com/kyleu/loadtoad/app/controller/cutil"
+  "github.com/kyleu/loadtoad/views/layout"
+) %}
+
+{% code type Unauthorized struct {
+  layout.Basic
+  Path string
+  Message string
+} %}
+
+{% func (p *Unauthorized) Body(as *app.State, ps *cutil.PageState) %}
+  <div class="card">
+    <h3>Unauthorized</h3>
+    <em>{%s p.Message %}</em>
+    <p>You're not authorized to view <code>{%s p.Path %}</code></p>
+  </div>
+{% endfunc %}
+
