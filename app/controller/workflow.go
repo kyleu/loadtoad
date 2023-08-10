@@ -30,6 +30,7 @@ func WorkflowDetail(rc *fasthttp.RequestCtx) {
 		if err != nil {
 			return "", err
 		}
+		ps.Title = "Workflows"
 		ps.Data = ret
 		return Render(rc, as, &vworkflow.Detail{Workflow: ret}, ps, "workflow", key)
 	})
@@ -49,6 +50,7 @@ func WorkflowRun(rc *fasthttp.RequestCtx) {
 		if err != nil {
 			return "", errors.Wrapf(err, "unable to load the toad")
 		}
+		ps.Title = "Workflow " + w.Title()
 		ps.Data = ret
 		return Render(rc, as, &vworkflow.Results{Workflow: w, Results: ret}, ps, "workflow", key, "run")
 	})

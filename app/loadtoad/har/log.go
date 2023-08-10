@@ -13,10 +13,15 @@ type Browser struct {
 }
 
 type Log struct {
+	Key     string   `json:"-"`
 	Version string   `json:"version"`
 	Creator *Creator `json:"creator"`
 	Browser *Browser `json:"browser"`
 	Pages   Pages    `json:"pages,omitempty"`
 	Entries Entries  `json:"entries"`
 	Comment string   `json:"comment"`
+}
+
+func (l *Log) WebPath() string {
+	return "/workflow/" + l.Key
 }

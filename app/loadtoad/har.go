@@ -9,6 +9,7 @@ import (
 )
 
 func (s *Service) LoadHar(fn string) (*har.Log, error) {
+	key := fn
 	if !strings.HasSuffix(fn, ".har") {
 		fn += ".har"
 	}
@@ -27,6 +28,7 @@ func (s *Service) LoadHar(fn string) (*har.Log, error) {
 	if err != nil {
 		return nil, errors.Wrapf(err, "error decoding file [%s]", fn)
 	}
+	ret.Log.Key = key
 	return ret.Log, nil
 }
 

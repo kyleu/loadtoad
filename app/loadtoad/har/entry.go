@@ -2,6 +2,7 @@ package har
 
 import (
 	"bytes"
+	"github.com/kyleu/loadtoad/app/util"
 	"github.com/samber/lo"
 	"golang.org/x/net/http/httpguts"
 	"net/http"
@@ -15,10 +16,21 @@ type Entry struct {
 	Request         *Request     `json:"request"`
 	Response        *Response    `json:"response"`
 	Cache           *Cache       `json:"cache"`
-	PageTimings     *PageTimings `json:"pageTimings"`
+	PageTimings     *PageTimings `json:"timings"`
 	ServerIPAddress string       `json:"serverIPAddress,omitempty"`
 	Connection      string       `json:"connection,omitempty"`
 	Comment         string       `json:"comment,omitempty"`
+}
+
+func (e *Entry) String() string {
+	if len(e.Request.URL) > 128 {
+		return e.Request.URL[:128] + "..."
+	}
+	return e.Request.URL
+}
+
+func (e *Entry) Duration() string {
+	return util.MicrosToMillis(e.PageTimings.Wait * 1000)
 }
 
 type Entries []*Entry

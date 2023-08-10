@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"github.com/kyleu/loadtoad/views"
+	"github.com/kyleu/loadtoad/views/vhar"
 	"github.com/valyala/fasthttp"
 
 	"github.com/kyleu/loadtoad/app"
@@ -10,16 +10,25 @@ import (
 
 func HarList(rc *fasthttp.RequestCtx) {
 	Act("har.list", rc, func(as *app.State, ps *cutil.PageState) (string, error) {
-		ret := "TODO"
+		ret := as.Services.LoadToad.ListHars(ps.Logger)
 		ps.Data = ret
-		return Render(rc, as, &views.Debug{}, ps)
+		ps.Title = "Archives"
+		return Render(rc, as, &vhar.List{Hars: ret}, ps, "har")
 	})
 }
 
 func HarDetail(rc *fasthttp.RequestCtx) {
 	Act("har.detail", rc, func(as *app.State, ps *cutil.PageState) (string, error) {
-		ret := "TODO"
+		key, err := cutil.RCRequiredString(rc, "key", true)
+		if err != nil {
+			return "", err
+		}
+		ret, err := as.Services.LoadToad.LoadHar(key)
+		if err != nil {
+			return "", err
+		}
+		ps.Title = "Archive [" + key + "]"
 		ps.Data = ret
-		return Render(rc, as, &views.Debug{}, ps)
+		return Render(rc, as, &vhar.Detail{Har: ret}, ps, "har", key)
 	})
 }

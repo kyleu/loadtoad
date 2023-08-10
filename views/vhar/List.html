@@ -1,10 +1,6 @@
 {% import (
-  "fmt"
-
   "github.com/kyleu/loadtoad/app"
   "github.com/kyleu/loadtoad/app/controller/cutil"
-  "github.com/kyleu/loadtoad/app/loadtoad"
-  "github.com/kyleu/loadtoad/app/util"
   "github.com/kyleu/loadtoad/views/components"
   "github.com/kyleu/loadtoad/views/layout"
 ) %}
@@ -26,9 +22,9 @@
   </div>
   <div class="card">
     <h3>{%= components.SVGRefIcon(`book`, ps) %} Managed Archives</h3>
-    <ul>
+    <ul class="mts">
       {%- for _, r := range p.Hars -%}
-      <li><a href="/workflow/{%s r %}">{%s r %}</a></li>
+      <li><a href="/har/{%s r %}">{%s r %}</a></li>
       {%- endfor -%}
     </ul>
   </div>

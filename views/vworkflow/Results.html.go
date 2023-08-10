@@ -189,13 +189,13 @@ func streamrenderResult(qw422016 *qt422016.Writer, rIdx int, r *loadtoad.Workflo
 	qw422016.N().S(`</h3>
     <div class="clear"></div>
     <div class="mts">
-      <table>
+      <table class="min-200">
         <thead>
           <tr>
             <th class="shrink"></th>
             <th class="shrink">Old</th>
             <th class="shrink">New</th>
-            <th>Result</th>
+            <th style="text-align: right;">Result</th>
           </tr>
         </thead>
         <tbody>
@@ -211,7 +211,7 @@ func streamrenderResult(qw422016 *qt422016.Writer, rIdx int, r *loadtoad.Workflo
 	qw422016.N().D(r.Response.Status)
 //line views/vworkflow/Results.html:58
 	qw422016.N().S(`</td>
-            <td>`)
+            <td style="text-align: right;">`)
 //line views/vworkflow/Results.html:59
 	streamrenderBool(qw422016, r.Response.Status == 200, ps)
 //line views/vworkflow/Results.html:59
@@ -229,7 +229,7 @@ func streamrenderResult(qw422016 *qt422016.Writer, rIdx int, r *loadtoad.Workflo
 	qw422016.E().S(util.MicrosToMillis(r.Duration))
 //line views/vworkflow/Results.html:64
 	qw422016.N().S(`</td>
-            <td>`)
+            <td style="text-align: right;">`)
 //line views/vworkflow/Results.html:65
 	streamrenderBool(qw422016, r.Duration < int(r.Entry.Time*1000), ps)
 //line views/vworkflow/Results.html:65

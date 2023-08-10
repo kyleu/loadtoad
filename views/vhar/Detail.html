@@ -1,0 +1,82 @@
+{% import (
+  "fmt"
+
+  "github.com/kyleu/loadtoad/app"
+  "github.com/kyleu/loadtoad/app/controller/cutil"
+  "github.com/kyleu/loadtoad/app/loadtoad/har"
+  "github.com/kyleu/loadtoad/app/util"
+  "github.com/kyleu/loadtoad/views/components"
+  "github.com/kyleu/loadtoad/views/layout"
+) %}
+
+{% code type Detail struct {
+  layout.Basic
+  Har *har.Log
+} %}
+
+{% func (p *Detail) Body(as *app.State, ps *cutil.PageState) %}
+  <div class="card">
+    <h3>{%= components.SVGRefIcon(`book`, ps) %} {%s p.Har.Key %}</h3>
+  </div>
+
+  <div class="card">
+    <h3>{%d len(p.Har.Entries) %} {%s util.StringPluralMaybe("entry", len(p.Har.Entries)) %}</h3>
+    <div class="mts">
+      <ul class="accordion">
+        {%- for i, e := range p.Har.Entries -%}
+        <li>
+          <input id="accordion-entry-{%d i %}" type="checkbox" hidden />
+          <label for="accordion-entry-{%d i %}">
+            <div class="right"><a href="#modal-entry-{%d i %}"><button type="button">JSON</button></a></div>
+            {%= components.JSONModal(fmt.Sprintf("entry-%d", i), e.String(), e, 3) %}
+            {%= components.ExpandCollapse(3, ps) %} {%s e.String() %}
+            <div class="clear"></div>
+          </label>
+          <div class="bd">
+            {%= renderEntry(i, e, ps) %}
+          </div>
+        </li>
+        {%- endfor -%}
+      </ul>
+    </div>
+  </div>
+{% endfunc %}
+
+{% func renderEntry(i int, e *har.Entry, ps *cutil.PageState) %}
+  <table>
+    <tbody>
+      <tr>
+        <th class="shrink">Duration</th>
+        <td>{%s e.Duration() %}</td>
+      </tr>
+      <tr>
+        <th class="shrink">Request</th>
+        <td>{%= renderRequest(i, e.Request, ps) %}</td>
+      </tr>
+      <tr>
+        <th class="shrink">Response</th>
+        <td>{%= renderResponse(i, e.Response, ps) %}</td>
+      </tr>
+    </tbody>
+  </table>
+{% endfunc %}
+
+{% func renderRequest(i int, r *har.Request, ps *cutil.PageState) %}
+  <ul class="accordion">
+    <li>
+      <input id="accordion-request-{%d i %}" type="checkbox" hidden />
+      <label class="no-padding" for="accordion-request-{%d i %}"><em>(click to show)</em></label>
+      <div class="bd">{%= components.JSON(r) %}</div>
+    </li>
+  </ul>
+{% endfunc %}
+
+{% func renderResponse(i int, r *har.Response, ps *cutil.PageState) %}
+  <ul class="accordion">
+    <li>
+      <input id="accordion-response-{%d i %}" type="checkbox" hidden />
+      <label class="no-padding" for="accordion-response-{%d i %}"><em>(click to show)</em></label>
+      <div class="bd">{%= components.JSON(r) %}</div>
+    </li>
+  </ul>
+{% endfunc %}

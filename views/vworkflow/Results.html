@@ -42,13 +42,13 @@
     <h3>{%= components.SVGRefIcon(`file`, ps) %}{%s r.Title() %}</h3>
     <div class="clear"></div>
     <div class="mts">
-      <table>
+      <table class="min-200">
         <thead>
           <tr>
             <th class="shrink"></th>
             <th class="shrink">Old</th>
             <th class="shrink">New</th>
-            <th>Result</th>
+            <th style="text-align: right;">Result</th>
           </tr>
         </thead>
         <tbody>
@@ -56,13 +56,13 @@
             <th>Status</th>
             <td>{%d r.Entry.Response.Status %}</td>
             <td>{%d r.Response.Status %}</td>
-            <td>{%= renderBool(r.Response.Status == 200, ps) %}</td>
+            <td style="text-align: right;">{%= renderBool(r.Response.Status == 200, ps) %}</td>
           </tr>
           <tr>
             <th>Duration</th>
             <td>{%s util.MicrosToMillis(int(r.Entry.Time * 1000)) %}</td>
             <td>{%s util.MicrosToMillis(r.Duration) %}</td>
-            <td>{%= renderBool(r.Duration < int(r.Entry.Time * 1000), ps) %}</td>
+            <td style="text-align: right;">{%= renderBool(r.Duration < int(r.Entry.Time * 1000), ps) %}</td>
           </tr>
         </tbody>
       </table>
