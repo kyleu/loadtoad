@@ -3,8 +3,10 @@
   "github.com/kyleu/loadtoad/app/controller/cutil"
   "github.com/kyleu/loadtoad/app/loadtoad"
   "github.com/kyleu/loadtoad/app/loadtoad/har"
+  "github.com/kyleu/loadtoad/app/util"
   "github.com/kyleu/loadtoad/views/components"
   "github.com/kyleu/loadtoad/views/layout"
+  "github.com/kyleu/loadtoad/views/vhar"
 ) %}
 
 {% code type Detail struct {
@@ -23,30 +25,24 @@
     </div>
   </div>
   <div class="card">
-    <h3>{%= components.SVGRefIcon(`play`, ps) %} Requests</h3>
+    <h3>{%= components.SVGRefIcon(`play`, ps) %} {%d len(p.Entries) %} {%s util.StringPluralMaybe("Request", len(p.Entries)) %}</h3>
     <div class="mt">
-      {%= entryList(p.Entries, ps) %}
+      <ul class="accordion">
+        {%- for i, e := range p.Entries -%}
+        {%- code e = e.Cleaned() -%}
+        <li>
+          <input id="accordion-entry-{%d i %}" type="checkbox" hidden />
+          <label for="accordion-entry-{%d i %}">
+            {%= vhar.RenderEntryOptions(i, e, false) %}
+            {%= components.ExpandCollapse(3, ps) %} {%s e.String() %}
+            <div class="clear"></div>
+          </label>
+          <div class="bd">
+            {%= vhar.RenderEntry(i, e, ps) %}
+          </div>
+        </li>
+        {%- endfor -%}
+      </ul>
     </div>
   </div>
-{% endfunc %}
-
-{% func entryList(ents har.Entries, ps *cutil.PageState) %}
-  {%- if len(ents) == 0 -%}
-  <div><em>no entries</em></div>
-  {%- else -%}
-  <table>
-    <thead>
-      <tr>
-        <th>URL</th>
-      </tr>
-    </thead>
-    <tbody>
-      {%- for _, e := range ents -%}
-      <tr>
-        <td>{%s e.String() %}</td>
-      </tr>
-      {%- endfor -%}
-    </tbody>
-  </table>
-  {%- endif -%}
 {% endfunc %}

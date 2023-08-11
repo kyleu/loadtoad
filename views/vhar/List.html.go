@@ -41,65 +41,66 @@ func (p *List) StreamBody(qw422016 *qt422016.Writer, as *app.State, ps *cutil.Pa
 	components.StreamSVGRefIcon(qw422016, `upload`, ps)
 //line views/vhar/List.html:15
 	qw422016.N().S(`HTTP Archives</h3>
-    <div class="mt">
-      <form>
-        <input type="file" name="f" />
-        <button type="submit">Upload HAR</button>
+    <div>
+      <form action="" method="post" enctype="multipart/form-data">
+        <div class="mt"><input type="file" name="f" /></div>
+        <div class="mt"><input type="text" name="n" placeholder="Name (optional)" /></div>
+        <div class="mt"><button type="submit">Upload HAR</button></div>
       </form>
     </div>
   </div>
   <div class="card">
     <h3>`)
-//line views/vhar/List.html:24
+//line views/vhar/List.html:25
 	components.StreamSVGRefIcon(qw422016, `book`, ps)
-//line views/vhar/List.html:24
+//line views/vhar/List.html:25
 	qw422016.N().S(` Managed Archives</h3>
     <ul class="mts">
 `)
-//line views/vhar/List.html:26
+//line views/vhar/List.html:27
 	for _, r := range p.Hars {
-//line views/vhar/List.html:26
+//line views/vhar/List.html:27
 		qw422016.N().S(`      <li><a href="/har/`)
-//line views/vhar/List.html:27
+//line views/vhar/List.html:28
 		qw422016.E().S(r)
-//line views/vhar/List.html:27
+//line views/vhar/List.html:28
 		qw422016.N().S(`">`)
-//line views/vhar/List.html:27
+//line views/vhar/List.html:28
 		qw422016.E().S(r)
-//line views/vhar/List.html:27
+//line views/vhar/List.html:28
 		qw422016.N().S(`</a></li>
 `)
-//line views/vhar/List.html:28
+//line views/vhar/List.html:29
 	}
-//line views/vhar/List.html:28
+//line views/vhar/List.html:29
 	qw422016.N().S(`    </ul>
   </div>
 `)
-//line views/vhar/List.html:31
+//line views/vhar/List.html:32
 }
 
-//line views/vhar/List.html:31
+//line views/vhar/List.html:32
 func (p *List) WriteBody(qq422016 qtio422016.Writer, as *app.State, ps *cutil.PageState) {
-//line views/vhar/List.html:31
+//line views/vhar/List.html:32
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line views/vhar/List.html:31
+//line views/vhar/List.html:32
 	p.StreamBody(qw422016, as, ps)
-//line views/vhar/List.html:31
+//line views/vhar/List.html:32
 	qt422016.ReleaseWriter(qw422016)
-//line views/vhar/List.html:31
+//line views/vhar/List.html:32
 }
 
-//line views/vhar/List.html:31
+//line views/vhar/List.html:32
 func (p *List) Body(as *app.State, ps *cutil.PageState) string {
-//line views/vhar/List.html:31
+//line views/vhar/List.html:32
 	qb422016 := qt422016.AcquireByteBuffer()
-//line views/vhar/List.html:31
+//line views/vhar/List.html:32
 	p.WriteBody(qb422016, as, ps)
-//line views/vhar/List.html:31
+//line views/vhar/List.html:32
 	qs422016 := string(qb422016.B)
-//line views/vhar/List.html:31
+//line views/vhar/List.html:32
 	qt422016.ReleaseByteBuffer(qb422016)
-//line views/vhar/List.html:31
+//line views/vhar/List.html:32
 	return qs422016
-//line views/vhar/List.html:31
+//line views/vhar/List.html:32
 }

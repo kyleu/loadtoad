@@ -29,8 +29,8 @@ func (e *Entry) String() string {
 	return e.Request.URL
 }
 
-func (e *Entry) Duration() string {
-	return util.MicrosToMillis(e.PageTimings.Wait * 1000)
+func (e *Entry) Duration() int {
+	return e.PageTimings.Wait * 1000
 }
 
 func (e *Entry) Clone() *Entry {
@@ -48,7 +48,7 @@ func (e *Entry) Cleaned() *Entry {
 	}
 	if ret.Response != nil && ret.Response.Content != nil && ret.Response.Content.Size > 1024*16 {
 		ret = ret.Clone()
-		ret.Response.Content.Text = util.ByteSizeSI(int64(len(ret.Response.Content.Text)))
+		ret.Response.Content.Text = util.ByteSizeSI(int64(ret.Response.Content.Size))
 	}
 	return ret
 }
@@ -91,5 +91,26 @@ type Entries []*Entry
 func (e Entries) ForPage(ref string) Entries {
 	return lo.Filter(e, func(x *Entry, _ int) bool {
 		return x.PageRef == ref
+	})
+}
+
+func (e Entries) Trimmed() Entries {
+	return lo.Filter(e, func(x *Entry, _ int) bool {
+		return x.Response != nil && x.Response.Status != 0
+	})
+}
+
+func (e Entries) TotalDuration() int {
+	return lo.SumBy(e, func(x *Entry) int {
+		return x.Duration()
+	})
+}
+
+func (e Entries) TotalResponseBodySize() int {
+	return lo.SumBy(e, func(x *Entry) int {
+		if x.Response == nil || x.Response.Content == nil {
+			return 0
+		}
+		return x.Response.Content.Size
 	})
 }

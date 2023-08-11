@@ -7,6 +7,7 @@ import (
 
 func loadtoadRoutes(r *router.Router) {
 	r.GET("/har", controller.HarList)
+	r.POST("/har", controller.HarUpload)
 	r.GET("/har/{key}", controller.HarDetail)
 
 	r.GET("/workflow", controller.WorkflowList)

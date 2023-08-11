@@ -1,0 +1,15 @@
+{% import (
+  "github.com/kyleu/loadtoad/app/controller/cutil"
+  "github.com/kyleu/loadtoad/app/loadtoad/har"
+  "github.com/kyleu/loadtoad/views/components"
+) %}
+
+{% func renderRequest(i int, r *har.Request, ps *cutil.PageState) %}
+  <ul class="accordion">
+    <li>
+      <input id="accordion-request-{%d i %}" type="checkbox" hidden />
+      <label class="no-padding" for="accordion-request-{%d i %}"><em>(click to show)</em></label>
+      <div class="bd">{%= components.JSON(r) %}</div>
+    </li>
+  </ul>
+{% endfunc %}

@@ -13,10 +13,11 @@
 {% func (p *List) Body(as *app.State, ps *cutil.PageState) %}
   <div class="card">
     <h3>{%= components.SVGRefIcon(`upload`, ps) %}HTTP Archives</h3>
-    <div class="mt">
-      <form>
-        <input type="file" name="f" />
-        <button type="submit">Upload HAR</button>
+    <div>
+      <form action="" method="post" enctype="multipart/form-data">
+        <div class="mt"><input type="file" name="f" /></div>
+        <div class="mt"><input type="text" name="n" placeholder="Name (optional)" /></div>
+        <div class="mt"><button type="submit">Upload HAR</button></div>
       </form>
     </div>
   </div>
