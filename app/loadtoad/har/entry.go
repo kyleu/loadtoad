@@ -23,8 +23,8 @@ type Entry struct {
 }
 
 func (e *Entry) String() string {
-	if len(e.Request.URL) > 128 {
-		return e.Request.URL[:128] + "..."
+	if len(e.Request.URL) > 64 {
+		return e.Request.URL[:64] + "..."
 	}
 	return e.Request.URL
 }
@@ -33,35 +33,24 @@ func (e *Entry) Duration() string {
 	return util.MicrosToMillis(e.PageTimings.Wait * 1000)
 }
 
-type Entries []*Entry
-
-func (e Entries) ForPage(ref string) Entries {
-	return lo.Filter(e, func(x *Entry, _ int) bool {
-		return x.PageRef == ref
-	})
+func (e *Entry) Clone() *Entry {
+	return &Entry{
+		PageRef: e.PageRef, StartedDateTime: e.StartedDateTime, Time: e.Time, Request: e.Request, Response: e.Response,
+		Cache: e.Cache, PageTimings: e.PageTimings, ServerIPAddress: e.ServerIPAddress, Connection: e.Connection, Comment: e.Comment,
+	}
 }
 
-func (e Entries) Find(u string, idx int) *Entry {
-	if u == "" {
-		return e.FindByIndex(idx)
+func (e *Entry) Cleaned() *Entry {
+	ret := e
+	if ret.Request.PostData != nil && len(ret.Request.PostData.Text) > 1024*16 {
+		ret = ret.Clone()
+		ret.Request.PostData.Text = util.ByteSizeSI(int64(len(ret.Request.PostData.Text)))
 	}
-	return e.FindByURL(u)
-}
-
-func (e Entries) FindByIndex(idx int) *Entry {
-	if len(e) < idx {
-		return nil
+	if ret.Response != nil && ret.Response.Content != nil && ret.Response.Content.Size > 1024*16 {
+		ret = ret.Clone()
+		ret.Response.Content.Text = util.ByteSizeSI(int64(len(ret.Response.Content.Text)))
 	}
-	return e[idx]
-}
-
-func (e Entries) FindByURL(u string) *Entry {
-	for _, x := range e {
-		if x.Request.URL == u {
-			return x
-		}
-	}
-	return nil
+	return ret
 }
 
 func (e *Entry) ToRequest(ignoreCookies bool) (*http.Request, error) {
@@ -95,4 +84,12 @@ func (e *Entry) ToRequest(ignoreCookies bool) (*http.Request, error) {
 	}
 
 	return req, nil
+}
+
+type Entries []*Entry
+
+func (e Entries) ForPage(ref string) Entries {
+	return lo.Filter(e, func(x *Entry, _ int) bool {
+		return x.PageRef == ref
+	})
 }

@@ -23,14 +23,14 @@
     <thead>
       <tr>
         <th class="shrink">Name</th>
-        <th>Requests</th>
+        <th>Tests</th>
       </tr>
     </thead>
     <tbody>
       {%- for _, w := range workflows -%}
       <tr>
         <td><a href="{%s w.WebPath() %}">{%s w.Title() %}</a></td>
-        <td>{%d len(w.RequestKeys) %}</td>
+        <td>{%d len(w.Tests) %}</td>
       </tr>
       {%- endfor -%}
     </tbody>

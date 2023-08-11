@@ -9,9 +9,9 @@ import (
 )
 
 type Workflow struct {
-	ID          string          `json:"id"`
-	Name        string          `json:"name,omitempty"`
-	RequestKeys har.RequestKeys `json:"requestKeys,omitempty"`
+	ID    string        `json:"-"`
+	Name  string        `json:"name,omitempty"`
+	Tests har.Selectors `json:"tests,omitempty"`
 }
 
 func (w *Workflow) Title() string {
@@ -27,8 +27,8 @@ func (w *Workflow) WebPath() string {
 
 type Workflows []*Workflow
 
-func NewWorkflow(id string, requestKeys har.RequestKeys) *Workflow {
-	return &Workflow{ID: id, RequestKeys: requestKeys}
+func NewWorkflow(id string, tests har.Selectors) *Workflow {
+	return &Workflow{ID: id, Tests: tests}
 }
 
 func (s *Service) LoadWorkflow(fn string) (*Workflow, error) {

@@ -86,7 +86,7 @@ func StreamTable(qw422016 *qt422016.Writer, workflows loadtoad.Workflows, ps *cu
     <thead>
       <tr>
         <th class="shrink">Name</th>
-        <th>Requests</th>
+        <th>Tests</th>
       </tr>
     </thead>
     <tbody>
@@ -106,7 +106,7 @@ func StreamTable(qw422016 *qt422016.Writer, workflows loadtoad.Workflows, ps *cu
 		qw422016.N().S(`</a></td>
         <td>`)
 //line views/vworkflow/List.html:33
-		qw422016.N().D(len(w.RequestKeys))
+		qw422016.N().D(len(w.Tests))
 //line views/vworkflow/List.html:33
 		qw422016.N().S(`</td>
       </tr>

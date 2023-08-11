@@ -23,49 +23,50 @@
     <div class="mts"><em>{%d len(p.Results) %} {%s util.StringPluralMaybe("result", len(p.Results)) %} in {%s util.MicrosToMillis(p.Results.Duration()) %}</em></div>
   </div>
   {%- for rIdx, r := range p.Results -%}
-  {%= renderResult(rIdx, r, ps) %}
+  {%= RenderResult(rIdx, r, ps) %}
   {%- endfor -%}
 {% endfunc %}
 
-{% func renderBool(b bool, ps *cutil.PageState) %}
+{% func renderBool(b bool, s string, ps *cutil.PageState) %}
   {%- if b -%}
-    <span class="success">{%= components.SVGRef("check", 16, 16, "", ps) %}</span>
+    <span class="success">{%s s %}</span>
   {%- else -%}
-    <span class="error">{%= components.SVGRef("times", 16, 16, "", ps) %}</span>
+    <span class="error">{%s s %}</span>
   {%- endif -%}
 {% endfunc %}
 
-{% func renderResult(rIdx int, r *loadtoad.WorkflowResult, ps *cutil.PageState) %}
+{% func RenderResult(rIdx int, r *loadtoad.WorkflowResult, ps *cutil.PageState) %}
   <div class="card">
     <div class="right"><a href="#modal-result-{%d rIdx %}"><button type="button">JSON</button></a></div>
     {%= components.JSONModal(fmt.Sprintf("result-%d", rIdx), r.Title(), r, 3) %}
     <h3>{%= components.SVGRefIcon(`file`, ps) %}{%s r.Title() %}</h3>
     <div class="clear"></div>
     <div class="mts">
-      <table class="min-200">
-        <thead>
-          <tr>
-            <th class="shrink"></th>
-            <th class="shrink">Old</th>
-            <th class="shrink">New</th>
-            <th style="text-align: right;">Result</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th>Status</th>
-            <td>{%d r.Entry.Response.Status %}</td>
-            <td>{%d r.Response.Status %}</td>
-            <td style="text-align: right;">{%= renderBool(r.Response.Status == 200, ps) %}</td>
-          </tr>
-          <tr>
-            <th>Duration</th>
-            <td>{%s util.MicrosToMillis(int(r.Entry.Time * 1000)) %}</td>
-            <td>{%s util.MicrosToMillis(r.Duration) %}</td>
-            <td style="text-align: right;">{%= renderBool(r.Duration < int(r.Entry.Time * 1000), ps) %}</td>
-          </tr>
-        </tbody>
-      </table>
+      {%= RenderResultTable(rIdx, r, ps) %}
     </div>
   </div>
+{% endfunc %}
+
+{% func RenderResultTable(rIdx int, r *loadtoad.WorkflowResult, ps *cutil.PageState) %}
+  <table class="min-200">
+    <thead>
+      <tr>
+        <th class="shrink"></th>
+        <th class="shrink">Old</th>
+        <th class="shrink">New</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th>{%= renderBool(r.Response.Status == r.Entry.Response.Status, "Status", ps) %}</th>
+        <td>{%d r.Entry.Response.Status %}</td>
+        <td>{%d r.Response.Status %}</td>
+      </tr>
+      <tr>
+        <th>{%= renderBool(r.Entry.Time == 0 || r.Duration < int(r.Entry.Time * 1000 * 1.1), "Duration", ps) %}</th>
+        <td>{%s util.MicrosToMillis(int(r.Entry.Time * 1000)) %}</td>
+        <td>{%s util.MicrosToMillis(r.Duration) %}</td>
+      </tr>
+    </tbody>
+  </table>
 {% endfunc %}

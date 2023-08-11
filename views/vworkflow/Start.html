@@ -1,0 +1,98 @@
+{% import (
+  "github.com/kyleu/loadtoad/app"
+  "github.com/kyleu/loadtoad/app/controller/cutil"
+  "github.com/kyleu/loadtoad/app/loadtoad"
+  "github.com/kyleu/loadtoad/app/loadtoad/har"
+  "github.com/kyleu/loadtoad/views/components"
+  "github.com/kyleu/loadtoad/views/layout"
+) %}
+
+{% code type Start struct {
+  layout.Basic
+  Workflow *loadtoad.Workflow
+  Entries har.Entries
+  Channel string
+} %}
+
+{% func (p *Start) Body(as *app.State, ps *cutil.PageState) %}
+  <div class="card">
+    <div class="right"><a href="#modal-workflow"><button type="button">JSON</button></a></div>
+    {%= components.JSONModal("workflow", "Workflow", p.Workflow, 3) %}
+    <h3>{%= components.SVGRefIcon(`sitemap`, ps) %} {%s p.Workflow.Title() %} Results</h3>
+    <div class="mt">
+      {%- if len(p.Entries) == 0 -%}
+      <div><em>no entries</em></div>
+      {%- endif -%}
+    </div>
+    <div id="results" class="mt">
+    </div>
+  </div>
+  {%- for idx, e := range p.Entries -%}
+  {%= entryPlaceholder(idx, e, ps) %}
+  {%- endfor -%}
+  <script>
+    var sock;
+    function open() {
+      console.log("[Open]");
+    }
+    function recv(m) {
+      let el = document.querySelector("#entry-placeholder-" + m.param.idx);
+      if (!el) {
+        if (m.param.idx === -1) {
+          el = document.querySelector("#results");
+        } else {
+          throw "invalid index [" + m.param.idx + "]";
+        }
+      }
+      switch (m.cmd) {
+        case "log":
+          const logs = el.querySelector(".logs");
+          if (!logs) {
+            throw "invalid logs for index [" + m.param.idx + "]";
+          }
+          const logEl = document.createElement("div");
+          logEl.innerText = " - " + m.param.ctx;
+          logs.appendChild(logEl);
+          break;
+        case "error":
+          throw "error [" + m.param.ctx + "] encountered for index [" + m.param.idx + "]";
+        case "ok":
+          const deets = el.querySelector(".details");
+          if (!deets) {
+            throw "invalid details for index [" + m.param.idx + "]";
+          }
+          const deetsDiv = document.createElement("div");
+          deetsDiv.innerHTML = m.param.ctx;
+          deets.replaceChildren(deetsDiv);
+          break;
+        case "complete":
+          const completeEl = document.createElement("div");
+          completeEl.innerText = m.param.ctx;
+          el.appendChild(completeEl);
+          break;
+        default:
+          console.log("[Recv]", m.param.idx, m.cmd);
+          break;
+      }
+    }
+    function err(e) {
+      console.log("[Err]", e);
+    }
+    document.addEventListener("DOMContentLoaded", function() {
+      sock = new loadtoad.Socket(false, open, recv, err, "/workflow/{%s p.Workflow.ID %}/connect?channel={%s p.Channel %}");
+      console.log("[Load]");
+    });
+  </script>
+{% endfunc %}
+
+{% func entryPlaceholder(idx int, ent *har.Entry, ps *cutil.PageState) %}
+  <div id="entry-placeholder-{%d idx %}" class="card">
+    <h3>{%= components.SVGRefIcon(`file`, ps) %}{%s ent.String() %}</h3>
+    <div class="clear"></div>
+    <div class="mts details">
+      <em>pending...</em>
+    </div>
+    <div class="logs">
+    </div>
+  </div>
+{% endfunc %}

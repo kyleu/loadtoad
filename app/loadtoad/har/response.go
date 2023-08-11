@@ -34,3 +34,13 @@ func ResponseFromHTTP(r *http.Response) *Response {
 	ret := &Response{Status: r.StatusCode, StatusText: r.Status, Cookies: cooks, Headers: nil, Content: content, BodySize: content.Size}
 	return ret
 }
+
+func (r *Response) Size() int {
+	if r.Content == nil {
+		return 0
+	}
+	if r.Content.Size != 0 {
+		return r.Content.Size
+	}
+	return len(r.Content.Text)
+}

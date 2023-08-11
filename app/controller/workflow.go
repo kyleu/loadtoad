@@ -1,6 +1,8 @@
 package controller
 
 import (
+	"github.com/kyleu/loadtoad/app/loadtoad"
+	"github.com/kyleu/loadtoad/app/util"
 	"github.com/kyleu/loadtoad/views/vworkflow"
 	"github.com/pkg/errors"
 	"github.com/valyala/fasthttp"
@@ -22,36 +24,60 @@ func WorkflowList(rc *fasthttp.RequestCtx) {
 
 func WorkflowDetail(rc *fasthttp.RequestCtx) {
 	Act("workflow.detail", rc, func(as *app.State, ps *cutil.PageState) (string, error) {
-		key, err := cutil.RCRequiredString(rc, "key", true)
+		w, err := loadWorkflow(as, rc)
 		if err != nil {
 			return "", err
 		}
-		ret, err := as.Services.LoadToad.LoadWorkflow(key)
+		ents, err := as.Services.LoadToad.LoadEntries(w.Tests...)
 		if err != nil {
 			return "", err
 		}
 		ps.Title = "Workflows"
-		ps.Data = ret
-		return Render(rc, as, &vworkflow.Detail{Workflow: ret}, ps, "workflow", key)
+		ps.Data = w
+		return Render(rc, as, &vworkflow.Detail{Workflow: w, Entries: ents}, ps, "workflow", w.ID)
 	})
 }
 
-func WorkflowRun(rc *fasthttp.RequestCtx) {
+func WorkflowStart(rc *fasthttp.RequestCtx) {
+	Act("workflow.start", rc, func(as *app.State, ps *cutil.PageState) (string, error) {
+		w, err := loadWorkflow(as, rc)
+		if err != nil {
+			return "", err
+		}
+		ents, err := as.Services.LoadToad.LoadEntries(w.Tests...)
+		if err != nil {
+			return "", err
+		}
+		ps.Title = "Workflow " + w.Title()
+		ps.Data = w
+		channel := "run-" + util.RandomString(16)
+		return Render(rc, as, &vworkflow.Start{Workflow: w, Entries: ents, Channel: channel}, ps, "workflow", w.ID, "run")
+	})
+}
+
+func WorkflowRunSync(rc *fasthttp.RequestCtx) {
 	Act("workflow.run", rc, func(as *app.State, ps *cutil.PageState) (string, error) {
-		key, err := cutil.RCRequiredString(rc, "key", true)
+		w, err := loadWorkflow(as, rc)
 		if err != nil {
 			return "", err
 		}
-		w, err := as.Services.LoadToad.LoadWorkflow(key)
-		if err != nil {
-			return "", err
+		logF := func(i int, s string) {
+			ps.Logger.Infof("[%d] %s", i, s)
 		}
-		ret, err := as.Services.LoadToad.Run(w)
+		ret, err := as.Services.LoadToad.Run(w, logF, nil, nil)
 		if err != nil {
 			return "", errors.Wrapf(err, "unable to load the toad")
 		}
 		ps.Title = "Workflow " + w.Title()
 		ps.Data = ret
-		return Render(rc, as, &vworkflow.Results{Workflow: w, Results: ret}, ps, "workflow", key, "run")
+		return Render(rc, as, &vworkflow.Results{Workflow: w, Results: ret}, ps, "workflow", w.ID, "run")
 	})
+}
+
+func loadWorkflow(as *app.State, rc *fasthttp.RequestCtx) (*loadtoad.Workflow, error) {
+	key, err := cutil.RCRequiredString(rc, "key", true)
+	if err != nil {
+		return nil, err
+	}
+	return as.Services.LoadToad.LoadWorkflow(key)
 }

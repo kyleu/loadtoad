@@ -1,5 +1,7 @@
 package har
 
+import "net/url"
+
 type PostParam struct {
 	Name        string `json:"name"`
 	Value       string `json:"value,omitempty"`
@@ -30,11 +32,17 @@ type Request struct {
 	Comment     string    `json:"comment"`
 }
 
-type RequestKey struct {
-	HAR  string `json:"har,omitempty"`
-	Page string `json:"page,omitempty"`
-	URL  string `json:"url,omitempty"`
-	Idx  int    `json:"idx,omitempty"`
+func (r *Request) Size() int {
+	if r.PostData == nil {
+		return 0
+	}
+	return len(r.PostData.Text)
 }
 
-type RequestKeys []*RequestKey
+func (r *Request) GetURL() *url.URL {
+	u, err := url.Parse(r.URL)
+	if err != nil {
+		return nil
+	}
+	return u
+}

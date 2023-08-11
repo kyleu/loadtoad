@@ -8,6 +8,7 @@ import (
 
 type WorkflowResult struct {
 	ID       string        `json:"id"`
+	Domain   string        `json:"domain,omitempty"`
 	Entry    *har.Entry    `json:"entry,omitempty"`
 	Duration int           `json:"duration,omitempty"`
 	Logs     []string      `json:"logs,omitempty"`
@@ -15,7 +16,7 @@ type WorkflowResult struct {
 }
 
 func (w *WorkflowResult) Title() string {
-	return w.Entry.Request.URL
+	return w.Entry.String()
 }
 
 func (w *WorkflowResult) AddLog(s string, args ...any) {
