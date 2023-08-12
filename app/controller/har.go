@@ -98,6 +98,6 @@ func HarStart(rc *fasthttp.RequestCtx) {
 		ps.Title = "Archive [" + key + "]"
 		ps.Data = ret
 		channel := "run-" + util.RandomString(16)
-		return Render(rc, as, &vworkflow.Start{Workflow: w, Entries: ret.Entries, Channel: channel, Path: "/har/" + ret.Key + "/connect"}, ps, "archive", ret.Key, "Run")
+		return Render(rc, as, &vworkflow.Start{Workflow: w, Entries: ret.Entries, Channel: channel, Path: "/har/" + ret.Key + "/connect"}, ps, "har", ret.Key, "Run")
 	})
 }
