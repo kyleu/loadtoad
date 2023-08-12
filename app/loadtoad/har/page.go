@@ -17,12 +17,13 @@ type PageTiming struct {
 }
 
 type PageTimings struct {
+	Total   int    `json:"total,omitempty"`
 	Blocked int    `json:"blocked,omitempty"`
 	DNS     int    `json:"dns,omitempty"`
 	Connect int    `json:"connect,omitempty"`
-	Send    int    `json:"send"`
-	Wait    int    `json:"wait"`
-	Receive int    `json:"receive"`
+	Send    int    `json:"send,omitempty"`
+	Wait    int    `json:"wait,omitempty"`
+	Receive int    `json:"receive,omitempty"`
 	Ssl     int    `json:"ssl,omitempty"`
 	Comment string `json:"comment,omitempty"`
 }

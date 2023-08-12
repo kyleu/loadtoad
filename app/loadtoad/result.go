@@ -9,12 +9,12 @@ import (
 )
 
 type WorkflowResult struct {
-	ID       string        `json:"id"`
-	Domain   string        `json:"domain,omitempty"`
-	Entry    *har.Entry    `json:"entry,omitempty"`
-	Duration int           `json:"duration,omitempty"`
-	Logs     []string      `json:"logs,omitempty"`
-	Response *har.Response `json:"response,omitempty"`
+	ID       string           `json:"id"`
+	Domain   string           `json:"domain,omitempty"`
+	Entry    *har.Entry       `json:"entry,omitempty"`
+	Timing   *har.PageTimings `json:"duration,omitempty"`
+	Logs     []string         `json:"logs,omitempty"`
+	Response *har.Response    `json:"response,omitempty"`
 }
 
 func (w *WorkflowResult) Title() string {
@@ -29,6 +29,6 @@ type WorkflowResults []*WorkflowResult
 
 func (w WorkflowResults) Duration() int {
 	return lo.SumBy(w, func(x *WorkflowResult) int {
-		return x.Duration
+		return x.Timing.Total
 	})
 }

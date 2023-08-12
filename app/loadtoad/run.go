@@ -3,15 +3,14 @@ package loadtoad
 import (
 	"crypto/tls"
 	"fmt"
-	"net/http"
-	"net/http/cookiejar"
-
+	"github.com/kyleu/loadtoad/app/loadtoad/har"
+	"github.com/kyleu/loadtoad/app/util"
 	"github.com/pkg/errors"
 	"github.com/samber/lo"
 	"golang.org/x/exp/slices"
-
-	"github.com/kyleu/loadtoad/app/loadtoad/har"
-	"github.com/kyleu/loadtoad/app/util"
+	"net/http"
+	"net/http/cookiejar"
+	"net/http/httptrace"
 )
 
 func (s *Service) LoadEntries(repls map[string]string, keys ...*har.Selector) (har.Entries, error) {
@@ -78,22 +77,13 @@ func (s *Service) RunEntry(
 	wf string, idx int, e *har.Entry, cl http.Client, jar *cookiejar.Jar, hot []string, logF func(int, string),
 ) (*WorkflowResult, error) {
 	id := fmt.Sprintf("%s-%d", wf, idx)
-	ret := &WorkflowResult{ID: id, Domain: e.Request.URL, Entry: e.Cleaned()}
+	ret := &WorkflowResult{ID: id, Domain: e.Request.URL, Entry: e.Cleaned(), Timing: &har.PageTimings{}}
 	u := e.Request.GetURL()
 	if u != nil {
 		ret.Domain = u.Host
 		if !slices.Contains(hot, u.Host) {
-			root := u.Scheme + "://" + u.Host
-			req, err := http.NewRequest("GET", root, nil)
-			if err != nil {
+			if err := preload(u.Scheme, u.Host, idx, cl, logF); err != nil {
 				return nil, err
-			}
-			req.Header.Set("Connection", "keep-alive")
-			req.Header.Set("Host", u.Host)
-			t := util.TimerStart()
-			_, _ = cl.Do(req)
-			if logF != nil {
-				logF(idx, fmt.Sprintf("preconnected to [%s] in [%s]", u.Host, t.EndString()))
 			}
 		}
 	}
@@ -102,16 +92,61 @@ func (s *Service) RunEntry(
 		return nil, err
 	}
 	jar.SetCookies(req.URL, req.Cookies())
+	req = wireReq(req, ret.Timing)
+
 	t := util.TimerStart()
 	resp, err := cl.Do(req)
 	if err != nil {
 		return nil, err
 	}
-	ret.Duration = t.End()
+	ret.Timing.Total = t.End()
 	ret.Response = har.ResponseFromHTTP(resp)
 
 	if resp != nil {
 		_ = resp.Body.Close()
 	}
 	return ret, nil
+}
+
+func preload(scheme string, host string, idx int, cl http.Client, logF func(int, string)) error {
+	root := scheme + "://" + host
+	req, err := http.NewRequest("GET", root, nil)
+	if err != nil {
+		return err
+	}
+	req.Header.Set("Connection", "keep-alive")
+	req.Header.Set("Host", host)
+	t := util.TimerStart()
+	_, _ = cl.Do(req)
+	if logF != nil {
+		logF(idx, fmt.Sprintf("preconnected to [%s] in [%s]", host, t.EndString()))
+	}
+	return nil
+}
+
+func wireReq(req *http.Request, timing *har.PageTimings) *http.Request {
+	start := util.TimerStart()
+	var connect, dns, tlsHandshake *util.Timer
+
+	trace := &httptrace.ClientTrace{
+		DNSStart: func(dsi httptrace.DNSStartInfo) { dns = util.TimerStart() },
+		DNSDone: func(ddi httptrace.DNSDoneInfo) {
+			timing.DNS = dns.End()
+		},
+
+		TLSHandshakeStart: func() { tlsHandshake = util.TimerStart() },
+		TLSHandshakeDone: func(cs tls.ConnectionState, err error) {
+			timing.Ssl = tlsHandshake.End()
+		},
+
+		ConnectStart: func(network, addr string) { connect = util.TimerStart() },
+		ConnectDone: func(network, addr string, err error) {
+			timing.Connect = connect.End()
+		},
+
+		GotFirstResponseByte: func() {
+			timing.Receive = start.End()
+		},
+	}
+	return req.WithContext(httptrace.WithClientTrace(req.Context(), trace))
 }
