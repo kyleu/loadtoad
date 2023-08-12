@@ -3,13 +3,15 @@ package loadtoad
 import (
 	"crypto/tls"
 	"fmt"
-	"github.com/kyleu/loadtoad/app/loadtoad/har"
-	"github.com/kyleu/loadtoad/app/util"
+	"net/http"
+	"net/http/cookiejar"
+
 	"github.com/pkg/errors"
 	"github.com/samber/lo"
 	"golang.org/x/exp/slices"
-	"net/http"
-	"net/http/cookiejar"
+
+	"github.com/kyleu/loadtoad/app/loadtoad/har"
+	"github.com/kyleu/loadtoad/app/util"
 )
 
 func (s *Service) LoadEntries(repls map[string]string, keys ...*har.Selector) (har.Entries, error) {

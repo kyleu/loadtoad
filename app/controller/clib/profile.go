@@ -20,6 +20,12 @@ func Profile(rc *fasthttp.RequestCtx) {
 	})
 }
 
+func ProfileSite(rc *fasthttp.RequestCtx) {
+	controller.ActSite("profile", rc, func(as *app.State, ps *cutil.PageState) (string, error) {
+		return profileAction(rc, as, ps)
+	})
+}
+
 func profileAction(rc *fasthttp.RequestCtx, as *app.State, ps *cutil.PageState) (string, error) {
 	ps.Title = "Profile"
 	ps.Data = ps.Profile

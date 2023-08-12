@@ -1,0 +1,21 @@
+<!-- Content managed by Project Forge, see [projectforge.md] for details. -->
+{% import (
+  "github.com/kyleu/loadtoad/app"
+  "github.com/kyleu/loadtoad/app/util"
+  "github.com/kyleu/loadtoad/app/controller/cutil"
+  "github.com/kyleu/loadtoad/views/components"
+  "github.com/kyleu/loadtoad/views/layout"
+) %}
+
+{% code type Index struct { layout.Basic } %}
+
+{% func (p *Index) Body(as *app.State, ps *cutil.PageState) %}
+  <div class="card">
+    <h3>{%= components.SVGRefIcon(`app`, ps) %}{%s util.AppName %}</h3>
+    <p>...</p>
+    <p>
+      <a href="/download"><button>Download</button></a>
+      <a href="https://github.com/kyleu/loadtoad"><button>Source Code</button></a>
+    </p>
+  </div>
+{% endfunc %}

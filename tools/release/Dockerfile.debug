@@ -19,6 +19,8 @@ SHELL ["/bin/bash", "-c"]
 
 # main http port
 EXPOSE 15550
+# marketing port
+EXPOSE 15551
 
 WORKDIR /
 

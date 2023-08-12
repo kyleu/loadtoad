@@ -8,6 +8,7 @@
   "modules": [
     "core",
     "filesystem",
+    "marketing",
     "notarize",
     "websocket"
   ],

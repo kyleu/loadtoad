@@ -2,13 +2,15 @@ package controller
 
 import (
 	"fmt"
+
+	"github.com/valyala/fasthttp"
+
 	"github.com/kyleu/loadtoad/app"
 	"github.com/kyleu/loadtoad/app/controller/cutil"
 	"github.com/kyleu/loadtoad/app/loadtoad"
 	"github.com/kyleu/loadtoad/app/util"
 	"github.com/kyleu/loadtoad/views/vpage"
 	"github.com/kyleu/loadtoad/views/vworkflow"
-	"github.com/valyala/fasthttp"
 )
 
 func WorkflowList(rc *fasthttp.RequestCtx) {

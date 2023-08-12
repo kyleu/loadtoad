@@ -2,12 +2,14 @@ package har
 
 import (
 	"bytes"
-	"github.com/kyleu/loadtoad/app/util"
-	"github.com/samber/lo"
-	"golang.org/x/net/http/httpguts"
 	"net/http"
 	"net/url"
 	"strings"
+
+	"github.com/samber/lo"
+	"golang.org/x/net/http/httpguts"
+
+	"github.com/kyleu/loadtoad/app/util"
 )
 
 type Entry struct {

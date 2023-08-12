@@ -13,14 +13,22 @@ import (
 )
 
 var (
-	_currentAppState      *app.State
-	_currentAppRootLogger util.Logger
+	_currentAppState       *app.State
+	_currentAppRootLogger  util.Logger
+	_currentSiteState      *app.State
+	_currentSiteRootLogger util.Logger
 )
 
 func SetAppState(a *app.State, logger util.Logger) {
 	_currentAppState = a
 	_currentAppRootLogger = logger
 	initApp(a, logger)
+}
+
+func SetSiteState(a *app.State, logger util.Logger) {
+	_currentSiteState = a
+	_currentSiteRootLogger = logger
+	initSite(a, logger)
 }
 
 func handleError(key string, as *app.State, ps *cutil.PageState, rc *fasthttp.RequestCtx, err error) (string, error) {

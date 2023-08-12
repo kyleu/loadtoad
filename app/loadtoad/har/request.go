@@ -2,9 +2,11 @@ package har
 
 import (
 	"fmt"
-	"github.com/kyleu/loadtoad/app/util"
-	"github.com/samber/lo"
 	"net/url"
+
+	"github.com/samber/lo"
+
+	"github.com/kyleu/loadtoad/app/util"
 )
 
 type PostParam struct {

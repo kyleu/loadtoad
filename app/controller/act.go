@@ -11,6 +11,7 @@ import (
 	"github.com/kyleu/loadtoad/app"
 	"github.com/kyleu/loadtoad/app/controller/cutil"
 	"github.com/kyleu/loadtoad/app/lib/telemetry"
+	"github.com/kyleu/loadtoad/app/site"
 	"github.com/kyleu/loadtoad/app/util"
 )
 
@@ -18,6 +19,16 @@ func Act(key string, rc *fasthttp.RequestCtx, f func(as *app.State, ps *cutil.Pa
 	as := _currentAppState
 	ps := cutil.LoadPageState(as, rc, key, _currentAppRootLogger)
 	if err := initAppRequest(as, ps); err != nil {
+		ps.Logger.Warnf("%+v", err)
+	}
+	actComplete(key, as, ps, rc, f)
+}
+
+func ActSite(key string, rc *fasthttp.RequestCtx, f func(as *app.State, ps *cutil.PageState) (string, error)) {
+	as := _currentSiteState
+	ps := cutil.LoadPageState(as, rc, key, _currentSiteRootLogger)
+	ps.Menu = site.Menu(ps.Context, as, ps.Profile, ps.Logger)
+	if err := initSiteRequest(as, ps); err != nil {
 		ps.Logger.Warnf("%+v", err)
 	}
 	actComplete(key, as, ps, rc, f)

@@ -2,6 +2,7 @@ package app
 
 import (
 	"context"
+
 	"github.com/kyleu/loadtoad/app/lib/websocket"
 	"github.com/kyleu/loadtoad/app/loadtoad"
 	"github.com/kyleu/loadtoad/app/util"

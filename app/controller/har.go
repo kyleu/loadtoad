@@ -2,18 +2,19 @@ package controller
 
 import (
 	"fmt"
+	"io/ioutil"
+	"strings"
+
+	"github.com/pkg/errors"
+	"github.com/valyala/fasthttp"
+
+	"github.com/kyleu/loadtoad/app"
+	"github.com/kyleu/loadtoad/app/controller/cutil"
 	"github.com/kyleu/loadtoad/app/loadtoad"
 	"github.com/kyleu/loadtoad/app/loadtoad/har"
 	"github.com/kyleu/loadtoad/app/util"
 	"github.com/kyleu/loadtoad/views/vhar"
 	"github.com/kyleu/loadtoad/views/vworkflow"
-	"github.com/pkg/errors"
-	"github.com/valyala/fasthttp"
-	"io/ioutil"
-	"strings"
-
-	"github.com/kyleu/loadtoad/app"
-	"github.com/kyleu/loadtoad/app/controller/cutil"
 )
 
 func HarList(rc *fasthttp.RequestCtx) {
