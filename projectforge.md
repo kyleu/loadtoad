@@ -8,4 +8,5 @@ The following modules were used to build this project:
 
 - [core](./doc/module/core.md)
 - [filesystem](./doc/module/filesystem.md)
+- [notarize](./doc/module/notarize.md)
 - [websocket](./doc/module/websocket.md)

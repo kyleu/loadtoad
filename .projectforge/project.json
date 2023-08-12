@@ -8,6 +8,7 @@
   "modules": [
     "core",
     "filesystem",
+    "notarize",
     "websocket"
   ],
   "tags": [
@@ -22,7 +23,8 @@
     "homepage": "https://github.com/kyleu/loadtoad",
     "sourcecode": "https://github.com/kyleu/loadtoad",
     "summary": "Load testing from HAR files",
-    "description": "..."
+    "description": "...",
+    "signingIdentity": "Developer ID Application: Kyle Unverferth (C6S478FYLD)"
   },
   "theme": {
     "light": {
