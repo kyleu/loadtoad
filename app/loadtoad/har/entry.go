@@ -7,6 +7,7 @@ import (
 	"golang.org/x/net/http/httpguts"
 	"net/http"
 	"net/url"
+	"strings"
 )
 
 type Entry struct {
@@ -86,6 +87,13 @@ func (e *Entry) ToRequest(ignoreCookies bool) (*http.Request, error) {
 	return req, nil
 }
 
+func (e *Entry) WithReplacements(repls func(s string) string) *Entry {
+	ret := e.Clone()
+	ret.Request = ret.Request.WithReplacements(repls)
+	ret.Response = ret.Response.WithReplacements(repls)
+	return ret
+}
+
 type Entries []*Entry
 
 func (e Entries) ForPage(ref string) Entries {
@@ -112,5 +120,23 @@ func (e Entries) TotalResponseBodySize() int {
 			return 0
 		}
 		return x.Response.Content.Size
+	})
+}
+
+func (e Entries) WithReplacementsMap(repls map[string]string) Entries {
+	if len(repls) == 0 {
+		return e
+	}
+	return e.WithReplacements(func(s string) string {
+		for k, v := range repls {
+			s = strings.ReplaceAll(s, k, v)
+		}
+		return s
+	})
+}
+
+func (e Entries) WithReplacements(repl func(s string) string) Entries {
+	return lo.Map(e, func(x *Entry, _ int) *Entry {
+		return x.WithReplacements(repl)
 	})
 }

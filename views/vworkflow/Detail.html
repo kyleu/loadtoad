@@ -21,7 +21,10 @@
     {%= components.JSONModal("workflow", "Workflow", p.Workflow, 3) %}
     <h3>{%= components.SVGRefIcon(`sitemap`, ps) %} {%s p.Workflow.Title() %}</h3>
     <div class="mt">
-      <a href="{%s p.Workflow.WebPath() %}/run"><button>Run</button></a>
+      <a href="{%s p.Workflow.WebPath() %}/run?ok=true"><button>Run</button></a>
+      {%- if len(p.Workflow.Replacements) > 0 -%}
+      <a href="{%s p.Workflow.WebPath() %}/run"><button>Run w/ Options</button></a>
+      {%- endif -%}
     </div>
   </div>
   <div class="card">
@@ -40,6 +43,7 @@
           <div class="bd">
             {%= vhar.RenderEntry(i, e, ps) %}
           </div>
+          {%= vhar.RenderEntryModals(i, e, false) %}
         </li>
         {%- endfor -%}
       </ul>

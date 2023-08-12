@@ -1,6 +1,9 @@
 package har
 
-import "time"
+import (
+	"github.com/kyleu/loadtoad/app/util"
+	"time"
+)
 
 type Cookie struct {
 	Name     string `json:"name"`
@@ -13,9 +16,31 @@ type Cookie struct {
 	Comment  bool   `json:"comment,omitempty"`
 }
 
-func (c *Cookie) Exp() time.Time {
-	ret, _ := time.Parse("2006-01-02T15:04:05.000Z", c.Expires)
+func (c *Cookie) Tags() []string {
+	var ret []string
+	if c.HTTPOnly {
+		ret = append(ret, "http-only")
+	}
+	if c.Secure {
+		ret = append(ret, "secure")
+	}
+	if c.Comment {
+		ret = append(ret, "comment")
+	}
 	return ret
+}
+
+func (c *Cookie) Exp() *time.Time {
+	ret, err := time.Parse("2006-01-02T15:04:05.000Z", c.Expires)
+	if err != nil {
+		return nil
+	}
+	return &ret
+}
+
+func (c *Cookie) ExpRelative() string {
+	e := c.Exp()
+	return util.TimeRelative(e)
 }
 
 type Cookies []*Cookie

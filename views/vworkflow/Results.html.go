@@ -49,7 +49,7 @@ func (p *Results) StreamBody(qw422016 *qt422016.Writer, as *app.State, ps *cutil
 	qw422016.N().S(`
     <h3>`)
 //line views/vworkflow/Results.html:22
-	components.StreamSVGRefIcon(qw422016, `play`, ps)
+	components.StreamSVGRefIcon(qw422016, `file-code`, ps)
 //line views/vworkflow/Results.html:22
 	qw422016.N().S(` `)
 //line views/vworkflow/Results.html:22
@@ -257,50 +257,60 @@ func StreamRenderResultTable(qw422016 *qt422016.Writer, rIdx int, r *loadtoad.Wo
 	qw422016.N().S(`</td>
       </tr>
       <tr>
-        <th>`)
+        <th title="duration must be within (`)
 //line views/vworkflow/Results.html:66
-	streamrenderBool(qw422016, r.Entry.Time == 0 || r.Duration < int(r.Entry.Time*1000*1.1), "Duration", ps)
+	qw422016.N().F(float64(r.Entry.Time))
 //line views/vworkflow/Results.html:66
-	qw422016.N().S(`</th>
+	qw422016.N().S(` * 1.3) + 10), which equals `)
+//line views/vworkflow/Results.html:66
+	qw422016.E().S(util.MicrosToMillis(int(r.Entry.Time*1000*1.3) + 10))
+//line views/vworkflow/Results.html:66
+	qw422016.N().S(`">
+          `)
+//line views/vworkflow/Results.html:67
+	streamrenderBool(qw422016, r.Entry.Time == 0 || r.Duration < int(r.Entry.Time*1000*1.3)+10, "Duration", ps)
+//line views/vworkflow/Results.html:67
+	qw422016.N().S(`
+        </th>
         <td>`)
-//line views/vworkflow/Results.html:67
+//line views/vworkflow/Results.html:69
 	qw422016.E().S(util.MicrosToMillis(int(r.Entry.Time * 1000)))
-//line views/vworkflow/Results.html:67
+//line views/vworkflow/Results.html:69
 	qw422016.N().S(`</td>
         <td>`)
-//line views/vworkflow/Results.html:68
+//line views/vworkflow/Results.html:70
 	qw422016.E().S(util.MicrosToMillis(r.Duration))
-//line views/vworkflow/Results.html:68
+//line views/vworkflow/Results.html:70
 	qw422016.N().S(`</td>
       </tr>
     </tbody>
   </table>
 `)
-//line views/vworkflow/Results.html:72
+//line views/vworkflow/Results.html:74
 }
 
-//line views/vworkflow/Results.html:72
+//line views/vworkflow/Results.html:74
 func WriteRenderResultTable(qq422016 qtio422016.Writer, rIdx int, r *loadtoad.WorkflowResult, ps *cutil.PageState) {
-//line views/vworkflow/Results.html:72
+//line views/vworkflow/Results.html:74
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line views/vworkflow/Results.html:72
+//line views/vworkflow/Results.html:74
 	StreamRenderResultTable(qw422016, rIdx, r, ps)
-//line views/vworkflow/Results.html:72
+//line views/vworkflow/Results.html:74
 	qt422016.ReleaseWriter(qw422016)
-//line views/vworkflow/Results.html:72
+//line views/vworkflow/Results.html:74
 }
 
-//line views/vworkflow/Results.html:72
+//line views/vworkflow/Results.html:74
 func RenderResultTable(rIdx int, r *loadtoad.WorkflowResult, ps *cutil.PageState) string {
-//line views/vworkflow/Results.html:72
+//line views/vworkflow/Results.html:74
 	qb422016 := qt422016.AcquireByteBuffer()
-//line views/vworkflow/Results.html:72
+//line views/vworkflow/Results.html:74
 	WriteRenderResultTable(qb422016, rIdx, r, ps)
-//line views/vworkflow/Results.html:72
+//line views/vworkflow/Results.html:74
 	qs422016 := string(qb422016.B)
-//line views/vworkflow/Results.html:72
+//line views/vworkflow/Results.html:74
 	qt422016.ReleaseByteBuffer(qb422016)
-//line views/vworkflow/Results.html:72
+//line views/vworkflow/Results.html:74
 	return qs422016
-//line views/vworkflow/Results.html:72
+//line views/vworkflow/Results.html:74
 }

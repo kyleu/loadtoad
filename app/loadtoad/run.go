@@ -12,7 +12,7 @@ import (
 	"net/http/cookiejar"
 )
 
-func (s *Service) LoadEntries(keys ...*har.Selector) (har.Entries, error) {
+func (s *Service) LoadEntries(repls map[string]string, keys ...*har.Selector) (har.Entries, error) {
 	var ret har.Entries
 	cache := map[string]*har.Log{}
 	for _, k := range keys {
@@ -37,34 +37,37 @@ func (s *Service) LoadEntries(keys ...*har.Selector) (har.Entries, error) {
 		})
 		ret = append(ret, ents...)
 	}
-	return ret, nil
+	return ret.WithReplacementsMap(repls), nil
 }
 
-func (s *Service) Run(w *Workflow, logF func(i int, s string), errF func(i int, e error), okF func(i int, result *WorkflowResult)) (WorkflowResults, error) {
+func (s *Service) Run(
+	w *Workflow, repls map[string]string, logF func(i int, s string), errF func(i int, e error), okF func(i int, result *WorkflowResult),
+) (WorkflowResults, error) {
 	var ret WorkflowResults
 	jar, _ := cookiejar.New(nil)
 	client := http.Client{Jar: jar, Transport: &http.Transport{TLSClientConfig: &tls.Config{InsecureSkipVerify: true}}}
-	entries, err := s.LoadEntries(w.Tests...)
+	entries, err := s.LoadEntries(repls, w.Tests...)
 	if err != nil {
 		return nil, err
 	}
 	var hot []string
 	for i, e := range entries {
 		wr, err := s.RunEntry(w.ID, i, e, client, jar, hot, logF)
-		if err != nil {
+		if err == nil {
+			if okF != nil {
+				okF(i, wr)
+			}
+			if !slices.Contains(hot, wr.Domain) {
+				hot = append(hot, wr.Domain)
+			}
+			ret = append(ret, wr)
+		} else {
 			if errF == nil {
 				return nil, err
 			} else {
 				errF(i, err)
 			}
 		}
-		if okF != nil {
-			okF(i, wr)
-		}
-		if !slices.Contains(hot, wr.Domain) {
-			hot = append(hot, wr.Domain)
-		}
-		ret = append(ret, wr)
 	}
 	return ret, nil
 }

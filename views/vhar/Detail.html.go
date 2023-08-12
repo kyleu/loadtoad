@@ -101,6 +101,10 @@ func (p *Detail) StreamBody(qw422016 *qt422016.Writer, as *app.State, ps *cutil.
 //line views/vhar/Detail.html:33
 		qw422016.N().S(` `)
 //line views/vhar/Detail.html:33
+		qw422016.E().S(e.Request.Method)
+//line views/vhar/Detail.html:33
+		qw422016.N().S(` `)
+//line views/vhar/Detail.html:33
 		qw422016.E().S(e.String())
 //line views/vhar/Detail.html:33
 		qw422016.N().S(`
@@ -113,11 +117,16 @@ func (p *Detail) StreamBody(qw422016 *qt422016.Writer, as *app.State, ps *cutil.
 //line views/vhar/Detail.html:37
 		qw422016.N().S(`
           </div>
+          `)
+//line views/vhar/Detail.html:39
+		StreamRenderEntryModals(qw422016, i, e, false)
+//line views/vhar/Detail.html:39
+		qw422016.N().S(`
         </li>
 `)
-//line views/vhar/Detail.html:40
+//line views/vhar/Detail.html:41
 	}
-//line views/vhar/Detail.html:40
+//line views/vhar/Detail.html:41
 	qw422016.N().S(`      </ul>
     </div>
   </div>
@@ -131,31 +140,31 @@ func (p *Detail) StreamBody(qw422016 *qt422016.Writer, as *app.State, ps *cutil.
     }
   </script>
 `)
-//line views/vhar/Detail.html:53
+//line views/vhar/Detail.html:54
 }
 
-//line views/vhar/Detail.html:53
+//line views/vhar/Detail.html:54
 func (p *Detail) WriteBody(qq422016 qtio422016.Writer, as *app.State, ps *cutil.PageState) {
-//line views/vhar/Detail.html:53
+//line views/vhar/Detail.html:54
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line views/vhar/Detail.html:53
+//line views/vhar/Detail.html:54
 	p.StreamBody(qw422016, as, ps)
-//line views/vhar/Detail.html:53
+//line views/vhar/Detail.html:54
 	qt422016.ReleaseWriter(qw422016)
-//line views/vhar/Detail.html:53
+//line views/vhar/Detail.html:54
 }
 
-//line views/vhar/Detail.html:53
+//line views/vhar/Detail.html:54
 func (p *Detail) Body(as *app.State, ps *cutil.PageState) string {
-//line views/vhar/Detail.html:53
+//line views/vhar/Detail.html:54
 	qb422016 := qt422016.AcquireByteBuffer()
-//line views/vhar/Detail.html:53
+//line views/vhar/Detail.html:54
 	p.WriteBody(qb422016, as, ps)
-//line views/vhar/Detail.html:53
+//line views/vhar/Detail.html:54
 	qs422016 := string(qb422016.B)
-//line views/vhar/Detail.html:53
+//line views/vhar/Detail.html:54
 	qt422016.ReleaseByteBuffer(qb422016)
-//line views/vhar/Detail.html:53
+//line views/vhar/Detail.html:54
 	return qs422016
-//line views/vhar/Detail.html:53
+//line views/vhar/Detail.html:54
 }

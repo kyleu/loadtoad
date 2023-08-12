@@ -44,3 +44,22 @@ func (r *Response) Size() int {
 	}
 	return len(r.Content.Text)
 }
+
+func (r *Response) WithReplacements(repl func(s string) string) *Response {
+	c := &Content{
+		Size: r.Content.Size, Compression: r.Content.Compression, MimeType: repl(r.Content.MimeType),
+		Text: repl(r.Content.Text), Encoding: r.Content.Encoding, Comment: r.Content.Comment, File: repl(r.Content.File),
+	}
+	return &Response{
+		Status:      r.Status,
+		StatusText:  r.StatusText,
+		HTTPVersion: r.HTTPVersion,
+		Cookies:     r.Cookies,
+		Headers:     r.Headers.WithReplacements(repl),
+		Content:     c,
+		RedirectURL: repl(r.RedirectURL),
+		HeadersSize: r.HeadersSize,
+		BodySize:    r.BodySize,
+		Comment:     r.Comment,
+	}
+}

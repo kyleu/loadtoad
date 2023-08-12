@@ -30,12 +30,13 @@
           <input id="accordion-entry-{%d i %}" type="checkbox" hidden />
           <label for="accordion-entry-{%d i %}">
             {%= RenderEntryOptions(i, e, false) %}
-            {%= components.ExpandCollapse(3, ps) %} {%s e.String() %}
+            {%= components.ExpandCollapse(3, ps) %} {%s e.Request.Method %} {%s e.String() %}
             <div class="clear"></div>
           </label>
           <div class="bd">
             {%= RenderEntry(i, e, ps) %}
           </div>
+          {%= RenderEntryModals(i, e, false) %}
         </li>
         {%- endfor -%}
       </ul>

@@ -67,21 +67,22 @@ func (p *Start) StreamBody(qw422016 *qt422016.Writer, as *app.State, ps *cutil.P
 //line views/vworkflow/Start.html:25
 	qw422016.N().S(`    </div>
     <div id="results" class="mt">
+      <div class="logs"></div>
     </div>
   </div>
 `)
-//line views/vworkflow/Start.html:30
+//line views/vworkflow/Start.html:31
 	for idx, e := range p.Entries {
-//line views/vworkflow/Start.html:30
+//line views/vworkflow/Start.html:31
 		qw422016.N().S(`  `)
-//line views/vworkflow/Start.html:31
+//line views/vworkflow/Start.html:32
 		streamentryPlaceholder(qw422016, idx, e, ps)
-//line views/vworkflow/Start.html:31
+//line views/vworkflow/Start.html:32
 		qw422016.N().S(`
 `)
-//line views/vworkflow/Start.html:32
+//line views/vworkflow/Start.html:33
 	}
-//line views/vworkflow/Start.html:32
+//line views/vworkflow/Start.html:33
 	qw422016.N().S(`  <script>
     var sock;
     function open() {
@@ -96,18 +97,22 @@ func (p *Start) StreamBody(qw422016 *qt422016.Writer, as *app.State, ps *cutil.P
           throw "invalid index [" + m.param.idx + "]";
         }
       }
+      const logs = el.querySelector(".logs");
+      if (!logs) {
+        throw "invalid logs for index [" + m.param.idx + "]";
+      }
       switch (m.cmd) {
         case "log":
-          const logs = el.querySelector(".logs");
-          if (!logs) {
-            throw "invalid logs for index [" + m.param.idx + "]";
-          }
           const logEl = document.createElement("div");
           logEl.innerText = " - " + m.param.ctx;
           logs.appendChild(logEl);
           break;
         case "error":
-          throw "error [" + m.param.ctx + "] encountered for index [" + m.param.idx + "]";
+          const errEl = document.createElement("div");
+          errEl.innerText = " - ERROR: " + m.param.ctx;
+          errEl.classList.add("error");
+          logs.appendChild(errEl);
+          break;
         case "ok":
           const deets = el.querySelector(".details");
           if (!deets) {
@@ -131,63 +136,65 @@ func (p *Start) StreamBody(qw422016 *qt422016.Writer, as *app.State, ps *cutil.P
       console.log("[Err]", e);
     }
     document.addEventListener("DOMContentLoaded", function() {
-      sock = new loadtoad.Socket(false, open, recv, err, "/workflow/`)
-//line views/vworkflow/Start.html:82
-	qw422016.E().S(p.Workflow.ID)
-//line views/vworkflow/Start.html:82
-	qw422016.N().S(`/connect?channel=`)
-//line views/vworkflow/Start.html:82
+      const up = new URLSearchParams(window.location.search);
+      up.set("channel", "`)
+//line views/vworkflow/Start.html:88
 	qw422016.E().S(p.Channel)
-//line views/vworkflow/Start.html:82
+//line views/vworkflow/Start.html:88
 	qw422016.N().S(`");
+      sock = new loadtoad.Socket(false, open, recv, err, "/workflow/`)
+//line views/vworkflow/Start.html:89
+	qw422016.E().S(p.Workflow.ID)
+//line views/vworkflow/Start.html:89
+	qw422016.N().S(`/connect?" + up.toString());
       console.log("[Load]");
     });
   </script>
 `)
-//line views/vworkflow/Start.html:86
+//line views/vworkflow/Start.html:93
 }
 
-//line views/vworkflow/Start.html:86
+//line views/vworkflow/Start.html:93
 func (p *Start) WriteBody(qq422016 qtio422016.Writer, as *app.State, ps *cutil.PageState) {
-//line views/vworkflow/Start.html:86
+//line views/vworkflow/Start.html:93
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line views/vworkflow/Start.html:86
+//line views/vworkflow/Start.html:93
 	p.StreamBody(qw422016, as, ps)
-//line views/vworkflow/Start.html:86
+//line views/vworkflow/Start.html:93
 	qt422016.ReleaseWriter(qw422016)
-//line views/vworkflow/Start.html:86
+//line views/vworkflow/Start.html:93
 }
 
-//line views/vworkflow/Start.html:86
+//line views/vworkflow/Start.html:93
 func (p *Start) Body(as *app.State, ps *cutil.PageState) string {
-//line views/vworkflow/Start.html:86
+//line views/vworkflow/Start.html:93
 	qb422016 := qt422016.AcquireByteBuffer()
-//line views/vworkflow/Start.html:86
+//line views/vworkflow/Start.html:93
 	p.WriteBody(qb422016, as, ps)
-//line views/vworkflow/Start.html:86
+//line views/vworkflow/Start.html:93
 	qs422016 := string(qb422016.B)
-//line views/vworkflow/Start.html:86
+//line views/vworkflow/Start.html:93
 	qt422016.ReleaseByteBuffer(qb422016)
-//line views/vworkflow/Start.html:86
+//line views/vworkflow/Start.html:93
 	return qs422016
-//line views/vworkflow/Start.html:86
+//line views/vworkflow/Start.html:93
 }
 
-//line views/vworkflow/Start.html:88
+//line views/vworkflow/Start.html:95
 func streamentryPlaceholder(qw422016 *qt422016.Writer, idx int, ent *har.Entry, ps *cutil.PageState) {
-//line views/vworkflow/Start.html:88
+//line views/vworkflow/Start.html:95
 	qw422016.N().S(`
   <div id="entry-placeholder-`)
-//line views/vworkflow/Start.html:89
+//line views/vworkflow/Start.html:96
 	qw422016.N().D(idx)
-//line views/vworkflow/Start.html:89
+//line views/vworkflow/Start.html:96
 	qw422016.N().S(`" class="card">
     <h3>`)
-//line views/vworkflow/Start.html:90
+//line views/vworkflow/Start.html:97
 	components.StreamSVGRefIcon(qw422016, `file`, ps)
-//line views/vworkflow/Start.html:90
+//line views/vworkflow/Start.html:97
 	qw422016.E().S(ent.String())
-//line views/vworkflow/Start.html:90
+//line views/vworkflow/Start.html:97
 	qw422016.N().S(`</h3>
     <div class="clear"></div>
     <div class="mts details">
@@ -197,31 +204,31 @@ func streamentryPlaceholder(qw422016 *qt422016.Writer, idx int, ent *har.Entry, 
     </div>
   </div>
 `)
-//line views/vworkflow/Start.html:98
+//line views/vworkflow/Start.html:105
 }
 
-//line views/vworkflow/Start.html:98
+//line views/vworkflow/Start.html:105
 func writeentryPlaceholder(qq422016 qtio422016.Writer, idx int, ent *har.Entry, ps *cutil.PageState) {
-//line views/vworkflow/Start.html:98
+//line views/vworkflow/Start.html:105
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line views/vworkflow/Start.html:98
+//line views/vworkflow/Start.html:105
 	streamentryPlaceholder(qw422016, idx, ent, ps)
-//line views/vworkflow/Start.html:98
+//line views/vworkflow/Start.html:105
 	qt422016.ReleaseWriter(qw422016)
-//line views/vworkflow/Start.html:98
+//line views/vworkflow/Start.html:105
 }
 
-//line views/vworkflow/Start.html:98
+//line views/vworkflow/Start.html:105
 func entryPlaceholder(idx int, ent *har.Entry, ps *cutil.PageState) string {
-//line views/vworkflow/Start.html:98
+//line views/vworkflow/Start.html:105
 	qb422016 := qt422016.AcquireByteBuffer()
-//line views/vworkflow/Start.html:98
+//line views/vworkflow/Start.html:105
 	writeentryPlaceholder(qb422016, idx, ent, ps)
-//line views/vworkflow/Start.html:98
+//line views/vworkflow/Start.html:105
 	qs422016 := string(qb422016.B)
-//line views/vworkflow/Start.html:98
+//line views/vworkflow/Start.html:105
 	qt422016.ReleaseByteBuffer(qb422016)
-//line views/vworkflow/Start.html:98
+//line views/vworkflow/Start.html:105
 	return qs422016
-//line views/vworkflow/Start.html:98
+//line views/vworkflow/Start.html:105
 }

@@ -14,6 +14,9 @@
     <a href="#modal-entry-{%d i %}"><button type="button">JSON</button></a>
     {%- endif -%}
   </div>
+{% endfunc %}
+
+{% func RenderEntryModals(i int, e *har.Entry, js bool) %}
   {%- if js -%}
   {%= components.JSONModal(fmt.Sprintf("entry-%d", i), e.String(), e.Cleaned(), 3) %}
   {%- endif -%}
@@ -41,10 +44,6 @@
       <tr>
         <th class="shrink">Duration</th>
         <td>{%s util.MicrosToMillis(e.Duration()) %}</td>
-      </tr>
-      <tr>
-        <th class="shrink">Request Size</th>
-        <td>{%s util.ByteSizeSI(int64(e.Request.Size())) %}</td>
       </tr>
       <tr>
         <th class="shrink">Request</th>

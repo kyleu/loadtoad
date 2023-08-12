@@ -7,6 +7,7 @@ import (
 	"github.com/kyleu/loadtoad/views/vworkflow"
 	"github.com/pkg/errors"
 	"github.com/valyala/fasthttp"
+	"strings"
 
 	"github.com/kyleu/loadtoad/app"
 	"github.com/kyleu/loadtoad/app/controller/cutil"
@@ -22,6 +23,20 @@ func WorkflowConnect(rc *fasthttp.RequestCtx) {
 		w, err := loadWorkflow(as, rc)
 		if err != nil {
 			return "", err
+		}
+
+		repls := w.Replacements
+
+		if string(rc.URI().QueryArgs().Peek("ok")) != "true" {
+			var args cutil.Args
+			for k, v := range w.Replacements {
+				args = append(args, &cutil.Arg{Key: k, Title: k, Type: "string", Default: v})
+			}
+			argRes := cutil.CollectArgs(rc, args)
+			if argRes.HasMissing() {
+				return "", errors.Errorf("missing replacements [%s]", strings.Join(argRes.Missing, ", "))
+			}
+			repls = argRes.Values
 		}
 		channel := string(rc.URI().QueryArgs().Peek("channel"))
 		if channel == "" {
@@ -49,7 +64,7 @@ func WorkflowConnect(rc *fasthttp.RequestCtx) {
 			send("ok", &WorkflowMessage{Idx: i, Ctx: vworkflow.RenderResultTable(i, w, ps)})
 		}
 		go func() {
-			final, e := as.Services.LoadToad.Run(w, logF, errF, okF)
+			final, e := as.Services.LoadToad.Run(w, repls, logF, errF, okF)
 			if e != nil {
 				errF(-1, e)
 			}

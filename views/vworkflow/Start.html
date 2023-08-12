@@ -25,6 +25,7 @@
       {%- endif -%}
     </div>
     <div id="results" class="mt">
+      <div class="logs"></div>
     </div>
   </div>
   {%- for idx, e := range p.Entries -%}
@@ -44,18 +45,22 @@
           throw "invalid index [" + m.param.idx + "]";
         }
       }
+      const logs = el.querySelector(".logs");
+      if (!logs) {
+        throw "invalid logs for index [" + m.param.idx + "]";
+      }
       switch (m.cmd) {
         case "log":
-          const logs = el.querySelector(".logs");
-          if (!logs) {
-            throw "invalid logs for index [" + m.param.idx + "]";
-          }
           const logEl = document.createElement("div");
           logEl.innerText = " - " + m.param.ctx;
           logs.appendChild(logEl);
           break;
         case "error":
-          throw "error [" + m.param.ctx + "] encountered for index [" + m.param.idx + "]";
+          const errEl = document.createElement("div");
+          errEl.innerText = " - ERROR: " + m.param.ctx;
+          errEl.classList.add("error");
+          logs.appendChild(errEl);
+          break;
         case "ok":
           const deets = el.querySelector(".details");
           if (!deets) {
@@ -79,7 +84,9 @@
       console.log("[Err]", e);
     }
     document.addEventListener("DOMContentLoaded", function() {
-      sock = new loadtoad.Socket(false, open, recv, err, "/workflow/{%s p.Workflow.ID %}/connect?channel={%s p.Channel %}");
+      const up = new URLSearchParams(window.location.search);
+      up.set("channel", "{%s p.Channel %}");
+      sock = new loadtoad.Socket(false, open, recv, err, "/workflow/{%s p.Workflow.ID %}/connect?" + up.toString());
       console.log("[Load]");
     });
   </script>

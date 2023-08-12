@@ -1,5 +1,7 @@
 package har
 
+import "github.com/samber/lo"
+
 type HarWrapper struct {
 	Log *Log `json:"log"`
 }
@@ -19,6 +21,12 @@ func (p NVPs) GetValue(n string) string {
 		}
 	}
 	return ""
+}
+
+func (p NVPs) WithReplacements(repl func(s string) string) NVPs {
+	return lo.Map(p, func(n *NVP, _ int) *NVP {
+		return &NVP{Name: repl(n.Name), Value: repl(n.Value), Comment: repl(n.Comment)}
+	})
 }
 
 type Content struct {

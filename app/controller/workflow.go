@@ -1,14 +1,14 @@
 package controller
 
 import (
-	"github.com/kyleu/loadtoad/app/loadtoad"
-	"github.com/kyleu/loadtoad/app/util"
-	"github.com/kyleu/loadtoad/views/vworkflow"
-	"github.com/pkg/errors"
-	"github.com/valyala/fasthttp"
-
+	"fmt"
 	"github.com/kyleu/loadtoad/app"
 	"github.com/kyleu/loadtoad/app/controller/cutil"
+	"github.com/kyleu/loadtoad/app/loadtoad"
+	"github.com/kyleu/loadtoad/app/util"
+	"github.com/kyleu/loadtoad/views/vpage"
+	"github.com/kyleu/loadtoad/views/vworkflow"
+	"github.com/valyala/fasthttp"
 )
 
 func WorkflowList(rc *fasthttp.RequestCtx) {
@@ -28,7 +28,7 @@ func WorkflowDetail(rc *fasthttp.RequestCtx) {
 		if err != nil {
 			return "", err
 		}
-		ents, err := as.Services.LoadToad.LoadEntries(w.Tests...)
+		ents, err := as.Services.LoadToad.LoadEntries(w.Replacements, w.Tests...)
 		if err != nil {
 			return "", err
 		}
@@ -44,7 +44,23 @@ func WorkflowStart(rc *fasthttp.RequestCtx) {
 		if err != nil {
 			return "", err
 		}
-		ents, err := as.Services.LoadToad.LoadEntries(w.Tests...)
+
+		repls := w.Replacements
+		if string(rc.URI().QueryArgs().Peek("ok")) != "true" {
+			var args cutil.Args
+			for k, v := range w.Replacements {
+				args = append(args, &cutil.Arg{Key: k, Title: k, Type: "string", Default: v})
+			}
+			argRes := cutil.CollectArgs(rc, args)
+			if argRes.HasMissing() {
+				url := fmt.Sprintf("/workflow/%s/run", w.ID)
+				ps.Data = argRes
+				return Render(rc, as, &vpage.Args{URL: url, Directions: "Choose your run options", ArgRes: argRes}, ps, "workflow", w.ID, "run")
+			}
+			repls = argRes.Values
+		}
+
+		ents, err := as.Services.LoadToad.LoadEntries(repls, w.Tests...)
 		if err != nil {
 			return "", err
 		}
@@ -52,25 +68,6 @@ func WorkflowStart(rc *fasthttp.RequestCtx) {
 		ps.Data = w
 		channel := "run-" + util.RandomString(16)
 		return Render(rc, as, &vworkflow.Start{Workflow: w, Entries: ents, Channel: channel}, ps, "workflow", w.ID, "run")
-	})
-}
-
-func WorkflowRunSync(rc *fasthttp.RequestCtx) {
-	Act("workflow.run", rc, func(as *app.State, ps *cutil.PageState) (string, error) {
-		w, err := loadWorkflow(as, rc)
-		if err != nil {
-			return "", err
-		}
-		logF := func(i int, s string) {
-			ps.Logger.Infof("[%d] %s", i, s)
-		}
-		ret, err := as.Services.LoadToad.Run(w, logF, nil, nil)
-		if err != nil {
-			return "", errors.Wrapf(err, "unable to load the toad")
-		}
-		ps.Title = "Workflow " + w.Title()
-		ps.Data = ret
-		return Render(rc, as, &vworkflow.Results{Workflow: w, Results: ret}, ps, "workflow", w.ID, "run")
 	})
 }
 

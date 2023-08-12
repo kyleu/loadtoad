@@ -9,9 +9,10 @@ import (
 )
 
 type Workflow struct {
-	ID    string        `json:"-"`
-	Name  string        `json:"name,omitempty"`
-	Tests har.Selectors `json:"tests,omitempty"`
+	ID           string            `json:"-"`
+	Name         string            `json:"name,omitempty"`
+	Tests        har.Selectors     `json:"tests,omitempty"`
+	Replacements map[string]string `json:"replacements,omitempty"`
 }
 
 func (w *Workflow) Title() string {
@@ -52,6 +53,11 @@ func (s *Service) LoadWorkflow(fn string) (*Workflow, error) {
 	}
 	if ret.ID == "" {
 		ret.ID = strings.TrimPrefix(strings.TrimSuffix(fn, ".json"), "workflow/")
+	}
+	for k, v := range ret.Replacements {
+		if v == "" {
+			ret.Replacements[k] = k
+		}
 	}
 	return ret, nil
 }
