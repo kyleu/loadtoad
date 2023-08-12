@@ -67,7 +67,7 @@ func WorkflowStart(rc *fasthttp.RequestCtx) {
 		ps.Title = "Workflow " + w.Title()
 		ps.Data = w
 		channel := "run-" + util.RandomString(16)
-		return Render(rc, as, &vworkflow.Start{Workflow: w, Entries: ents, Channel: channel}, ps, "workflow", w.ID, "run")
+		return Render(rc, as, &vworkflow.Start{Workflow: w, Entries: ents, Channel: channel, Path: "/workflow/" + w.ID + "/connect"}, ps, "workflow", w.ID, "run")
 	})
 }
 

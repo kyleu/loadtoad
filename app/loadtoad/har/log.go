@@ -23,7 +23,7 @@ type Log struct {
 }
 
 func (l *Log) WebPath() string {
-	return "/workflow/" + l.Key
+	return "/har/" + l.Key
 }
 
 type Logs []*Log

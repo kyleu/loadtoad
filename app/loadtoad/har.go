@@ -33,7 +33,7 @@ func (s *Service) LoadHar(fn string) (*har.Log, error) {
 	if err != nil {
 		return nil, errors.Wrapf(err, "error decoding file [%s]", fn)
 	}
-	ret.Log.Key = key
+	ret.Log.Key = strings.TrimSuffix(key, ".har")
 	ret.Log.Entries = ret.Log.Entries.Trimmed()
 	return ret.Log, nil
 }

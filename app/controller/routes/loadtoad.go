@@ -9,6 +9,8 @@ func loadtoadRoutes(r *router.Router) {
 	r.GET("/har", controller.HarList)
 	r.POST("/har", controller.HarUpload)
 	r.GET("/har/{key}", controller.HarDetail)
+	r.GET("/har/{key}/run", controller.HarStart)
+	r.GET("/har/{key}/connect", controller.HarConnect)
 
 	r.GET("/workflow", controller.WorkflowList)
 	r.GET("/workflow/{key}", controller.WorkflowDetail)

@@ -12,6 +12,7 @@
   Workflow *loadtoad.Workflow
   Entries har.Entries
   Channel string
+  Path string
 } %}
 
 {% func (p *Start) Body(as *app.State, ps *cutil.PageState) %}
@@ -86,7 +87,7 @@
     document.addEventListener("DOMContentLoaded", function() {
       const up = new URLSearchParams(window.location.search);
       up.set("channel", "{%s p.Channel %}");
-      sock = new loadtoad.Socket(false, open, recv, err, "/workflow/{%s p.Workflow.ID %}/connect?" + up.toString());
+      sock = new loadtoad.Socket(false, open, recv, err, "{%s p.Path %}?" + up.toString());
       console.log("[Load]");
     });
   </script>

@@ -1,11 +1,11 @@
 <!--- Content managed by Project Forge, see [projectforge.md] for details. -->
 # Releasing
 
-Load Toad uses `goreleaser` to create build artifacts. 
+Load Toad uses `goreleaser` to create build artifacts.
 
-You can release to GitHub using `./bin/build/release.sh`, or test the release by running `./bin/build/release-test.sh`. 
+You can release to GitHub using `./bin/build/release.sh`, or test the release by running `./bin/build/release-test.sh`.
 
-Your releases are available at https://github.com/kyleu/loadtoad/releases 
+Your releases are available at https://github.com/kyleu/loadtoad/releases
 
 ### Checksums
 
@@ -30,8 +30,4 @@ The source code will be bundled in the release, available as `loadtoad_x.x.x_sou
 ### Universal Binaries
 
 A universal macOS app will be created, containing the complete app for x86-64 and ARM
-
-### Desktop Build
-
-A standalone desktop application, bundling the server and a web view, will be built for Linux, macOS, and Windows
 

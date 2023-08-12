@@ -2,8 +2,11 @@ package controller
 
 import (
 	"fmt"
+	"github.com/kyleu/loadtoad/app/loadtoad"
+	"github.com/kyleu/loadtoad/app/loadtoad/har"
 	"github.com/kyleu/loadtoad/app/util"
 	"github.com/kyleu/loadtoad/views/vhar"
+	"github.com/kyleu/loadtoad/views/vworkflow"
 	"github.com/pkg/errors"
 	"github.com/valyala/fasthttp"
 	"io/ioutil"
@@ -34,7 +37,7 @@ func HarDetail(rc *fasthttp.RequestCtx) {
 		}
 		ps.Title = "Archive [" + key + "]"
 		ps.Data = ret
-		return Render(rc, as, &vhar.Detail{Har: ret}, ps, "har", key)
+		return Render(rc, as, &vhar.Detail{Har: ret}, ps, "har", ret.Key)
 	})
 }
 
@@ -77,5 +80,23 @@ func HarUpload(rc *fasthttp.RequestCtx) {
 		msg := fmt.Sprintf("Created [%s] (%s)", name, util.ByteSizeSI(fileHeader.Size))
 		redir := "/har/" + name
 		return FlashAndRedir(true, msg, redir, rc, ps)
+	})
+}
+
+func HarStart(rc *fasthttp.RequestCtx) {
+	Act("har.start", rc, func(as *app.State, ps *cutil.PageState) (string, error) {
+		key, err := cutil.RCRequiredString(rc, "key", true)
+		if err != nil {
+			return "", err
+		}
+		ret, err := as.Services.LoadToad.LoadHar(key)
+		if err != nil {
+			return "", err
+		}
+		w := &loadtoad.Workflow{ID: ret.Key, Name: ret.Key, Tests: har.Selectors{{Har: ret.Key}}}
+		ps.Title = "Archive [" + key + "]"
+		ps.Data = ret
+		channel := "run-" + util.RandomString(16)
+		return Render(rc, as, &vworkflow.Start{Workflow: w, Entries: ret.Entries, Channel: channel, Path: "/har/" + ret.Key + "/connect"}, ps, "archive", ret.Key, "Run")
 	})
 }

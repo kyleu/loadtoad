@@ -15,8 +15,6 @@ checksum:
   name_template: "checksums.txt"
   extra_files:
     - glob: "./build/dist/*_notarized.zip"
-    - glob: "./build/dist/*_desktop.dmg"
-    - glob: "./build/dist/*_desktop.zip"
     # $PF_SECTION_START(checksums)$
     # $PF_SECTION_END(checksums)$
 
@@ -46,8 +44,6 @@ release:
 
   extra_files:
     - glob: "./build/dist/*_notarized.zip"
-    - glob: "./build/dist/*.dmg"
-    - glob: "./build/dist/*_desktop.zip"
     # $PF_SECTION_START(releasefiles)$
     # $PF_SECTION_END(releasefiles)$
 
@@ -69,7 +65,6 @@ universal_binaries:
   hooks:
     # This is a good place to put one-time use scripts
     post:
-      - "./bin/build/desktop.release.sh {{ .Version }}"
       - "./tools/notarize/notarize.sh"
       # $PF_SECTION_START(extrascripts)$
       # $PF_SECTION_END(extrascripts)$
