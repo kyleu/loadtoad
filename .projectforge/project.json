@@ -24,7 +24,9 @@
     "sourcecode": "https://github.com/kyleu/loadtoad",
     "summary": "Load testing from HAR files",
     "description": "...",
-    "signingIdentity": "Developer ID Application: Kyle Unverferth (C6S478FYLD)"
+    "bundle": "dev.kyleu.loadtoad",
+    "signingIdentity": "Developer ID Application: Kyle Unverferth (C6S478FYLD)",
+    "notarizeEmail": "kyle@kyleu.com"
   },
   "theme": {
     "light": {
