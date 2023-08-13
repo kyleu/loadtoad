@@ -100,7 +100,7 @@ export class Socket {
   }
 
   disconnect() {
-    this.sock?.close();
+    // noop
   }
 
   send(msg: Message) {

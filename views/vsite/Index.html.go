@@ -43,7 +43,7 @@ func (p *Index) StreamBody(qw422016 *qt422016.Writer, as *app.State, ps *cutil.P
 	qw422016.E().S(util.AppName)
 //line views/vsite/Index.html:14
 	qw422016.N().S(`</h3>
-    <p>...</p>
+    <p>Load Toad helps you test your web application using HTTP Archive (.har) files</p>
     <p>
       <a href="/download"><button>Download</button></a>
       <a href="https://github.com/kyleu/loadtoad"><button>Source Code</button></a>

@@ -24,7 +24,7 @@
     "homepage": "https://github.com/kyleu/loadtoad",
     "sourcecode": "https://github.com/kyleu/loadtoad",
     "summary": "Load testing from HAR files",
-    "description": "...",
+    "description": "Load Toad helps you test your web application using HTTP Archive (.har) files",
     "bundle": "dev.kyleu.loadtoad",
     "signingIdentity": "Developer ID Application: Kyle Unverferth (C6S478FYLD)",
     "notarizeEmail": "kyle@kyleu.com"
