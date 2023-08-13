@@ -13,7 +13,7 @@ require (
 	github.com/gertd/go-pluralize v0.2.1
 	github.com/gomarkdown/markdown v0.0.0-20230716120725-531d2d74bc12
 	github.com/google/uuid v1.3.0
-	github.com/iancoleman/strcase v0.3.0
+	github.com/iancoleman/strcase v0.2.0
 	github.com/json-iterator/go v1.1.12
 	github.com/kirsle/configdir v0.0.0-20170128060238-e45d2f54772f
 	github.com/mileusna/useragent v1.3.3
