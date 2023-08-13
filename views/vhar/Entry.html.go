@@ -180,7 +180,11 @@ func StreamRenderEntry(qw422016 *qt422016.Writer, i int, e *har.Entry, ps *cutil
 //line views/vhar/Entry.html:46
 	qw422016.E().S(util.MicrosToMillis(e.Duration()))
 //line views/vhar/Entry.html:46
-	qw422016.N().S(`</td>
+	qw422016.N().S(` (`)
+//line views/vhar/Entry.html:46
+	qw422016.E().S(e.PageTimings.String())
+//line views/vhar/Entry.html:46
+	qw422016.N().S(`)</td>
       </tr>
       <tr>
         <th class="shrink">Request</th>

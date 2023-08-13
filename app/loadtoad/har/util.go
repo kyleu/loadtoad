@@ -2,7 +2,9 @@ package har
 
 import "github.com/samber/lo"
 
-type HarWrapper struct {
+const Ext = ".har"
+
+type Wrapper struct {
 	Log *Log `json:"log"`
 }
 

@@ -48,7 +48,7 @@ func WorkflowStart(rc *fasthttp.RequestCtx) {
 		}
 
 		repls := w.Replacements
-		if string(rc.URI().QueryArgs().Peek("ok")) != "true" {
+		if string(rc.URI().QueryArgs().Peek("ok")) != util.BoolTrue {
 			var args cutil.Args
 			for k, v := range w.Replacements {
 				args = append(args, &cutil.Arg{Key: k, Title: k, Type: "string", Default: v})

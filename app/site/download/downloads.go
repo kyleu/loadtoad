@@ -7,11 +7,6 @@ import (
 	"github.com/kyleu/loadtoad/app/util"
 )
 
-var (
-	arms = []string{ArchARMV5, ArchARMV6, ArchARMV7}
-	mips = []string{ArchMIPS64Hard, ArchMIPS64Soft, ArchMIPS64LEHard, ArchMIPS64LESoft, ArchMIPSHard, ArchMIPSSoft, ArchMIPSLEHard, ArchMIPSLESoft}
-)
-
 func GetLinks(version string) Links {
 	if availableLinks == nil {
 		availableLinks = calcDownloadLinks(version)

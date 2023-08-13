@@ -14,5 +14,3 @@ func initApp(_ *app.State, _ util.Logger) {
 func initAppRequest(_ *app.State, _ *cutil.PageState) error {
 	return nil
 }
-
-

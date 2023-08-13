@@ -1,16 +1,19 @@
 package loadtoad
 
 import (
+	"context"
 	"crypto/tls"
 	"fmt"
-	"github.com/kyleu/loadtoad/app/loadtoad/har"
-	"github.com/kyleu/loadtoad/app/util"
-	"github.com/pkg/errors"
-	"github.com/samber/lo"
-	"golang.org/x/exp/slices"
 	"net/http"
 	"net/http/cookiejar"
 	"net/http/httptrace"
+
+	"github.com/pkg/errors"
+	"github.com/samber/lo"
+	"golang.org/x/exp/slices"
+
+	"github.com/kyleu/loadtoad/app/loadtoad/har"
+	"github.com/kyleu/loadtoad/app/util"
 )
 
 func (s *Service) LoadEntries(repls map[string]string, keys ...*har.Selector) (har.Entries, error) {
@@ -31,7 +34,7 @@ func (s *Service) LoadEntries(repls map[string]string, keys ...*har.Selector) (h
 		}
 		ents, err := h.Entries.Find(k)
 		if err != nil {
-			return nil, errors.Wrapf(err, "no entries found in [%s] with selector [%s]", h, util.ToJSONCompact(k))
+			return nil, errors.Wrapf(err, "no entries found in [%s] with selector [%s]", k.Har, util.ToJSONCompact(k))
 		}
 		ents = lo.Filter(ents, func(e *har.Entry, _ int) bool {
 			return e.Response != nil && e.Response.Status != 0
@@ -42,18 +45,18 @@ func (s *Service) LoadEntries(repls map[string]string, keys ...*har.Selector) (h
 }
 
 func (s *Service) Run(
-	w *Workflow, repls map[string]string, logF func(i int, s string), errF func(i int, e error), okF func(i int, result *WorkflowResult),
+	ctx context.Context, w *Workflow, repls map[string]string, logF func(i int, s string), errF func(i int, e error), okF func(i int, result *WorkflowResult),
 ) (WorkflowResults, error) {
 	var ret WorkflowResults
 	jar, _ := cookiejar.New(nil)
-	client := http.Client{Jar: jar, Transport: &http.Transport{TLSClientConfig: &tls.Config{InsecureSkipVerify: true}}}
+	client := http.Client{Jar: jar, Transport: &http.Transport{TLSClientConfig: &tls.Config{InsecureSkipVerify: true}}} //nolint:gosec
 	entries, err := s.LoadEntries(repls, w.Tests...)
 	if err != nil {
 		return nil, err
 	}
 	var hot []string
 	for i, e := range entries {
-		wr, err := s.RunEntry(w.ID, i, e, client, jar, hot, logF)
+		wr, err := s.RunEntry(ctx, w.ID, i, e, client, jar, hot, logF)
 		if err == nil {
 			if okF != nil {
 				okF(i, wr)
@@ -65,16 +68,15 @@ func (s *Service) Run(
 		} else {
 			if errF == nil {
 				return nil, err
-			} else {
-				errF(i, err)
 			}
+			errF(i, err)
 		}
 	}
 	return ret, nil
 }
 
 func (s *Service) RunEntry(
-	wf string, idx int, e *har.Entry, cl http.Client, jar *cookiejar.Jar, hot []string, logF func(int, string),
+	ctx context.Context, wf string, idx int, e *har.Entry, cl http.Client, jar *cookiejar.Jar, hot []string, logF func(int, string),
 ) (*WorkflowResult, error) {
 	id := fmt.Sprintf("%s-%d", wf, idx)
 	ret := &WorkflowResult{ID: id, Domain: e.Request.URL, Entry: e.Cleaned(), Timing: &har.PageTimings{}}
@@ -82,12 +84,12 @@ func (s *Service) RunEntry(
 	if u != nil {
 		ret.Domain = u.Host
 		if !slices.Contains(hot, u.Host) {
-			if err := preload(u.Scheme, u.Host, idx, cl, logF); err != nil {
+			if err := preload(ctx, u.Scheme, u.Host, idx, cl, logF); err != nil {
 				return nil, err
 			}
 		}
 	}
-	req, err := e.ToRequest(false)
+	req, err := e.ToRequest(ctx, false)
 	if err != nil {
 		return nil, err
 	}
@@ -108,16 +110,23 @@ func (s *Service) RunEntry(
 	return ret, nil
 }
 
-func preload(scheme string, host string, idx int, cl http.Client, logF func(int, string)) error {
+func preload(ctx context.Context, scheme string, host string, idx int, cl http.Client, logF func(int, string)) error {
 	root := scheme + "://" + host
-	req, err := http.NewRequest("GET", root, nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, root, http.NoBody)
 	if err != nil {
 		return err
 	}
 	req.Header.Set("Connection", "keep-alive")
 	req.Header.Set("Host", host)
 	t := util.TimerStart()
-	_, _ = cl.Do(req)
+	rsp, err := cl.Do(req)
+	if err != nil {
+		logF(idx, fmt.Sprintf("error preconnecting to [%s]: %v", host, err))
+	}
+
+	defer func() {
+		_ = rsp.Body.Close()
+	}()
 	if logF != nil {
 		logF(idx, fmt.Sprintf("preconnected to [%s] in [%s]", host, t.EndString()))
 	}
@@ -127,6 +136,7 @@ func preload(scheme string, host string, idx int, cl http.Client, logF func(int,
 func wireReq(req *http.Request, timing *har.PageTimings) *http.Request {
 	start := util.TimerStart()
 	var connect, dns, tlsHandshake *util.Timer
+	timing.IsMicros = true
 
 	trace := &httptrace.ClientTrace{
 		DNSStart: func(dsi httptrace.DNSStartInfo) { dns = util.TimerStart() },
@@ -136,7 +146,7 @@ func wireReq(req *http.Request, timing *har.PageTimings) *http.Request {
 
 		TLSHandshakeStart: func() { tlsHandshake = util.TimerStart() },
 		TLSHandshakeDone: func(cs tls.ConnectionState, err error) {
-			timing.Ssl = tlsHandshake.End()
+			timing.SSL = tlsHandshake.End()
 		},
 
 		ConnectStart: func(network, addr string) { connect = util.TimerStart() },

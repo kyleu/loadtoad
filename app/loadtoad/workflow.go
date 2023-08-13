@@ -1,11 +1,13 @@
 package loadtoad
 
 import (
-	"github.com/kyleu/loadtoad/app/loadtoad/har"
-	"github.com/kyleu/loadtoad/app/util"
-	"github.com/pkg/errors"
 	"path"
 	"strings"
+
+	"github.com/pkg/errors"
+
+	"github.com/kyleu/loadtoad/app/loadtoad/har"
+	"github.com/kyleu/loadtoad/app/util"
 )
 
 type Workflow struct {
@@ -64,7 +66,7 @@ func (s *Service) LoadWorkflow(fn string) (*Workflow, error) {
 
 func (s *Service) ListWorkflows(logger util.Logger) (Workflows, error) {
 	names := s.FS.ListExtension("workflow", "json", nil, true, logger)
-	var ret Workflows
+	ret := make(Workflows, 0, len(names))
 	for _, n := range names {
 		w, err := s.LoadWorkflow(n)
 		if err != nil {

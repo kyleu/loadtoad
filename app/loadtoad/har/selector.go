@@ -1,10 +1,11 @@
 package har
 
 import (
+	"strings"
+
 	"github.com/pkg/errors"
 	"github.com/samber/lo"
 	"golang.org/x/exp/slices"
-	"strings"
 )
 
 type Selector struct {

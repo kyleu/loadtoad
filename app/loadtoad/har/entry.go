@@ -2,6 +2,7 @@ package har
 
 import (
 	"bytes"
+	"context"
 	"net/http"
 	"net/url"
 	"strings"
@@ -56,7 +57,7 @@ func (e *Entry) Cleaned() *Entry {
 	return ret
 }
 
-func (e *Entry) ToRequest(ignoreCookies bool) (*http.Request, error) {
+func (e *Entry) ToRequest(ctx context.Context, ignoreCookies bool) (*http.Request, error) {
 	body := ""
 
 	if e.Request.PostData != nil {
@@ -71,7 +72,7 @@ func (e *Entry) ToRequest(ignoreCookies bool) (*http.Request, error) {
 		}
 	}
 
-	req, _ := http.NewRequest(e.Request.Method, e.Request.URL, bytes.NewBuffer([]byte(body)))
+	req, _ := http.NewRequestWithContext(ctx, e.Request.Method, e.Request.URL, bytes.NewBuffer([]byte(body)))
 
 	for _, h := range e.Request.Headers {
 		if httpguts.ValidHeaderFieldName(h.Name) && httpguts.ValidHeaderFieldValue(h.Value) && h.Name != "Cookie" {

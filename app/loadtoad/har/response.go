@@ -1,10 +1,11 @@
 package har
 
 import (
-	"github.com/samber/lo"
 	"io"
 	"log"
 	"net/http"
+
+	"github.com/samber/lo"
 )
 
 type Response struct {

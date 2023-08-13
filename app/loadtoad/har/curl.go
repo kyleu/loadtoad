@@ -1,10 +1,12 @@
 package har
 
 import (
-	"github.com/kyleu/loadtoad/app/util"
-	"github.com/samber/lo"
 	"net/url"
 	"strings"
+
+	"github.com/samber/lo"
+
+	"github.com/kyleu/loadtoad/app/util"
 )
 
 func (e *Entry) Curl() string {
@@ -17,7 +19,7 @@ func (e *Entry) Curl() string {
 		for _, cookie := range e.Request.Cookies {
 			cookies = append(cookies, url.QueryEscape(cookie.Name)+"="+url.QueryEscape(cookie.Value))
 		}
-		command += " \\\n  -b \"" + strings.Join(cookies[:], "&") + "\""
+		command += " \\\n  -b \"" + strings.Join(cookies, "&") + "\""
 	}
 	for _, h := range e.Request.Headers {
 		if h.Name == "Accept-Encoding" && strings.Contains(h.Value, "br") {

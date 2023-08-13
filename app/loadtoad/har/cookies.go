@@ -1,8 +1,9 @@
 package har
 
 import (
-	"github.com/kyleu/loadtoad/app/util"
 	"time"
+
+	"github.com/kyleu/loadtoad/app/util"
 )
 
 type Cookie struct {

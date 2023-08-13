@@ -43,7 +43,7 @@
     <tbody>
       <tr>
         <th class="shrink">Duration</th>
-        <td>{%s util.MicrosToMillis(e.Duration()) %}</td>
+        <td>{%s util.MicrosToMillis(e.Duration()) %} ({%s e.PageTimings.String() %})</td>
       </tr>
       <tr>
         <th class="shrink">Request</th>

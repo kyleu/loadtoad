@@ -2,7 +2,7 @@ package controller
 
 import (
 	"fmt"
-	"io/ioutil"
+	"io"
 	"strings"
 
 	"github.com/pkg/errors"
@@ -63,8 +63,8 @@ func HarUpload(rc *fasthttp.RequestCtx) {
 		}
 		if name == "" {
 			name = fileHeader.Filename
-			if !strings.HasSuffix(name, ".har") {
-				name += ".har"
+			if !strings.HasSuffix(name, har.Ext) {
+				name += har.Ext
 			}
 		}
 
@@ -73,11 +73,14 @@ func HarUpload(rc *fasthttp.RequestCtx) {
 		ps.Logger.Infof("MIME Header: %+v\n", fileHeader.Header)
 
 		defer func() { _ = file.Close() }()
-		fileBytes, err := ioutil.ReadAll(file)
+		fileBytes, err := io.ReadAll(file)
 		if err != nil {
 			return "", err
 		}
 		err = as.Services.LoadToad.SaveHar(name, fileBytes)
+		if err != nil {
+			return "", err
+		}
 		msg := fmt.Sprintf("Created [%s] (%s)", name, util.ByteSizeSI(fileHeader.Size))
 		redir := "/har/" + name
 		return FlashAndRedir(true, msg, redir, rc, ps)

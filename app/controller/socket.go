@@ -1,17 +1,19 @@
 package controller
 
 import (
+	"context"
+	"strings"
+
+	"github.com/pkg/errors"
+	"github.com/valyala/fasthttp"
+
+	"github.com/kyleu/loadtoad/app"
+	"github.com/kyleu/loadtoad/app/controller/cutil"
 	"github.com/kyleu/loadtoad/app/lib/websocket"
 	"github.com/kyleu/loadtoad/app/loadtoad"
 	"github.com/kyleu/loadtoad/app/loadtoad/har"
 	"github.com/kyleu/loadtoad/app/util"
 	"github.com/kyleu/loadtoad/views/vworkflow"
-	"github.com/pkg/errors"
-	"github.com/valyala/fasthttp"
-	"strings"
-
-	"github.com/kyleu/loadtoad/app"
-	"github.com/kyleu/loadtoad/app/controller/cutil"
 )
 
 type WorkflowMessage struct {
@@ -30,7 +32,7 @@ func HarConnect(rc *fasthttp.RequestCtx) {
 			return "", err
 		}
 		w := &loadtoad.Workflow{ID: ret.Key, Name: ret.Key, Tests: har.Selectors{{Har: ret.Key}}}
-		return socketConnect(w, map[string]string{}, rc, as, ps)
+		return socketConnect(ps.Context, w, map[string]string{}, rc, as, ps)
 	})
 }
 
@@ -42,7 +44,7 @@ func WorkflowConnect(rc *fasthttp.RequestCtx) {
 		}
 
 		repls := w.Replacements
-		if string(rc.URI().QueryArgs().Peek("ok")) != "true" {
+		if string(rc.URI().QueryArgs().Peek("ok")) != util.BoolTrue {
 			var args cutil.Args
 			for k, v := range w.Replacements {
 				args = append(args, &cutil.Arg{Key: k, Title: k, Type: "string", Default: v})
@@ -53,11 +55,13 @@ func WorkflowConnect(rc *fasthttp.RequestCtx) {
 			}
 			repls = argRes.Values
 		}
-		return socketConnect(w, repls, rc, as, ps)
+		return socketConnect(ps.Context, w, repls, rc, as, ps)
 	})
 }
 
-func socketConnect(w *loadtoad.Workflow, repls map[string]string, rc *fasthttp.RequestCtx, as *app.State, ps *cutil.PageState) (string, error) {
+func socketConnect(
+	ctx context.Context, w *loadtoad.Workflow, repls map[string]string, rc *fasthttp.RequestCtx, as *app.State, ps *cutil.PageState,
+) (string, error) {
 	channel := string(rc.URI().QueryArgs().Peek("channel"))
 	if channel == "" {
 		return "", errors.New("must provide channel")
@@ -66,7 +70,7 @@ func socketConnect(w *loadtoad.Workflow, repls map[string]string, rc *fasthttp.R
 		msg := &websocket.Message{Channel: channel, Cmd: cmd, Param: util.ToJSONBytes(x, true)}
 		_ = as.Services.Socket.WriteChannel(msg, ps.Logger)
 	}
-	err := as.Services.Socket.Upgrade(ps.Context, rc, channel, ps.Profile, ps.Logger)
+	err := as.Services.Socket.Upgrade(ps.Context, rc, channel, ps.Profile, ps.Logger) //nolint:contextcheck
 	if err != nil {
 		ps.Logger.Warnf("unable to upgrade connection to WebSocket: %s", err.Error())
 		return "", err
@@ -84,7 +88,7 @@ func socketConnect(w *loadtoad.Workflow, repls map[string]string, rc *fasthttp.R
 		send("ok", &WorkflowMessage{Idx: i, Ctx: vworkflow.RenderResultTable(i, w, ps)})
 	}
 	go func() {
-		final, e := as.Services.LoadToad.Run(w, repls, logF, errF, okF)
+		final, e := as.Services.LoadToad.Run(ctx, w, repls, logF, errF, okF)
 		if e != nil {
 			errF(-1, e)
 		}
