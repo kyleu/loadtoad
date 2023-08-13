@@ -45,11 +45,7 @@ func WorkflowConnect(rc *fasthttp.RequestCtx) {
 
 		repls := w.Replacements
 		if string(rc.URI().QueryArgs().Peek("ok")) != util.BoolTrue {
-			var args cutil.Args
-			for k, v := range w.Replacements {
-				args = append(args, &cutil.Arg{Key: k, Title: k, Type: "string", Default: v})
-			}
-			argRes := cutil.CollectArgs(rc, args)
+			_, argRes := collectArgs(w, rc)
 			if argRes.HasMissing() {
 				return "", errors.Errorf("missing replacements [%s]", strings.Join(argRes.Missing, ", "))
 			}
@@ -93,7 +89,21 @@ func socketConnect(
 			errF(-1, e)
 		}
 		ps.Logger.Infof("[COMPLETE] %s", w.ID)
-		send("complete", &WorkflowMessage{Idx: -1, Ctx: util.MicrosToMillis(final.Duration())})
+		msg := map[string]any{"message": util.MicrosToMillis(final.Duration()), "status": "Success"}
+		send("complete", &WorkflowMessage{Idx: -1, Ctx: msg})
 	}()
 	return "", nil
+}
+
+func collectArgs(w *loadtoad.Workflow, rc *fasthttp.RequestCtx) (cutil.Args, *cutil.ArgResults) {
+	var args cutil.Args
+	for k, v := range w.Replacements {
+		if strings.Contains(v, "||") {
+			choices := util.StringSplitAndTrim(v, "||")
+			args = append(args, &cutil.Arg{Key: k, Title: k, Type: "string", Default: "", Choices: choices})
+		} else {
+			args = append(args, &cutil.Arg{Key: k, Title: k, Type: "string", Default: v})
+		}
+	}
+	return args, cutil.CollectArgs(rc, args)
 }

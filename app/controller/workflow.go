@@ -30,7 +30,7 @@ func WorkflowDetail(rc *fasthttp.RequestCtx) {
 		if err != nil {
 			return "", err
 		}
-		ents, err := as.Services.LoadToad.LoadEntries(w.Replacements, w.Tests...)
+		ents, err := as.Services.LoadToad.LoadEntries(nil, w.Tests...)
 		if err != nil {
 			return "", err
 		}
@@ -49,11 +49,7 @@ func WorkflowStart(rc *fasthttp.RequestCtx) {
 
 		repls := w.Replacements
 		if string(rc.URI().QueryArgs().Peek("ok")) != util.BoolTrue {
-			var args cutil.Args
-			for k, v := range w.Replacements {
-				args = append(args, &cutil.Arg{Key: k, Title: k, Type: "string", Default: v})
-			}
-			argRes := cutil.CollectArgs(rc, args)
+			_, argRes := collectArgs(w, rc)
 			if argRes.HasMissing() {
 				url := fmt.Sprintf("/workflow/%s/run", w.ID)
 				ps.Data = argRes

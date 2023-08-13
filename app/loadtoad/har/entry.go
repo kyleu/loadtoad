@@ -72,7 +72,10 @@ func (e *Entry) ToRequest(ctx context.Context, ignoreCookies bool) (*http.Reques
 		}
 	}
 
-	req, _ := http.NewRequestWithContext(ctx, e.Request.Method, e.Request.URL, bytes.NewBuffer([]byte(body)))
+	req, err := http.NewRequestWithContext(ctx, e.Request.Method, e.Request.URL, bytes.NewBuffer([]byte(body)))
+	if err != nil {
+		return nil, err
+	}
 
 	for _, h := range e.Request.Headers {
 		if httpguts.ValidHeaderFieldName(h.Name) && httpguts.ValidHeaderFieldValue(h.Value) && h.Name != "Cookie" {
@@ -132,6 +135,12 @@ func (e Entries) WithReplacementsMap(repls map[string]string) Entries {
 	}
 	return e.WithReplacements(func(s string) string {
 		for k, v := range repls {
+			if v == "" {
+				v = k
+			}
+			if strings.Contains(v, "||") {
+				v = util.StringSplitAndTrim(v, "||")[0]
+			}
 			s = strings.ReplaceAll(s, k, v)
 		}
 		return s

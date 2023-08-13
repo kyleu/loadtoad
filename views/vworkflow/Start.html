@@ -26,71 +26,18 @@
       {%- endif -%}
     </div>
     <div id="results" class="mt">
+      <div>
+        <strong>{%d len(p.Entries) %}</strong> total requests.
+        <strong class="successes">0</strong> succeeded and <strong class="failures">0</strong> failed in <strong class="elapsed">0ms</strong>.
+      </div>
+      <div class="mt"><em class="status">Running...</em></div>
       <div class="logs"></div>
     </div>
   </div>
   {%- for idx, e := range p.Entries -%}
   {%= entryPlaceholder(idx, e, ps) %}
   {%- endfor -%}
-  <script>
-    var sock;
-    function open() {
-      console.log("[Open]");
-    }
-    function recv(m) {
-      let el = document.querySelector("#entry-placeholder-" + m.param.idx);
-      if (!el) {
-        if (m.param.idx === -1) {
-          el = document.querySelector("#results");
-        } else {
-          throw "invalid index [" + m.param.idx + "]";
-        }
-      }
-      const logs = el.querySelector(".logs");
-      if (!logs) {
-        throw "invalid logs for index [" + m.param.idx + "]";
-      }
-      switch (m.cmd) {
-        case "log":
-          const logEl = document.createElement("div");
-          logEl.innerText = " - " + m.param.ctx;
-          logs.appendChild(logEl);
-          break;
-        case "error":
-          const errEl = document.createElement("div");
-          errEl.innerText = " - ERROR: " + m.param.ctx;
-          errEl.classList.add("error");
-          logs.appendChild(errEl);
-          break;
-        case "ok":
-          const deets = el.querySelector(".details");
-          if (!deets) {
-            throw "invalid details for index [" + m.param.idx + "]";
-          }
-          const deetsDiv = document.createElement("div");
-          deetsDiv.innerHTML = m.param.ctx;
-          deets.replaceChildren(deetsDiv);
-          break;
-        case "complete":
-          const completeEl = document.createElement("div");
-          completeEl.innerText = m.param.ctx;
-          el.appendChild(completeEl);
-          break;
-        default:
-          console.log("[Recv]", m.param.idx, m.cmd);
-          break;
-      }
-    }
-    function err(e) {
-      console.log("[Err]", e);
-    }
-    document.addEventListener("DOMContentLoaded", function() {
-      const up = new URLSearchParams(window.location.search);
-      up.set("channel", "{%s p.Channel %}");
-      sock = new loadtoad.Socket(false, open, recv, err, "{%s p.Path %}?" + up.toString());
-      console.log("[Load]");
-    });
-  </script>
+  {%= startScript(p.Channel, p.Path) %}
 {% endfunc %}
 
 {% func entryPlaceholder(idx int, ent *har.Entry, ps *cutil.PageState) %}

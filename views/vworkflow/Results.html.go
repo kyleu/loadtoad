@@ -268,7 +268,7 @@ func StreamRenderResultTable(qw422016 *qt422016.Writer, rIdx int, r *loadtoad.Wo
 	qw422016.N().S(`">
           `)
 //line views/vworkflow/Results.html:67
-	streamrenderBool(qw422016, r.Entry.Time == 0 || r.Timing.Total < int(r.Entry.Time*1000*1.3)+10, "Duration", ps)
+	streamrenderBool(qw422016, r.Entry.Time == 0 || r.Timing.Total < int(r.Entry.Time*1000*1.3)+10000, "Duration", ps)
 //line views/vworkflow/Results.html:67
 	qw422016.N().S(`
         </th>
