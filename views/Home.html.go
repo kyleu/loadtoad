@@ -8,73 +8,137 @@ package views
 import (
 	"github.com/kyleu/loadtoad/app"
 	"github.com/kyleu/loadtoad/app/controller/cutil"
+	"github.com/kyleu/loadtoad/app/loadtoad"
 	"github.com/kyleu/loadtoad/app/util"
 	"github.com/kyleu/loadtoad/views/components"
 	"github.com/kyleu/loadtoad/views/layout"
 )
 
-//line views/Home.html:9
+//line views/Home.html:10
 import (
 	qtio422016 "io"
 
 	qt422016 "github.com/valyala/quicktemplate"
 )
 
-//line views/Home.html:9
+//line views/Home.html:10
 var (
 	_ = qtio422016.Copy
 	_ = qt422016.AcquireByteBuffer
 )
 
-//line views/Home.html:9
+//line views/Home.html:10
 type Home struct {
 	layout.Basic
+	Hars      []string
+	Workflows loadtoad.Workflows
 }
 
-//line views/Home.html:13
+//line views/Home.html:16
 func (p *Home) StreamBody(qw422016 *qt422016.Writer, as *app.State, ps *cutil.PageState) {
-//line views/Home.html:13
+//line views/Home.html:16
 	qw422016.N().S(`
   <div class="card">
     <h3>`)
-//line views/Home.html:15
+//line views/Home.html:18
 	components.StreamSVGRefIcon(qw422016, `app`, ps)
-//line views/Home.html:15
+//line views/Home.html:18
 	qw422016.E().S(util.AppName)
-//line views/Home.html:15
+//line views/Home.html:18
 	qw422016.N().S(`</h3>
-    <div class="mt">Welcome to `)
-//line views/Home.html:16
+    <div class="mt">`)
+//line views/Home.html:19
 	qw422016.E().S(util.AppName)
-//line views/Home.html:16
-	qw422016.N().S(`, your new application!</div>
+//line views/Home.html:19
+	qw422016.N().S(` helps you test your web application using HTTP Archive (.har) files</div>
   </div>
+  <div class="card">
+    <h3>`)
+//line views/Home.html:22
+	components.StreamSVGRefIcon(qw422016, `book`, ps)
+//line views/Home.html:22
+	qw422016.N().S(`Archives</h3>
+    <div class="mt">
+      <table>
+        <tbody>
 `)
-//line views/Home.html:18
+//line views/Home.html:26
+	for _, h := range p.Hars {
+//line views/Home.html:26
+		qw422016.N().S(`          <tr><td><a href="/har/`)
+//line views/Home.html:27
+		qw422016.E().S(h)
+//line views/Home.html:27
+		qw422016.N().S(`">`)
+//line views/Home.html:27
+		qw422016.E().S(h)
+//line views/Home.html:27
+		qw422016.N().S(`</a></td></tr>
+`)
+//line views/Home.html:28
+	}
+//line views/Home.html:28
+	qw422016.N().S(`        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="card">
+    <h3>`)
+//line views/Home.html:34
+	components.StreamSVGRefIcon(qw422016, `sitemap`, ps)
+//line views/Home.html:34
+	qw422016.N().S(`Workflows</h3>
+    <div class="mt">
+      <table>
+        <tbody>
+`)
+//line views/Home.html:38
+	for _, w := range p.Workflows {
+//line views/Home.html:38
+		qw422016.N().S(`        <tr><td><a href="/workflow/`)
+//line views/Home.html:39
+		qw422016.E().S(w.ID)
+//line views/Home.html:39
+		qw422016.N().S(`">`)
+//line views/Home.html:39
+		qw422016.E().S(w.Title())
+//line views/Home.html:39
+		qw422016.N().S(`</a></td></tr>
+`)
+//line views/Home.html:40
+	}
+//line views/Home.html:40
+	qw422016.N().S(`        </tbody>
+      </table>
+    </div>
+  </div>
+
+`)
+//line views/Home.html:46
 }
 
-//line views/Home.html:18
+//line views/Home.html:46
 func (p *Home) WriteBody(qq422016 qtio422016.Writer, as *app.State, ps *cutil.PageState) {
-//line views/Home.html:18
+//line views/Home.html:46
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line views/Home.html:18
+//line views/Home.html:46
 	p.StreamBody(qw422016, as, ps)
-//line views/Home.html:18
+//line views/Home.html:46
 	qt422016.ReleaseWriter(qw422016)
-//line views/Home.html:18
+//line views/Home.html:46
 }
 
-//line views/Home.html:18
+//line views/Home.html:46
 func (p *Home) Body(as *app.State, ps *cutil.PageState) string {
-//line views/Home.html:18
+//line views/Home.html:46
 	qb422016 := qt422016.AcquireByteBuffer()
-//line views/Home.html:18
+//line views/Home.html:46
 	p.WriteBody(qb422016, as, ps)
-//line views/Home.html:18
+//line views/Home.html:46
 	qs422016 := string(qb422016.B)
-//line views/Home.html:18
+//line views/Home.html:46
 	qt422016.ReleaseByteBuffer(qb422016)
-//line views/Home.html:18
+//line views/Home.html:46
 	return qs422016
-//line views/Home.html:18
+//line views/Home.html:46
 }

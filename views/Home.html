@@ -1,6 +1,7 @@
 {% import (
   "github.com/kyleu/loadtoad/app"
   "github.com/kyleu/loadtoad/app/controller/cutil"
+  "github.com/kyleu/loadtoad/app/loadtoad"
   "github.com/kyleu/loadtoad/app/util"
   "github.com/kyleu/loadtoad/views/components"
   "github.com/kyleu/loadtoad/views/layout"
@@ -8,11 +9,38 @@
 
 {% code type Home struct {
   layout.Basic
+  Hars []string
+  Workflows loadtoad.Workflows
 } %}
 
 {% func (p *Home) Body(as *app.State, ps *cutil.PageState) %}
   <div class="card">
     <h3>{%= components.SVGRefIcon(`app`, ps) %}{%s util.AppName %}</h3>
-    <div class="mt">Welcome to {%s util.AppName %}, your new application!</div>
+    <div class="mt">{%s util.AppName %} helps you test your web application using HTTP Archive (.har) files</div>
   </div>
+  <div class="card">
+    <h3>{%= components.SVGRefIcon(`book`, ps) %}Archives</h3>
+    <div class="mt">
+      <table>
+        <tbody>
+          {%- for _, h := range p.Hars -%}
+          <tr><td><a href="/har/{%s h %}">{%s h %}</a></td></tr>
+          {%- endfor -%}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="card">
+    <h3>{%= components.SVGRefIcon(`sitemap`, ps) %}Workflows</h3>
+    <div class="mt">
+      <table>
+        <tbody>
+        {%- for _, w := range p.Workflows -%}
+        <tr><td><a href="/workflow/{%s w.ID %}">{%s w.Title() %}</a></td></tr>
+        {%- endfor -%}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
 {% endfunc %}
