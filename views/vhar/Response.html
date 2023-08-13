@@ -1,15 +1,52 @@
 {% import (
+  "fmt"
+
   "github.com/kyleu/loadtoad/app/controller/cutil"
   "github.com/kyleu/loadtoad/app/loadtoad/har"
-  "github.com/kyleu/loadtoad/views/components"
+  "github.com/kyleu/loadtoad/app/util"
 ) %}
 
 {% func renderResponse(i int, r *har.Response, ps *cutil.PageState) %}
-  <ul class="accordion">
-    <li>
-      <input id="accordion-response-{%d i %}" type="checkbox" hidden />
-      <label class="no-padding" for="accordion-response-{%d i %}"><em>(click to show)</em></label>
-      <div class="bd">{%= components.JSON(r) %}</div>
-    </li>
-  </ul>
+  <table>
+    <tbody>
+      <tr>
+        <th class="shrink">Status</th>
+        <td>{%d r.Status %}: {%s r.StatusText %}</td>
+      </tr>
+      {%- if r.RedirectURL != "" -%}
+      <tr>
+        <th class="shrink">Redirect URL</th>
+        <td>{%s r.RedirectURL %}</td>
+      </tr>
+      {%- endif -%}
+      <tr>
+        <th class="shrink">Headers </th>
+        <td>{%= renderNVPsHidden(fmt.Sprintf("request-header-%d", i), "Header", r.Headers, r.HeadersSize, ps) %}</td>
+      </tr>
+      {%- if len(r.Cookies) > 0 -%}
+      <tr>
+        <th class="shrink">Cookies</th>
+        <td>{%= renderCookiesHidden(fmt.Sprintf("request-cookies-%d", i), r.Cookies, ps) %}</td>
+      </tr>
+      {%- endif -%}
+      {%- if r.Content != nil && r.Content.Text != "" -%}
+      <tr>
+        <th class="shrink">Body</th>
+        <td>
+          <div class="right"><em>{%s util.ByteSizeSI(int64(r.Content.Size)) %}</em></div>
+          <ul class="accordion">
+            <li>
+              <input id="accordion-response-body-{%d i %}" type="checkbox" hidden />
+              <label class="no-padding" for="accordion-response-body-{%d i %}"><em>(click to show)</em></label>
+              <div class="bd">
+                <pre>{%s r.Content.Text %}</pre>
+              </div>
+            </li>
+          </ul>
+
+        </td>
+      </tr>
+      {%- endif -%}
+    </tbody>
+  </table>
 {% endfunc %}

@@ -1,6 +1,8 @@
 package loadtoad
 
 import (
+	"fmt"
+	"github.com/kyleu/loadtoad/app/lib/filesystem"
 	"path"
 	"strings"
 
@@ -32,6 +34,10 @@ type Workflows []*Workflow
 
 func NewWorkflow(id string, tests har.Selectors) *Workflow {
 	return &Workflow{ID: id, Tests: tests}
+}
+
+func (s *Service) SaveWorkflow(w *Workflow) error {
+	return s.FS.WriteFile(fmt.Sprintf("workflow/%s.json", w.ID), util.ToJSONBytes(w, true), filesystem.DefaultMode, true)
 }
 
 func (s *Service) LoadWorkflow(fn string) (*Workflow, error) {

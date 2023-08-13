@@ -2,6 +2,7 @@ package controller
 
 import (
 	"fmt"
+	"github.com/pkg/errors"
 
 	"github.com/valyala/fasthttp"
 
@@ -37,6 +38,48 @@ func WorkflowDetail(rc *fasthttp.RequestCtx) {
 		ps.Title = "Workflows"
 		ps.Data = w
 		return Render(rc, as, &vworkflow.Detail{Workflow: w, Entries: ents}, ps, "workflow", w.ID)
+	})
+}
+
+func WorkflowForm(rc *fasthttp.RequestCtx) {
+	Act("workflow.form", rc, func(as *app.State, ps *cutil.PageState) (string, error) {
+		w, err := loadWorkflow(as, rc)
+		if err != nil {
+			return "", err
+		}
+		ps.Title = "Edit [" + w.ID + "]"
+		ps.Data = w
+		return Render(rc, as, &vworkflow.Form{Workflow: w}, ps, "workflow", w.ID, "Edit")
+	})
+}
+
+func WorkflowSave(rc *fasthttp.RequestCtx) {
+	Act("workflow.save", rc, func(as *app.State, ps *cutil.PageState) (string, error) {
+		frm, err := cutil.ParseForm(rc)
+		if err != nil {
+			return "", err
+		}
+		w, err := loadWorkflow(as, rc)
+		if err != nil {
+			return "", err
+		}
+		w.Name = frm.GetStringOpt("name")
+		if w.Name == "" {
+			return "", errors.New("must provide name")
+		}
+		err = util.FromJSON([]byte(frm.GetStringOpt("tests")), &w.Tests)
+		if err != nil {
+			return "", err
+		}
+		err = util.FromJSON([]byte(frm.GetStringOpt("replacements")), &w.Replacements)
+		if err != nil {
+			return "", err
+		}
+		err = as.Services.LoadToad.SaveWorkflow(w)
+		if err != nil {
+			return "", err
+		}
+		return FlashAndRedir(true, "Workflow saved", w.WebPath(), rc, ps)
 	})
 }
 

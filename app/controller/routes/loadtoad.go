@@ -15,6 +15,8 @@ func loadtoadRoutes(r *router.Router) {
 
 	r.GET("/workflow", controller.WorkflowList)
 	r.GET("/workflow/{key}", controller.WorkflowDetail)
+	r.GET("/workflow/{key}/edit", controller.WorkflowForm)
+	r.POST("/workflow/{key}/edit", controller.WorkflowSave)
 	r.GET("/workflow/{key}/run", controller.WorkflowStart)
 	r.GET("/workflow/{key}/connect", controller.WorkflowConnect)
 }

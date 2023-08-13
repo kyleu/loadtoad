@@ -17,7 +17,10 @@
 
 {% func (p *Detail) Body(as *app.State, ps *cutil.PageState) %}
   <div class="card">
-    <div class="right"><a href="#modal-workflow"><button type="button">JSON</button></a></div>
+    <div class="right">
+      <a href="/workflow/{%s p.Workflow.ID %}/edit"><button type="button">Edit</button></a>
+      <a href="#modal-workflow"><button type="button">JSON</button></a>
+    </div>
     {%= components.JSONModal("workflow", "Workflow", p.Workflow, 3) %}
     <h3>{%= components.SVGRefIcon(`sitemap`, ps) %} {%s p.Workflow.Title() %}</h3>
     <div class="mt">
