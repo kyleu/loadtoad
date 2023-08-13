@@ -57,7 +57,7 @@ func streamrenderRequest(qw422016 *qt422016.Writer, i int, r *har.Request, ps *c
         <th class="shrink">Headers </th>
         <td>`)
 //line views/vhar/Request.html:23
-	streamrenderNVPsHidden(qw422016, fmt.Sprintf("request-header-", i), "Header", r.Headers, r.HeadersSize, ps)
+	streamrenderNVPsHidden(qw422016, fmt.Sprintf("request-header-%d", i), "Header", r.Headers, r.HeadersSize, ps)
 //line views/vhar/Request.html:23
 	qw422016.N().S(`</td>
       </tr>
@@ -69,7 +69,7 @@ func streamrenderRequest(qw422016 *qt422016.Writer, i int, r *har.Request, ps *c
         <th class="shrink">Query String</th>
         <td>`)
 //line views/vhar/Request.html:28
-		streamrenderNVPsHidden(qw422016, fmt.Sprintf("request-query-string-", i), "Query String", r.QueryString, 0, ps)
+		streamrenderNVPsHidden(qw422016, fmt.Sprintf("request-query-string-%d", i), "Query String", r.QueryString, 0, ps)
 //line views/vhar/Request.html:28
 		qw422016.N().S(`</td>
       </tr>
@@ -83,7 +83,7 @@ func streamrenderRequest(qw422016 *qt422016.Writer, i int, r *har.Request, ps *c
         <th class="shrink">Cookies</th>
         <td>`)
 //line views/vhar/Request.html:34
-		streamrenderCookiesHidden(qw422016, fmt.Sprintf("request-cookies-", i), r.Cookies, ps)
+		streamrenderCookiesHidden(qw422016, fmt.Sprintf("request-cookies-%d", i), r.Cookies, ps)
 //line views/vhar/Request.html:34
 		qw422016.N().S(`</td>
       </tr>

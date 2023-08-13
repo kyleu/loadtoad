@@ -20,18 +20,18 @@
       </tr>
       <tr>
         <th class="shrink">Headers </th>
-        <td>{%= renderNVPsHidden(fmt.Sprintf("request-header-", i), "Header", r.Headers, r.HeadersSize, ps) %}</td>
+        <td>{%= renderNVPsHidden(fmt.Sprintf("request-header-%d", i), "Header", r.Headers, r.HeadersSize, ps) %}</td>
       </tr>
       {%- if len(r.QueryString) > 0 -%}
       <tr>
         <th class="shrink">Query String</th>
-        <td>{%= renderNVPsHidden(fmt.Sprintf("request-query-string-", i), "Query String", r.QueryString, 0, ps) %}</td>
+        <td>{%= renderNVPsHidden(fmt.Sprintf("request-query-string-%d", i), "Query String", r.QueryString, 0, ps) %}</td>
       </tr>
       {%- endif -%}
       {%- if len(r.Cookies) > 0 -%}
       <tr>
         <th class="shrink">Cookies</th>
-        <td>{%= renderCookiesHidden(fmt.Sprintf("request-cookies-", i), r.Cookies, ps) %}</td>
+        <td>{%= renderCookiesHidden(fmt.Sprintf("request-cookies-%d", i), r.Cookies, ps) %}</td>
       </tr>
       {%- endif -%}
       {%- if r.PostData != nil -%}
