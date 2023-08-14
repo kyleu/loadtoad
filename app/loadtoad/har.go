@@ -40,6 +40,24 @@ func (s *Service) LoadHar(fn string) (*har.Log, error) {
 	return ret.Log, nil
 }
 
+func (s *Service) DeleteHar(key string, logger util.Logger) error {
+	fn := key
+	if !strings.HasSuffix(fn, har.Ext) {
+		fn += har.Ext
+	}
+	if !strings.Contains(fn, "har/") {
+		fn = path.Join("har", fn)
+	}
+	if !s.FS.Exists(fn) {
+		return errors.Errorf("missing file [%s]", fn)
+	}
+	err := s.FS.Remove(fn, logger)
+	if err != nil {
+		return errors.Wrapf(err, "error deleting file [%s]", fn)
+	}
+	return nil
+}
+
 func (s *Service) SaveHar(fn string, b []byte) error {
 	if !strings.HasSuffix(fn, har.Ext) {
 		fn += har.Ext

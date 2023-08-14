@@ -103,6 +103,20 @@ func WorkflowSave(rc *fasthttp.RequestCtx) {
 	})
 }
 
+func WorkflowDelete(rc *fasthttp.RequestCtx) {
+	Act("workflow.delete", rc, func(as *app.State, ps *cutil.PageState) (string, error) {
+		w, err := loadWorkflow(as, rc)
+		if err != nil {
+			return "", err
+		}
+		err = as.Services.LoadToad.DeleteWorkflow(w.ID, ps.Logger)
+		if err != nil {
+			return "", err
+		}
+		return FlashAndRedir(true, "Workflow deleted", "/workflow", rc, ps)
+	})
+}
+
 func workflowFromForm(w *loadtoad.Workflow, rc *fasthttp.RequestCtx) error {
 	frm, err := cutil.ParseForm(rc)
 	if err != nil {

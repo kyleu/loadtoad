@@ -41,6 +41,10 @@ func (s *Service) SaveWorkflow(w *Workflow) error {
 	return s.FS.WriteFile(fmt.Sprintf("workflow/%s.json", w.ID), util.ToJSONBytes(w, true), filesystem.DefaultMode, true)
 }
 
+func (s *Service) DeleteWorkflow(id string, logger util.Logger) error {
+	return s.FS.Remove(fmt.Sprintf("workflow/%s.json", id), logger)
+}
+
 func (s *Service) LoadWorkflow(fn string) (*Workflow, error) {
 	if !strings.HasSuffix(fn, ".json") {
 		fn += ".json"

@@ -21,6 +21,11 @@
     varsHelp := "Custom variable keys and values used by the workflow"
   -%}
   <div class="card">
+    {%- if w.ID != "" -%}
+    <div class="right">
+      <a href="{%s w.WebPath() %}/delete" class="link-confirm" data-message="Are you sure?"><button>Delete</button></a>
+    </div>
+    {%- endif -%}
     <h3>{%= components.SVGRefIcon(`sitemap`, ps) %} {%s ps.Title %}</h3>
     <div class="mt">
       <form action="" method="post">

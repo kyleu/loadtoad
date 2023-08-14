@@ -42,6 +42,20 @@ func HarDetail(rc *fasthttp.RequestCtx) {
 	})
 }
 
+func HarDelete(rc *fasthttp.RequestCtx) {
+	Act("har.delete", rc, func(as *app.State, ps *cutil.PageState) (string, error) {
+		key, err := cutil.RCRequiredString(rc, "key", true)
+		if err != nil {
+			return "", err
+		}
+		err = as.Services.LoadToad.DeleteHar(key, ps.Logger)
+		if err != nil {
+			return "", err
+		}
+		return FlashAndRedir(true, "Archive deleted", "/har", rc, ps)
+	})
+}
+
 func HarUpload(rc *fasthttp.RequestCtx) {
 	Act("har.upload", rc, func(as *app.State, ps *cutil.PageState) (string, error) {
 		mpfrm, err := rc.MultipartForm()
