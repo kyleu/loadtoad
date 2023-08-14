@@ -30,26 +30,58 @@
       {%- endif -%}
     </div>
   </div>
+  {%- if len(p.Workflow.Variables) > 0 -%}
+  <div class="card">
+    <h3>{%= components.SVGRefIcon(`sitemap`, ps) %} [{%d len(p.Workflow.Variables) %}] Variables</h3>
+    <div class="mt">
+      <table class="min-200">
+        <tbody>
+          {%- for k, v := range p.Workflow.Variables -%}
+          <tr>
+            <th class="shrink">{%s k %}</th>
+            <td>{%v v %}</td>
+          </tr>
+          {%- endfor -%}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {%- endif -%}
   <div class="card">
     <h3>{%= components.SVGRefIcon(`play`, ps) %} {%d len(p.Entries) %} {%s util.StringPluralMaybe("Request", len(p.Entries)) %}</h3>
     <div class="mt">
-      <ul class="accordion">
-        {%- for i, e := range p.Entries -%}
-        {%- code e = e.Cleaned() -%}
-        <li>
-          <input id="accordion-entry-{%d i %}" type="checkbox" hidden />
-          <label for="accordion-entry-{%d i %}">
-            {%= vhar.RenderEntryOptions(i, e, false) %}
-            {%= components.ExpandCollapse(3, ps) %} {%s e.String() %}
-            <div class="clear"></div>
-          </label>
-          <div class="bd">
-            {%= vhar.RenderEntry(i, e, ps) %}
-          </div>
-          {%= vhar.RenderEntryModals(i, e, false) %}
-        </li>
-        {%- endfor -%}
-      </ul>
+      {%= showEntries(p.Entries, ps) %}
     </div>
   </div>
+{% endfunc %}
+
+{% func showEntries(ents har.Entries, ps *cutil.PageState) %}
+  {%- code var idx int -%}
+  {%- for _, sel := range ents.Selectors() -%}
+  <h4 class="mt">{%s sel.String() %}</h4>
+  {%- code selEnts := ents.BySelector(sel) -%}
+  {%- if len(selEnts) == 0 -%}
+  <em>no requests matched</em>
+  {%- else -%}
+  <div class="mt">
+    <ul class="accordion">
+      {%- for _, e := range selEnts -%}
+      <li>
+        <input id="accordion-entry-{%d idx %}" type="checkbox" hidden />
+        <label for="accordion-entry-{%d idx %}">
+          {%= vhar.RenderEntryOptions(idx, e, false) %}
+          {%= components.ExpandCollapse(3, ps) %} {%s e.String() %}
+          <div class="clear"></div>
+        </label>
+        <div class="bd">
+          {%= vhar.RenderEntry(idx, e, ps) %}
+        </div>
+        {%= vhar.RenderEntryModals(idx, e, false) %}
+      </li>
+      {%- code idx++ -%}
+      {%- endfor -%}
+    </ul>
+  </div>
+  {%- endif -%}
+  {%- endfor -%}
 {% endfunc %}

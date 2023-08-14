@@ -39,6 +39,9 @@ func (s *Service) LoadEntries(repls map[string]string, keys ...*har.Selector) (h
 		ents = lo.Filter(ents, func(e *har.Entry, _ int) bool {
 			return e.Response != nil && e.Response.Status != 0
 		})
+		lo.ForEach(ents, func(x *har.Entry, _ int) {
+			x.Selector = k
+		})
 		ret = append(ret, ents...)
 	}
 	return ret.WithReplacementsMap(repls), nil

@@ -30,7 +30,7 @@ var (
 func streamrenderResponse(qw422016 *qt422016.Writer, i int, r *har.Response, ps *cutil.PageState) {
 //line views/vhar/Response.html:9
 	qw422016.N().S(`
-  <table>
+  <table class="min-200">
     <tbody>
       <tr>
         <th class="shrink">Status</th>
@@ -64,7 +64,7 @@ func streamrenderResponse(qw422016 *qt422016.Writer, i int, r *har.Response, ps 
         <th class="shrink">Headers </th>
         <td>`)
 //line views/vhar/Response.html:24
-	streamrenderNVPsHidden(qw422016, fmt.Sprintf("request-header-%d", i), "Header", r.Headers, r.HeadersSize, ps)
+	streamrenderNVPsHidden(qw422016, fmt.Sprintf("response-header-%d", i), "Header", r.Headers, r.HeadersSize, ps)
 //line views/vhar/Response.html:24
 	qw422016.N().S(`</td>
       </tr>
@@ -76,7 +76,7 @@ func streamrenderResponse(qw422016 *qt422016.Writer, i int, r *har.Response, ps 
         <th class="shrink">Cookies</th>
         <td>`)
 //line views/vhar/Response.html:29
-		streamrenderCookiesHidden(qw422016, fmt.Sprintf("request-cookies-%d", i), r.Cookies, ps)
+		streamrenderCookiesHidden(qw422016, fmt.Sprintf("response-cookies-%d", i), r.Cookies, ps)
 //line views/vhar/Response.html:29
 		qw422016.N().S(`</td>
       </tr>

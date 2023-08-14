@@ -7,7 +7,7 @@
 ) %}
 
 {% func renderResponse(i int, r *har.Response, ps *cutil.PageState) %}
-  <table>
+  <table class="min-200">
     <tbody>
       <tr>
         <th class="shrink">Status</th>
@@ -21,12 +21,12 @@
       {%- endif -%}
       <tr>
         <th class="shrink">Headers </th>
-        <td>{%= renderNVPsHidden(fmt.Sprintf("request-header-%d", i), "Header", r.Headers, r.HeadersSize, ps) %}</td>
+        <td>{%= renderNVPsHidden(fmt.Sprintf("response-header-%d", i), "Header", r.Headers, r.HeadersSize, ps) %}</td>
       </tr>
       {%- if len(r.Cookies) > 0 -%}
       <tr>
         <th class="shrink">Cookies</th>
-        <td>{%= renderCookiesHidden(fmt.Sprintf("request-cookies-%d", i), r.Cookies, ps) %}</td>
+        <td>{%= renderCookiesHidden(fmt.Sprintf("response-cookies-%d", i), r.Cookies, ps) %}</td>
       </tr>
       {%- endif -%}
       {%- if r.Content != nil && r.Content.Text != "" -%}

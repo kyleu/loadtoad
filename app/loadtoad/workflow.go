@@ -17,6 +17,7 @@ type Workflow struct {
 	Name         string            `json:"name,omitempty"`
 	Tests        har.Selectors     `json:"tests,omitempty"`
 	Replacements map[string]string `json:"replacements,omitempty"`
+	Variables    util.ValueMap     `json:"variables,omitempty"`
 }
 
 func (w *Workflow) Title() string {

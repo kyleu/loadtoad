@@ -13,9 +13,9 @@ type Services struct {
 	Socket   *websocket.Service
 }
 
-func NewServices(_ context.Context, _ *State, _ util.Logger) (*Services, error) {
+func NewServices(_ context.Context, _ *State, logger util.Logger) (*Services, error) {
 	ws := websocket.NewService(nil, nil, nil)
-	lt := loadtoad.NewService(ws)
+	lt := loadtoad.NewService(ws, logger)
 	return &Services{LoadToad: lt, Socket: ws}, nil
 }
 

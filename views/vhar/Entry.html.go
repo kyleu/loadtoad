@@ -172,7 +172,7 @@ func RenderEntryModals(i int, e *har.Entry, js bool) string {
 func StreamRenderEntry(qw422016 *qt422016.Writer, i int, e *har.Entry, ps *cutil.PageState) {
 //line views/vhar/Entry.html:41
 	qw422016.N().S(`
-  <table>
+  <table class="min-200">
     <tbody>
       <tr>
         <th class="shrink">Duration</th>

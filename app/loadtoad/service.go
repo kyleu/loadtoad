@@ -11,8 +11,13 @@ type Service struct {
 	Socket *websocket.Service
 }
 
-func NewService(ws *websocket.Service) *Service {
-	fs := filesystem.NewFileSystem(util.GetEnv("loadtoad_path", "./tmp"))
+func NewService(ws *websocket.Service, logger util.Logger) *Service {
+	p := util.GetEnv("loadtoad_path", "./data")
+	fs := filesystem.NewFileSystem(p)
+	if !fs.Exists(".") {
+		logger.Infof("creating data directory at [%s]", p)
+		_ = fs.CreateDirectory(".")
+	}
 	ret := &Service{FS: fs, Socket: ws}
 	return ret
 }

@@ -105,5 +105,6 @@ func collectArgs(w *loadtoad.Workflow, rc *fasthttp.RequestCtx) (cutil.Args, *cu
 			args = append(args, &cutil.Arg{Key: k, Title: k, Type: "string", Default: v})
 		}
 	}
+	args = append(args, &cutil.Arg{Key: "variables", Title: "Other Variables", Type: "textarea", Default: util.ToJSON(w.Variables)})
 	return args, cutil.CollectArgs(rc, args)
 }

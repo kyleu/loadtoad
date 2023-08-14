@@ -24,6 +24,7 @@ type Entry struct {
 	ServerIPAddress string       `json:"serverIPAddress,omitempty"`
 	Connection      string       `json:"connection,omitempty"`
 	Comment         string       `json:"comment,omitempty"`
+	Selector        *Selector    `json:"-"`
 }
 
 func (e *Entry) String() string {
@@ -39,8 +40,8 @@ func (e *Entry) Duration() int {
 
 func (e *Entry) Clone() *Entry {
 	return &Entry{
-		PageRef: e.PageRef, StartedDateTime: e.StartedDateTime, Time: e.Time, Request: e.Request, Response: e.Response,
-		Cache: e.Cache, PageTimings: e.PageTimings, ServerIPAddress: e.ServerIPAddress, Connection: e.Connection, Comment: e.Comment,
+		PageRef: e.PageRef, StartedDateTime: e.StartedDateTime, Time: e.Time, Request: e.Request, Response: e.Response, Cache: e.Cache,
+		PageTimings: e.PageTimings, ServerIPAddress: e.ServerIPAddress, Connection: e.Connection, Comment: e.Comment, Selector: e.Selector,
 	}
 }
 
@@ -105,6 +106,20 @@ type Entries []*Entry
 func (e Entries) ForPage(ref string) Entries {
 	return lo.Filter(e, func(x *Entry, _ int) bool {
 		return x.PageRef == ref
+	})
+}
+
+func (e Entries) BySelector(sel *Selector) Entries {
+	return lo.Filter(e, func(x *Entry, _ int) bool {
+		return x.Selector != nil && x.Selector.Matches(sel)
+	})
+}
+
+func (e Entries) Selectors() Selectors {
+	return lo.UniqBy(lo.Map(e, func(x *Entry, _ int) *Selector {
+		return x.Selector
+	}), func(s *Selector) string {
+		return s.String()
 	})
 }
 

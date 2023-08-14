@@ -13,6 +13,7 @@
 
 {% func (p *List) Body(as *app.State, ps *cutil.PageState) %}
   <div class="card">
+    <div class="right"><a href="/workflow/new"><button>New</button></a></div>
     <h3>{%= components.SVGRefIcon(`sitemap`, ps) %} Workflows</h3>
     <div class="mt">{%= Table(p.Workflows, ps) %}</div>
   </div>

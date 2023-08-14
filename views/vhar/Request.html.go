@@ -31,7 +31,7 @@ var (
 func streamrenderRequest(qw422016 *qt422016.Writer, i int, r *har.Request, ps *cutil.PageState) {
 //line views/vhar/Request.html:10
 	qw422016.N().S(`
-  <table>
+  <table class="min-200">
     <tbody>
       <tr>
         <th class="shrink">Method</th>

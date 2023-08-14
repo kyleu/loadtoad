@@ -37,50 +37,51 @@ func (p *List) StreamBody(qw422016 *qt422016.Writer, as *app.State, ps *cutil.Pa
 //line views/vworkflow/List.html:14
 	qw422016.N().S(`
   <div class="card">
+    <div class="right"><a href="/workflow/new"><button>New</button></a></div>
     <h3>`)
-//line views/vworkflow/List.html:16
+//line views/vworkflow/List.html:17
 	components.StreamSVGRefIcon(qw422016, `sitemap`, ps)
-//line views/vworkflow/List.html:16
+//line views/vworkflow/List.html:17
 	qw422016.N().S(` Workflows</h3>
     <div class="mt">`)
-//line views/vworkflow/List.html:17
+//line views/vworkflow/List.html:18
 	StreamTable(qw422016, p.Workflows, ps)
-//line views/vworkflow/List.html:17
+//line views/vworkflow/List.html:18
 	qw422016.N().S(`</div>
   </div>
 `)
-//line views/vworkflow/List.html:19
+//line views/vworkflow/List.html:20
 }
 
-//line views/vworkflow/List.html:19
+//line views/vworkflow/List.html:20
 func (p *List) WriteBody(qq422016 qtio422016.Writer, as *app.State, ps *cutil.PageState) {
-//line views/vworkflow/List.html:19
+//line views/vworkflow/List.html:20
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line views/vworkflow/List.html:19
+//line views/vworkflow/List.html:20
 	p.StreamBody(qw422016, as, ps)
-//line views/vworkflow/List.html:19
+//line views/vworkflow/List.html:20
 	qt422016.ReleaseWriter(qw422016)
-//line views/vworkflow/List.html:19
+//line views/vworkflow/List.html:20
 }
 
-//line views/vworkflow/List.html:19
+//line views/vworkflow/List.html:20
 func (p *List) Body(as *app.State, ps *cutil.PageState) string {
-//line views/vworkflow/List.html:19
+//line views/vworkflow/List.html:20
 	qb422016 := qt422016.AcquireByteBuffer()
-//line views/vworkflow/List.html:19
+//line views/vworkflow/List.html:20
 	p.WriteBody(qb422016, as, ps)
-//line views/vworkflow/List.html:19
+//line views/vworkflow/List.html:20
 	qs422016 := string(qb422016.B)
-//line views/vworkflow/List.html:19
+//line views/vworkflow/List.html:20
 	qt422016.ReleaseByteBuffer(qb422016)
-//line views/vworkflow/List.html:19
+//line views/vworkflow/List.html:20
 	return qs422016
-//line views/vworkflow/List.html:19
+//line views/vworkflow/List.html:20
 }
 
-//line views/vworkflow/List.html:21
+//line views/vworkflow/List.html:22
 func StreamTable(qw422016 *qt422016.Writer, workflows loadtoad.Workflows, ps *cutil.PageState) {
-//line views/vworkflow/List.html:21
+//line views/vworkflow/List.html:22
 	qw422016.N().S(`
   <table class="min-200">
     <thead>
@@ -91,57 +92,57 @@ func StreamTable(qw422016 *qt422016.Writer, workflows loadtoad.Workflows, ps *cu
     </thead>
     <tbody>
 `)
-//line views/vworkflow/List.html:30
+//line views/vworkflow/List.html:31
 	for _, w := range workflows {
-//line views/vworkflow/List.html:30
+//line views/vworkflow/List.html:31
 		qw422016.N().S(`      <tr>
         <td><a href="`)
-//line views/vworkflow/List.html:32
+//line views/vworkflow/List.html:33
 		qw422016.E().S(w.WebPath())
-//line views/vworkflow/List.html:32
+//line views/vworkflow/List.html:33
 		qw422016.N().S(`">`)
-//line views/vworkflow/List.html:32
+//line views/vworkflow/List.html:33
 		qw422016.E().S(w.Title())
-//line views/vworkflow/List.html:32
+//line views/vworkflow/List.html:33
 		qw422016.N().S(`</a></td>
         <td>`)
-//line views/vworkflow/List.html:33
+//line views/vworkflow/List.html:34
 		qw422016.N().D(len(w.Tests))
-//line views/vworkflow/List.html:33
+//line views/vworkflow/List.html:34
 		qw422016.N().S(`</td>
       </tr>
 `)
-//line views/vworkflow/List.html:35
+//line views/vworkflow/List.html:36
 	}
-//line views/vworkflow/List.html:35
+//line views/vworkflow/List.html:36
 	qw422016.N().S(`    </tbody>
   </table>
 `)
-//line views/vworkflow/List.html:38
+//line views/vworkflow/List.html:39
 }
 
-//line views/vworkflow/List.html:38
+//line views/vworkflow/List.html:39
 func WriteTable(qq422016 qtio422016.Writer, workflows loadtoad.Workflows, ps *cutil.PageState) {
-//line views/vworkflow/List.html:38
+//line views/vworkflow/List.html:39
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line views/vworkflow/List.html:38
+//line views/vworkflow/List.html:39
 	StreamTable(qw422016, workflows, ps)
-//line views/vworkflow/List.html:38
+//line views/vworkflow/List.html:39
 	qt422016.ReleaseWriter(qw422016)
-//line views/vworkflow/List.html:38
+//line views/vworkflow/List.html:39
 }
 
-//line views/vworkflow/List.html:38
+//line views/vworkflow/List.html:39
 func Table(workflows loadtoad.Workflows, ps *cutil.PageState) string {
-//line views/vworkflow/List.html:38
+//line views/vworkflow/List.html:39
 	qb422016 := qt422016.AcquireByteBuffer()
-//line views/vworkflow/List.html:38
+//line views/vworkflow/List.html:39
 	WriteTable(qb422016, workflows, ps)
-//line views/vworkflow/List.html:38
+//line views/vworkflow/List.html:39
 	qs422016 := string(qb422016.B)
-//line views/vworkflow/List.html:38
+//line views/vworkflow/List.html:39
 	qt422016.ReleaseByteBuffer(qb422016)
-//line views/vworkflow/List.html:38
+//line views/vworkflow/List.html:39
 	return qs422016
-//line views/vworkflow/List.html:38
+//line views/vworkflow/List.html:39
 }

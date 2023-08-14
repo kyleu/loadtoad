@@ -4,6 +4,7 @@
 /.scannerwork
 /build
 /tmp
+/data
 
 /client/node_modules
 
