@@ -5,6 +5,7 @@
   "github.com/kyleu/loadtoad/app/loadtoad/har"
   "github.com/kyleu/loadtoad/views/components"
   "github.com/kyleu/loadtoad/views/layout"
+  "github.com/kyleu/loadtoad/views/vhar"
 ) %}
 
 {% code type Start struct {
@@ -42,12 +43,42 @@
 
 {% func entryPlaceholder(idx int, ent *har.Entry, ps *cutil.PageState) %}
   <div id="entry-placeholder-{%d idx %}" class="card">
+    <div class="right">
+      <a class="modal-button hidden" href="#modal-result-{%d idx %}"><button type="button">Result</button></a>
+      <a href="#modal-entry-{%d idx %}"><button type="button">Details</button></a>
+    </div>
+    <div id="modal-result-{%d idx %}" class="modal" style="display: none;">
+      <a class="backdrop" href="#"></a>
+      <div class="modal-content">
+        <div class="modal-header">
+          <a href="#" class="modal-close">×</a>
+          <h2>Result [{%d idx %}]: {%s ent.String() %}</h2>
+        </div>
+        <div class="modal-body">
+          <div class="mt result-content">
+            In progress...
+          </div>
+        </div>
+      </div>
+    </div>
     <h3>{%= components.SVGRefIcon(`file`, ps) %}{%s ent.String() %}</h3>
     <div class="clear"></div>
     <div class="mts details">
       <em>pending...</em>
     </div>
     <div class="logs">
+    </div>
+  </div>
+  <div id="modal-entry-{%d idx %}" class="modal" style="display: none;">
+    <a class="backdrop" href="#"></a>
+    <div class="modal-content">
+      <div class="modal-header">
+        <a href="#" class="modal-close">×</a>
+        <h2>{%s ent.String() %}</h2>
+      </div>
+      <div class="modal-body">
+        {%= vhar.RenderEntry(idx, ent, ps) %}
+      </div>
     </div>
   </div>
 {% endfunc %}

@@ -27,10 +27,10 @@ var (
 )
 
 //line views/vhar/Response.html:9
-func streamrenderResponse(qw422016 *qt422016.Writer, i int, r *har.Response, ps *cutil.PageState) {
+func StreamRenderResponse(qw422016 *qt422016.Writer, i int, r *har.Response, ps *cutil.PageState) {
 //line views/vhar/Response.html:9
 	qw422016.N().S(`
-  <table class="min-200">
+  <table class="min-200 expanded">
     <tbody>
       <tr>
         <th class="shrink">Status</th>
@@ -68,49 +68,57 @@ func streamrenderResponse(qw422016 *qt422016.Writer, i int, r *har.Response, ps 
 //line views/vhar/Response.html:24
 	qw422016.N().S(`</td>
       </tr>
+      <tr>
+        <th class="shrink">Content Type</th>
+        <td>`)
+//line views/vhar/Response.html:28
+	qw422016.E().S(r.ContentType())
+//line views/vhar/Response.html:28
+	qw422016.N().S(`</td>
+      </tr>
 `)
-//line views/vhar/Response.html:26
+//line views/vhar/Response.html:30
 	if len(r.Cookies) > 0 {
-//line views/vhar/Response.html:26
+//line views/vhar/Response.html:30
 		qw422016.N().S(`      <tr>
         <th class="shrink">Cookies</th>
         <td>`)
-//line views/vhar/Response.html:29
+//line views/vhar/Response.html:33
 		streamrenderCookiesHidden(qw422016, fmt.Sprintf("response-cookies-%d", i), r.Cookies, ps)
-//line views/vhar/Response.html:29
+//line views/vhar/Response.html:33
 		qw422016.N().S(`</td>
       </tr>
 `)
-//line views/vhar/Response.html:31
+//line views/vhar/Response.html:35
 	}
-//line views/vhar/Response.html:32
+//line views/vhar/Response.html:36
 	if r.Content != nil && r.Content.Text != "" {
-//line views/vhar/Response.html:32
+//line views/vhar/Response.html:36
 		qw422016.N().S(`      <tr>
         <th class="shrink">Body</th>
         <td>
           <div class="right"><em>`)
-//line views/vhar/Response.html:36
+//line views/vhar/Response.html:40
 		qw422016.E().S(util.ByteSizeSI(int64(r.Content.Size)))
-//line views/vhar/Response.html:36
+//line views/vhar/Response.html:40
 		qw422016.N().S(`</em></div>
           <ul class="accordion">
             <li>
               <input id="accordion-response-body-`)
-//line views/vhar/Response.html:39
+//line views/vhar/Response.html:43
 		qw422016.N().D(i)
-//line views/vhar/Response.html:39
+//line views/vhar/Response.html:43
 		qw422016.N().S(`" type="checkbox" hidden />
               <label class="no-padding" for="accordion-response-body-`)
-//line views/vhar/Response.html:40
+//line views/vhar/Response.html:44
 		qw422016.N().D(i)
-//line views/vhar/Response.html:40
+//line views/vhar/Response.html:44
 		qw422016.N().S(`"><em>(click to show)</em></label>
               <div class="bd">
                 <pre>`)
-//line views/vhar/Response.html:42
+//line views/vhar/Response.html:46
 		qw422016.E().S(r.Content.Text)
-//line views/vhar/Response.html:42
+//line views/vhar/Response.html:46
 		qw422016.N().S(`</pre>
               </div>
             </li>
@@ -119,37 +127,37 @@ func streamrenderResponse(qw422016 *qt422016.Writer, i int, r *har.Response, ps 
         </td>
       </tr>
 `)
-//line views/vhar/Response.html:49
+//line views/vhar/Response.html:53
 	}
-//line views/vhar/Response.html:49
+//line views/vhar/Response.html:53
 	qw422016.N().S(`    </tbody>
   </table>
 `)
-//line views/vhar/Response.html:52
+//line views/vhar/Response.html:56
 }
 
-//line views/vhar/Response.html:52
-func writerenderResponse(qq422016 qtio422016.Writer, i int, r *har.Response, ps *cutil.PageState) {
-//line views/vhar/Response.html:52
+//line views/vhar/Response.html:56
+func WriteRenderResponse(qq422016 qtio422016.Writer, i int, r *har.Response, ps *cutil.PageState) {
+//line views/vhar/Response.html:56
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line views/vhar/Response.html:52
-	streamrenderResponse(qw422016, i, r, ps)
-//line views/vhar/Response.html:52
+//line views/vhar/Response.html:56
+	StreamRenderResponse(qw422016, i, r, ps)
+//line views/vhar/Response.html:56
 	qt422016.ReleaseWriter(qw422016)
-//line views/vhar/Response.html:52
+//line views/vhar/Response.html:56
 }
 
-//line views/vhar/Response.html:52
-func renderResponse(i int, r *har.Response, ps *cutil.PageState) string {
-//line views/vhar/Response.html:52
+//line views/vhar/Response.html:56
+func RenderResponse(i int, r *har.Response, ps *cutil.PageState) string {
+//line views/vhar/Response.html:56
 	qb422016 := qt422016.AcquireByteBuffer()
-//line views/vhar/Response.html:52
-	writerenderResponse(qb422016, i, r, ps)
-//line views/vhar/Response.html:52
+//line views/vhar/Response.html:56
+	WriteRenderResponse(qb422016, i, r, ps)
+//line views/vhar/Response.html:56
 	qs422016 := string(qb422016.B)
-//line views/vhar/Response.html:52
+//line views/vhar/Response.html:56
 	qt422016.ReleaseByteBuffer(qb422016)
-//line views/vhar/Response.html:52
+//line views/vhar/Response.html:56
 	return qs422016
-//line views/vhar/Response.html:52
+//line views/vhar/Response.html:56
 }

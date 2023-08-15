@@ -28,10 +28,10 @@ var (
 )
 
 //line views/vhar/Request.html:10
-func streamrenderRequest(qw422016 *qt422016.Writer, i int, r *har.Request, ps *cutil.PageState) {
+func StreamRenderRequest(qw422016 *qt422016.Writer, i int, r *har.Request, ps *cutil.PageState) {
 //line views/vhar/Request.html:10
 	qw422016.N().S(`
-  <table class="min-200">
+  <table class="min-200 expanded">
     <tbody>
       <tr>
         <th class="shrink">Method</th>
@@ -116,22 +116,22 @@ func streamrenderRequest(qw422016 *qt422016.Writer, i int, r *har.Request, ps *c
 }
 
 //line views/vhar/Request.html:45
-func writerenderRequest(qq422016 qtio422016.Writer, i int, r *har.Request, ps *cutil.PageState) {
+func WriteRenderRequest(qq422016 qtio422016.Writer, i int, r *har.Request, ps *cutil.PageState) {
 //line views/vhar/Request.html:45
 	qw422016 := qt422016.AcquireWriter(qq422016)
 //line views/vhar/Request.html:45
-	streamrenderRequest(qw422016, i, r, ps)
+	StreamRenderRequest(qw422016, i, r, ps)
 //line views/vhar/Request.html:45
 	qt422016.ReleaseWriter(qw422016)
 //line views/vhar/Request.html:45
 }
 
 //line views/vhar/Request.html:45
-func renderRequest(i int, r *har.Request, ps *cutil.PageState) string {
+func RenderRequest(i int, r *har.Request, ps *cutil.PageState) string {
 //line views/vhar/Request.html:45
 	qb422016 := qt422016.AcquireByteBuffer()
 //line views/vhar/Request.html:45
-	writerenderRequest(qb422016, i, r, ps)
+	WriteRenderRequest(qb422016, i, r, ps)
 //line views/vhar/Request.html:45
 	qs422016 := string(qb422016.B)
 //line views/vhar/Request.html:45

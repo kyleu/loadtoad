@@ -167,3 +167,9 @@ func (e Entries) WithReplacements(repl func(s string) string) Entries {
 		return x.WithReplacements(repl)
 	})
 }
+
+func (e Entries) Cleaned() Entries {
+	return lo.Map(e, func(x *Entry, _ int) *Entry {
+		return x.Cleaned()
+	})
+}

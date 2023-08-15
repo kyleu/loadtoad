@@ -10,12 +10,13 @@
 {% code type Form struct {
   layout.Basic
   Workflow *loadtoad.Workflow
+  Archives []string
 } %}
 
 {% func (p *Form) Body(as *app.State, ps *cutil.PageState) %}
   {%- code
     w := p.Workflow
-    nameHelp := "The name of the workflow (optional)"
+    nameHelp := "The name of the workflow"
     testsHelp := "An array of tests, see example"
     replsHelp := "String replacements, applied throughout the workflow"
     varsHelp := "Custom variable keys and values used by the workflow"
@@ -33,24 +34,37 @@
           <tbody>
             {%= components.TableInput("name", "", "Name", w.Name, 6, nameHelp) %}
             <tr>
-              <th class="shrink">
-                <label for="edit-tests" title="{%s testsHelp %}">Tests</label>
+              <td class="shrink">
+                <label for="edit-tests" title="{%s testsHelp %}"><strong>Tests</strong></label>
                 <div>(<a href="#modal-tests">example</a>)</div>
-              </th>
+                {%- if len(p.Archives) > 0 -%}
+                <div class="mt">
+                  <select id="archive-select">
+                    <option value="">choose an archive</option>
+                    {%- for _, a := range p.Archives -%}
+                    <option>{%s a %}</option>
+                    {%- endfor -%}
+                  </select>
+                </div>
+                <div class="mt">
+                  <a href="" onclick="addArchive();return false;"><button>Add Archive</button></a>
+                </div>
+                {%- endif -%}
+              </td>
               <td>{%= components.FormTextarea("tests", "edit-tests", 12, util.ToJSON(w.Tests), testsHelp) %}</td>
             </tr>
             <tr>
-              <th class="shrink">
-                <label for="edit-replacements" title="{%s replsHelp %}">Replacements</label>
+              <td class="shrink">
+                <label for="edit-replacements" title="{%s replsHelp %}"><strong>Replacements</strong></label>
                 <div>(<a href="#modal-repls">example</a>)</div>
-              </th>
+              </td>
               <td>{%= components.FormTextarea("replacements", "edit-replacements", 12, util.ToJSON(w.Replacements), replsHelp) %}</td>
             </tr>
             <tr>
-              <th class="shrink">
-                <label for="edit-variables" title="{%s varsHelp %}">Variables</label>
+              <td class="shrink">
+                <label for="edit-variables" title="{%s varsHelp %}"><strong>Variables</strong></label>
                 <div>(<a href="#modal-vars">example</a>)</div>
-              </th>
+              </td>
               <td>{%= components.FormTextarea("variables", "edit-variables", 12, util.ToJSON(w.Variables), varsHelp) %}</td>
             </tr>
             <tr>
@@ -62,6 +76,21 @@
     </div>
   </div>
   {%= formModals(w, as, ps) %}
+  <script>
+    function addArchive() {
+      const har = document.querySelector("#archive-select").value;
+      if (har === "") {
+        alert("Please select an archive");
+        return;
+      }
+      const ta = document.querySelector("#edit-tests");
+      const curr = ta.value;
+      const currArray = JSON.parse(curr);
+      currArray.push({"har": har});
+      ta.value = JSON.stringify(currArray, null, 2);
+      console.log(har, curr);
+    }
+  </script>
 {% endfunc %}
 
 {% func formModals(w *loadtoad.Workflow, as *app.State, ps *cutil.PageState) %}

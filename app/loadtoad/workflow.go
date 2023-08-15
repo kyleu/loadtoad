@@ -2,12 +2,12 @@ package loadtoad
 
 import (
 	"fmt"
-	"github.com/kyleu/loadtoad/app/lib/filesystem"
 	"path"
 	"strings"
 
 	"github.com/pkg/errors"
 
+	"github.com/kyleu/loadtoad/app/lib/filesystem"
 	"github.com/kyleu/loadtoad/app/loadtoad/har"
 	"github.com/kyleu/loadtoad/app/util"
 )

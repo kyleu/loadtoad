@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/tls"
 	"fmt"
+	"io"
 	"net/http"
 	"net/http/cookiejar"
 	"net/http/httptrace"
@@ -87,7 +88,7 @@ func (s *Service) RunEntry(
 	if u != nil {
 		ret.Domain = u.Host
 		if !slices.Contains(hot, u.Host) {
-			if err := preload(ctx, u.Scheme, u.Host, idx, cl, logF); err != nil {
+			if err := preload(ctx, u.Scheme, u.Host, e.Request.Headers, idx, cl, logF); err != nil {
 				return nil, err
 			}
 		}
@@ -113,7 +114,7 @@ func (s *Service) RunEntry(
 	return ret, nil
 }
 
-func preload(ctx context.Context, scheme string, host string, idx int, cl http.Client, logF func(int, string)) error {
+func preload(ctx context.Context, scheme string, host string, headers har.NVPs, idx int, cl http.Client, logF func(int, string)) error {
 	root := scheme + "://" + host
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, root, http.NoBody)
 	if err != nil {
@@ -121,15 +122,18 @@ func preload(ctx context.Context, scheme string, host string, idx int, cl http.C
 	}
 	req.Header.Set("Connection", "keep-alive")
 	req.Header.Set("Host", host)
+	for _, h := range headers {
+		req.Header.Set(h.Name, h.Value)
+	}
 	t := util.TimerStart()
 	rsp, err := cl.Do(req)
 	if err != nil {
 		logF(idx, fmt.Sprintf("error preconnecting to [%s]: %v", host, err))
 	}
-
 	defer func() {
 		_ = rsp.Body.Close()
 	}()
+	_, _ = io.ReadAll(rsp.Body)
 	if logF != nil {
 		logF(idx, fmt.Sprintf("preconnected to [%s] in [%s]", host, t.EndString()))
 	}

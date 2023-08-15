@@ -2,15 +2,15 @@ package controller
 
 import (
 	"fmt"
-	"github.com/kyleu/loadtoad/app/loadtoad/har"
-	"github.com/pkg/errors"
 	"maps"
 
+	"github.com/pkg/errors"
 	"github.com/valyala/fasthttp"
 
 	"github.com/kyleu/loadtoad/app"
 	"github.com/kyleu/loadtoad/app/controller/cutil"
 	"github.com/kyleu/loadtoad/app/loadtoad"
+	"github.com/kyleu/loadtoad/app/loadtoad/har"
 	"github.com/kyleu/loadtoad/app/util"
 	"github.com/kyleu/loadtoad/views/vpage"
 	"github.com/kyleu/loadtoad/views/vworkflow"
@@ -46,9 +46,10 @@ func WorkflowDetail(rc *fasthttp.RequestCtx) {
 func WorkflowNew(rc *fasthttp.RequestCtx) {
 	Act("workflow.new", rc, func(as *app.State, ps *cutil.PageState) (string, error) {
 		w := &loadtoad.Workflow{Tests: har.Selectors{}, Replacements: map[string]string{}, Variables: util.ValueMap{}}
+		arcs := as.Services.LoadToad.ListHars(ps.Logger)
 		ps.Title = "New Workflow"
 		ps.Data = w
-		return Render(rc, as, &vworkflow.Form{Workflow: w}, ps, "workflow", "New")
+		return Render(rc, as, &vworkflow.Form{Workflow: w, Archives: arcs}, ps, "workflow", "New")
 	})
 }
 
@@ -79,9 +80,10 @@ func WorkflowForm(rc *fasthttp.RequestCtx) {
 		if err != nil {
 			return "", err
 		}
+		arcs := as.Services.LoadToad.ListHars(ps.Logger)
 		ps.Title = "Edit [" + w.ID + "]"
 		ps.Data = w
-		return Render(rc, as, &vworkflow.Form{Workflow: w}, ps, "workflow", w.ID, "Edit")
+		return Render(rc, as, &vworkflow.Form{Workflow: w, Archives: arcs}, ps, "workflow", w.ID, "Edit")
 	})
 }
 
@@ -169,7 +171,9 @@ func WorkflowStart(rc *fasthttp.RequestCtx) {
 		ps.Title = "Workflow " + w.Title()
 		ps.Data = w
 		channel := "run-" + util.RandomString(16)
-		return Render(rc, as, &vworkflow.Start{Workflow: w, Entries: ents, Channel: channel, Path: "/workflow/" + w.ID + "/connect"}, ps, "workflow", w.ID, "run")
+		p := "/workflow/" + w.ID + "/connect"
+		page := &vworkflow.Start{Workflow: w, Entries: ents.Cleaned(), Channel: channel, Path: p}
+		return Render(rc, as, page, ps, "workflow", w.ID, "run")
 	})
 }
 

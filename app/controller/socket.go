@@ -81,7 +81,8 @@ func socketConnect(
 	}
 	okF := func(i int, w *loadtoad.WorkflowResult) {
 		ps.Logger.Infof("[%d] [OK] %s", i, w.ID)
-		send("ok", &WorkflowMessage{Idx: i, Ctx: vworkflow.RenderResultTable(i, w, ps)})
+		c := util.ValueMap{"table": vworkflow.RenderResultTable(i, w, ps), "result": vworkflow.RenderResultModal(i, w, ps)}
+		send("ok", &WorkflowMessage{Idx: i, Ctx: c})
 	}
 	go func() {
 		final, e := as.Services.LoadToad.Run(ctx, w, repls, logF, errF, okF)

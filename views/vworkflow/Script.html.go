@@ -63,8 +63,15 @@ func streamstartScript(qw422016 *qt422016.Writer, ch string, pth string) {
             throw "invalid details for index [" + m.param.idx + "]";
           }
           const deetsDiv = document.createElement("div");
-          deetsDiv.innerHTML = m.param.ctx;
+          deetsDiv.innerHTML = m.param.ctx.table;
           deets.replaceChildren(deetsDiv);
+
+          const btn = el.querySelector(".modal-button");
+          btn.classList.remove("hidden");
+
+          const md = el.querySelector(".result-content");
+          md.innerHTML = m.param.ctx.result;
+
           break;
         case "complete":
           document.querySelector("#results .elapsed").innerText = m.param.ctx.message;
@@ -81,44 +88,44 @@ func streamstartScript(qw422016 *qt422016.Writer, ch string, pth string) {
     document.addEventListener("DOMContentLoaded", function() {
       const up = new URLSearchParams(window.location.search);
       up.set("channel", "`)
-//line views/vworkflow/Script.html:61
+//line views/vworkflow/Script.html:68
 	qw422016.E().S(ch)
-//line views/vworkflow/Script.html:61
+//line views/vworkflow/Script.html:68
 	qw422016.N().S(`");
       sock = new loadtoad.Socket(false, open, recv, err, "`)
-//line views/vworkflow/Script.html:62
+//line views/vworkflow/Script.html:69
 	qw422016.E().S(pth)
-//line views/vworkflow/Script.html:62
+//line views/vworkflow/Script.html:69
 	qw422016.N().S(`?" + up.toString());
       console.log("[Load]");
     });
   </script>
 `)
-//line views/vworkflow/Script.html:66
+//line views/vworkflow/Script.html:73
 }
 
-//line views/vworkflow/Script.html:66
+//line views/vworkflow/Script.html:73
 func writestartScript(qq422016 qtio422016.Writer, ch string, pth string) {
-//line views/vworkflow/Script.html:66
+//line views/vworkflow/Script.html:73
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line views/vworkflow/Script.html:66
+//line views/vworkflow/Script.html:73
 	streamstartScript(qw422016, ch, pth)
-//line views/vworkflow/Script.html:66
+//line views/vworkflow/Script.html:73
 	qt422016.ReleaseWriter(qw422016)
-//line views/vworkflow/Script.html:66
+//line views/vworkflow/Script.html:73
 }
 
-//line views/vworkflow/Script.html:66
+//line views/vworkflow/Script.html:73
 func startScript(ch string, pth string) string {
-//line views/vworkflow/Script.html:66
+//line views/vworkflow/Script.html:73
 	qb422016 := qt422016.AcquireByteBuffer()
-//line views/vworkflow/Script.html:66
+//line views/vworkflow/Script.html:73
 	writestartScript(qb422016, ch, pth)
-//line views/vworkflow/Script.html:66
+//line views/vworkflow/Script.html:73
 	qs422016 := string(qb422016.B)
-//line views/vworkflow/Script.html:66
+//line views/vworkflow/Script.html:73
 	qt422016.ReleaseByteBuffer(qb422016)
-//line views/vworkflow/Script.html:66
+//line views/vworkflow/Script.html:73
 	return qs422016
-//line views/vworkflow/Script.html:66
+//line views/vworkflow/Script.html:73
 }

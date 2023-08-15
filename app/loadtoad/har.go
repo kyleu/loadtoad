@@ -12,7 +12,7 @@ import (
 )
 
 func (s *Service) ListHars(logger util.Logger) []string {
-	return s.FS.ListExtension("./har", "har", nil, false, logger)
+	return s.FS.ListExtension("./har", "har", nil, true, logger)
 }
 
 func (s *Service) LoadHar(fn string) (*har.Log, error) {

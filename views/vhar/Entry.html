@@ -1,5 +1,6 @@
 {% import (
   "fmt"
+  "strings"
 
   "github.com/kyleu/loadtoad/app/controller/cutil"
   "github.com/kyleu/loadtoad/app/loadtoad/har"
@@ -39,15 +40,17 @@
 {% endfunc %}
 
 {% func RenderEntry(i int, e *har.Entry, ps *cutil.PageState) %}
-  <table class="min-200">
+  <table class="min-200 expanded">
     <tbody>
       <tr>
         <th class="shrink">Duration</th>
-        <td>{%s util.MicrosToMillis(e.Duration()) %} ({%s e.PageTimings.String() %})</td>
+        <td>{%s util.MicrosToMillis(e.Duration()) %}
+          <em>{%s strings.Join(e.PageTimings.Strings(), ", ") %}</em>
+        </td>
       </tr>
       <tr>
         <th class="shrink">Request</th>
-        <td>{%= renderRequest(i, e.Request, ps) %}</td>
+        <td>{%= RenderRequest(i, e.Request, ps) %}</td>
       </tr>
       <tr>
         <th class="shrink">Response Size</th>
@@ -55,7 +58,7 @@
       </tr>
       <tr>
         <th class="shrink">Response</th>
-        <td>{%= renderResponse(i, e.Response, ps) %}</td>
+        <td>{%= RenderResponse(i, e.Response, ps) %}</td>
       </tr>
     </tbody>
   </table>

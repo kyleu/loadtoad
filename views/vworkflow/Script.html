@@ -41,8 +41,15 @@
             throw "invalid details for index [" + m.param.idx + "]";
           }
           const deetsDiv = document.createElement("div");
-          deetsDiv.innerHTML = m.param.ctx;
+          deetsDiv.innerHTML = m.param.ctx.table;
           deets.replaceChildren(deetsDiv);
+
+          const btn = el.querySelector(".modal-button");
+          btn.classList.remove("hidden");
+
+          const md = el.querySelector(".result-content");
+          md.innerHTML = m.param.ctx.result;
+
           break;
         case "complete":
           document.querySelector("#results .elapsed").innerText = m.param.ctx.message;

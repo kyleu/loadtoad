@@ -30,9 +30,15 @@ func ResponseFromHTTP(r *http.Response) *Response {
 	if err != nil {
 		log.Fatal(err)
 	}
+	var headers NVPs
+	for k, vs := range r.Header {
+		for _, v := range vs {
+			headers = append(headers, &NVP{Name: k, Value: v})
+		}
+	}
 	body := string(bodyBytes)
 	content := &Content{Size: len(body), Text: body}
-	ret := &Response{Status: r.StatusCode, StatusText: r.Status, Cookies: cooks, Headers: nil, Content: content, BodySize: content.Size}
+	ret := &Response{Status: r.StatusCode, StatusText: r.Status, Cookies: cooks, Headers: headers, Content: content, BodySize: content.Size}
 	return ret
 }
 
@@ -44,6 +50,10 @@ func (r *Response) Size() int {
 		return r.Content.Size
 	}
 	return len(r.Content.Text)
+}
+
+func (r *Response) ContentType() string {
+	return r.Headers.GetValue("content-type")
 }
 
 func (r *Response) WithReplacements(repl func(s string) string) *Response {

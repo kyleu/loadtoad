@@ -7,8 +7,8 @@
   "github.com/kyleu/loadtoad/app/util"
 ) %}
 
-{% func renderRequest(i int, r *har.Request, ps *cutil.PageState) %}
-  <table class="min-200">
+{% func RenderRequest(i int, r *har.Request, ps *cutil.PageState) %}
+  <table class="min-200 expanded">
     <tbody>
       <tr>
         <th class="shrink">Method</th>

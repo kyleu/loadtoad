@@ -6,8 +6,8 @@
   "github.com/kyleu/loadtoad/app/util"
 ) %}
 
-{% func renderResponse(i int, r *har.Response, ps *cutil.PageState) %}
-  <table class="min-200">
+{% func RenderResponse(i int, r *har.Response, ps *cutil.PageState) %}
+  <table class="min-200 expanded">
     <tbody>
       <tr>
         <th class="shrink">Status</th>
@@ -22,6 +22,10 @@
       <tr>
         <th class="shrink">Headers </th>
         <td>{%= renderNVPsHidden(fmt.Sprintf("response-header-%d", i), "Header", r.Headers, r.HeadersSize, ps) %}</td>
+      </tr>
+      <tr>
+        <th class="shrink">Content Type</th>
+        <td>{%s r.ContentType() %}</td>
       </tr>
       {%- if len(r.Cookies) > 0 -%}
       <tr>
