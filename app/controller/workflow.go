@@ -33,7 +33,7 @@ func WorkflowDetail(rc *fasthttp.RequestCtx) {
 		if err != nil {
 			return "", err
 		}
-		ents, err := as.Services.LoadToad.LoadEntries(nil, w.Tests...)
+		ents, err := as.Services.LoadToad.LoadEntries(nil, nil, w.Tests...)
 		if err != nil {
 			return "", err
 		}
@@ -164,7 +164,7 @@ func WorkflowStart(rc *fasthttp.RequestCtx) {
 			delete(repls, "variables")
 		}
 
-		ents, err := as.Services.LoadToad.LoadEntries(repls, w.Tests...)
+		ents, err := as.Services.LoadToad.LoadEntries(repls, w.Variables, w.Tests...)
 		if err != nil {
 			return "", err
 		}

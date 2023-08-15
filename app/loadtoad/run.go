@@ -17,7 +17,7 @@ import (
 	"github.com/kyleu/loadtoad/app/util"
 )
 
-func (s *Service) LoadEntries(repls map[string]string, keys ...*har.Selector) (har.Entries, error) {
+func (s *Service) LoadEntries(repls map[string]string, vars util.ValueMap, keys ...*har.Selector) (har.Entries, error) {
 	var ret har.Entries
 	cache := map[string]*har.Log{}
 	for _, k := range keys {
@@ -45,7 +45,7 @@ func (s *Service) LoadEntries(repls map[string]string, keys ...*har.Selector) (h
 		})
 		ret = append(ret, ents...)
 	}
-	return ret.WithReplacementsMap(repls), nil
+	return ret.WithReplacementsMap(repls, vars), nil
 }
 
 func (s *Service) Run(
@@ -54,7 +54,7 @@ func (s *Service) Run(
 	var ret WorkflowResults
 	jar, _ := cookiejar.New(nil)
 	client := http.Client{Jar: jar, Transport: &http.Transport{TLSClientConfig: &tls.Config{InsecureSkipVerify: true}}} //nolint:gosec
-	entries, err := s.LoadEntries(repls, w.Tests...)
+	entries, err := s.LoadEntries(repls, w.Variables, w.Tests...)
 	if err != nil {
 		return nil, err
 	}
@@ -130,10 +130,12 @@ func preload(ctx context.Context, scheme string, host string, headers har.NVPs, 
 	if err != nil {
 		logF(idx, fmt.Sprintf("error preconnecting to [%s]: %v", host, err))
 	}
-	defer func() {
-		_ = rsp.Body.Close()
-	}()
-	_, _ = io.ReadAll(rsp.Body)
+	if rsp != nil && rsp.Body != nil {
+		defer func() {
+			_ = rsp.Body.Close()
+		}()
+		_, _ = io.ReadAll(rsp.Body)
+	}
 	if logF != nil {
 		logF(idx, fmt.Sprintf("preconnected to [%s] in [%s]", host, t.EndString()))
 	}

@@ -144,10 +144,11 @@ func (e Entries) TotalResponseBodySize() int {
 	})
 }
 
-func (e Entries) WithReplacementsMap(repls map[string]string) Entries {
+func (e Entries) WithReplacementsMap(repls map[string]string, vars util.ValueMap) Entries {
 	if len(repls) == 0 {
 		return e
 	}
+	startToken, endToken := "{{{", "}}}"
 	return e.WithReplacements(func(s string) string {
 		for k, v := range repls {
 			if v == "" {
@@ -155,6 +156,21 @@ func (e Entries) WithReplacementsMap(repls map[string]string) Entries {
 			}
 			if strings.Contains(v, "||") {
 				v = util.StringSplitAndTrim(v, "||")[0]
+			}
+			sIdx := strings.Index(v, "{{{")
+			for sIdx > -1 {
+				eIdx := strings.Index(v, "}}}")
+				if eIdx == -1 {
+					return "ERROR: missing end token \"}}}\""
+				}
+				match := v[sIdx+3 : eIdx]
+				r := startToken + match + endToken
+				variable := vars.GetStringOpt(strings.TrimSpace(match))
+				if variable == "" {
+					return "ERROR: missing variable \"" + strings.TrimSpace(match) + "\""
+				}
+				v = strings.Replace(v, r, variable, 1)
+				sIdx = strings.Index(v, "{{{")
 			}
 			s = strings.ReplaceAll(s, k, v)
 		}
