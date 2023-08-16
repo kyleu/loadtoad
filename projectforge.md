@@ -10,4 +10,6 @@ The following modules were used to build this project:
 - [filesystem](./doc/module/filesystem.md)
 - [marketing](./doc/module/marketing.md)
 - [notarize](./doc/module/notarize.md)
+- [process](./doc/module/process.md)
+- [scripting](./doc/module/scripting.md)
 - [websocket](./doc/module/websocket.md)

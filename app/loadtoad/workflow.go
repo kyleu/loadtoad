@@ -2,6 +2,7 @@ package loadtoad
 
 import (
 	"fmt"
+	"net/url"
 	"path"
 	"strings"
 
@@ -28,7 +29,7 @@ func (w *Workflow) Title() string {
 }
 
 func (w *Workflow) WebPath() string {
-	return "/workflow/" + w.ID
+	return "/workflow/" + url.QueryEscape(w.ID)
 }
 
 type Workflows []*Workflow

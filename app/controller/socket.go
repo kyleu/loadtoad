@@ -2,6 +2,7 @@ package controller
 
 import (
 	"context"
+	"fmt"
 	"strings"
 
 	"github.com/pkg/errors"
@@ -81,7 +82,8 @@ func socketConnect(
 	}
 	okF := func(i int, w *loadtoad.WorkflowResult) {
 		ps.Logger.Infof("[%d] [OK] %s", i, w.ID)
-		c := util.ValueMap{"table": vworkflow.RenderResultTable(i, w, ps), "result": vworkflow.RenderResultModal(i, w, ps)}
+		res := vworkflow.RenderResultModal(fmt.Sprintf("result-%d", i), w, ps)
+		c := util.ValueMap{"table": vworkflow.RenderResultTable(i, w, ps), "result": res}
 		send("ok", &WorkflowMessage{Idx: i, Ctx: c})
 	}
 	go func() {

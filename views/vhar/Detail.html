@@ -1,4 +1,6 @@
 {% import (
+  "fmt"
+
   "github.com/kyleu/loadtoad/app"
   "github.com/kyleu/loadtoad/app/controller/cutil"
   "github.com/kyleu/loadtoad/app/loadtoad/har"
@@ -29,18 +31,21 @@
     <div class="mts">
       <ul class="accordion">
         {%- for i, e := range p.Har.Entries -%}
-        {%- code e = e.Cleaned() -%}
+        {%- code
+          key := fmt.Sprintf("%d", i)
+          e = e.Cleaned()
+        -%}
         <li>
-          <input id="accordion-entry-{%d i %}" type="checkbox" hidden />
-          <label for="accordion-entry-{%d i %}">
-            {%= RenderEntryOptions(i, e, false) %}
+          <input id="accordion-entry-{%s key %}" type="checkbox" hidden />
+          <label for="accordion-entry-{%s key %}">
+            {%= RenderEntryOptions(key, e, false) %}
             {%= components.ExpandCollapse(3, ps) %} {%s e.Request.Method %} {%s e.String() %}
             <div class="clear"></div>
           </label>
           <div class="bd">
-            {%= RenderEntry(i, e, ps) %}
+            {%= RenderEntry(key, e, ps) %}
           </div>
-          {%= RenderEntryModals(i, e, false) %}
+          {%= RenderEntryModals(key, e, false) %}
         </li>
         {%- endfor -%}
       </ul>

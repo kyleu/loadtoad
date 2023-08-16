@@ -7,7 +7,7 @@
   "github.com/kyleu/loadtoad/app/util"
 ) %}
 
-{% func RenderRequest(i int, r *har.Request, ps *cutil.PageState) %}
+{% func RenderRequest(key string, r *har.Request, ps *cutil.PageState) %}
   <table class="min-200 expanded">
     <tbody>
       <tr>
@@ -20,18 +20,18 @@
       </tr>
       <tr>
         <th class="shrink">Headers </th>
-        <td>{%= renderNVPsHidden(fmt.Sprintf("request-header-%d", i), "Header", r.Headers, r.HeadersSize, ps) %}</td>
+        <td>{%= renderNVPsHidden(fmt.Sprintf("request-header-%s", key), "Header", r.Headers, r.HeadersSize, ps) %}</td>
       </tr>
       {%- if len(r.QueryString) > 0 -%}
       <tr>
         <th class="shrink">Query String</th>
-        <td>{%= renderNVPsHidden(fmt.Sprintf("request-query-string-%d", i), "Query String", r.QueryString, 0, ps) %}</td>
+        <td>{%= renderNVPsHidden(fmt.Sprintf("request-query-string-%s", key), "Query String", r.QueryString, 0, ps) %}</td>
       </tr>
       {%- endif -%}
       {%- if len(r.Cookies) > 0 -%}
       <tr>
         <th class="shrink">Cookies</th>
-        <td>{%= renderCookiesHidden(fmt.Sprintf("request-cookies-%d", i), r.Cookies, ps) %}</td>
+        <td>{%= renderCookiesHidden(fmt.Sprintf("request-cookies-%s", key), r.Cookies, ps) %}</td>
       </tr>
       {%- endif -%}
       {%- if r.PostData != nil -%}

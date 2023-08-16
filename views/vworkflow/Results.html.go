@@ -325,12 +325,12 @@ func RenderResultTable(rIdx int, r *loadtoad.WorkflowResult, ps *cutil.PageState
 }
 
 //line views/vworkflow/Results.html:81
-func StreamRenderResultModal(qw422016 *qt422016.Writer, rIdx int, r *loadtoad.WorkflowResult, ps *cutil.PageState) {
+func StreamRenderResultModal(qw422016 *qt422016.Writer, key string, r *loadtoad.WorkflowResult, ps *cutil.PageState) {
 //line views/vworkflow/Results.html:81
 	qw422016.N().S(`
   `)
 //line views/vworkflow/Results.html:82
-	vhar.StreamRenderResponse(qw422016, rIdx, r.Response, ps)
+	vhar.StreamRenderResponse(qw422016, key, r.Response, ps)
 //line views/vworkflow/Results.html:82
 	qw422016.N().S(`
 `)
@@ -338,22 +338,22 @@ func StreamRenderResultModal(qw422016 *qt422016.Writer, rIdx int, r *loadtoad.Wo
 }
 
 //line views/vworkflow/Results.html:83
-func WriteRenderResultModal(qq422016 qtio422016.Writer, rIdx int, r *loadtoad.WorkflowResult, ps *cutil.PageState) {
+func WriteRenderResultModal(qq422016 qtio422016.Writer, key string, r *loadtoad.WorkflowResult, ps *cutil.PageState) {
 //line views/vworkflow/Results.html:83
 	qw422016 := qt422016.AcquireWriter(qq422016)
 //line views/vworkflow/Results.html:83
-	StreamRenderResultModal(qw422016, rIdx, r, ps)
+	StreamRenderResultModal(qw422016, key, r, ps)
 //line views/vworkflow/Results.html:83
 	qt422016.ReleaseWriter(qw422016)
 //line views/vworkflow/Results.html:83
 }
 
 //line views/vworkflow/Results.html:83
-func RenderResultModal(rIdx int, r *loadtoad.WorkflowResult, ps *cutil.PageState) string {
+func RenderResultModal(key string, r *loadtoad.WorkflowResult, ps *cutil.PageState) string {
 //line views/vworkflow/Results.html:83
 	qb422016 := qt422016.AcquireByteBuffer()
 //line views/vworkflow/Results.html:83
-	WriteRenderResultModal(qb422016, rIdx, r, ps)
+	WriteRenderResultModal(qb422016, key, r, ps)
 //line views/vworkflow/Results.html:83
 	qs422016 := string(qb422016.B)
 //line views/vworkflow/Results.html:83

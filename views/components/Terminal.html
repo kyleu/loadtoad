@@ -1,0 +1,26 @@
+<!-- Content managed by Project Forge, see [projectforge.md] for details. -->
+{% import (
+  "github.com/robert-nix/ansihtml"
+
+  "github.com/kyleu/loadtoad/app/util"
+) %}
+
+{% func DisplayTerminal(id string, s string) %}{% stripspace %}
+  {%- code
+    raw := string(ansihtml.ConvertToHTML([]byte(s)))
+    lines := util.StringSplitLines(raw)
+    if len(lines) > 0 && lines[len(lines) - 1] == "" {
+      lines = lines[:len(lines) - 1]
+    }
+  -%}
+  <table class="mt">
+    <tbody id="{%s id %}">
+      {%- for idx, line := range lines -%}
+      <tr style="font-family: monospace;">
+        <td class="shrink br" style="padding: 2px var(--padding) 2px 0; vertical-align: top;">{%d idx + 1 %}</td>
+        <td style="padding: 2px var(--padding);"><div style="white-space: pre-wrap; word-wrap: break-word; word-break: break-word;">{%s= line %}</div></td>
+      </tr>
+      {%- endfor -%}
+    </tbody>
+  </table>
+{% endstripspace %}{% endfunc %}

@@ -8,20 +8,20 @@
   "github.com/kyleu/loadtoad/views/components"
 ) %}
 
-{% func RenderEntryOptions(i int, e *har.Entry, js bool) %}
+{% func RenderEntryOptions(key string, e *har.Entry, js bool) %}
   <div class="right">
-    <a href="#modal-entry-{%d i %}-curl"><button type="button">cURL</button></a>
+    <a href="#modal-entry-{%s key %}-curl"><button type="button">cURL</button></a>
     {%- if js -%}
-    <a href="#modal-entry-{%d i %}"><button type="button">JSON</button></a>
+    <a href="#modal-entry-{%s key %}"><button type="button">JSON</button></a>
     {%- endif -%}
   </div>
 {% endfunc %}
 
-{% func RenderEntryModals(i int, e *har.Entry, js bool) %}
+{% func RenderEntryModals(key string, e *har.Entry, js bool) %}
   {%- if js -%}
-  {%= components.JSONModal(fmt.Sprintf("entry-%d", i), e.String(), e.Cleaned(), 3) %}
+  {%= components.JSONModal(fmt.Sprintf("entry-%s", key), e.String(), e.Cleaned(), 3) %}
   {%- endif -%}
-  <div id="modal-entry-{%d i %}-curl" class="modal" style="display: none;">
+  <div id="modal-entry-{%s key %}-curl" class="modal" style="display: none;">
     <a class="backdrop" href="#"></a>
     <div class="modal-content">
       <div class="modal-header">
@@ -29,8 +29,8 @@
         <h2>cURL {%s e.String() %}</h2>
       </div>
       <div class="modal-body">
-        <div id="modal-entry-{%d i %}-curl-data" hidden="hidden" style="display:none;">{%s e.Curl() %}</div>
-        <button onclick="clip('{%d i %}');">Copy to clipboard</button>
+        <div id="modal-entry-{%s key %}-curl-data" hidden="hidden" style="display:none;">{%s e.Curl() %}</div>
+        <button onclick="clip('{%s key %}');">Copy to clipboard</button>
         <div class="mt">
           <pre>{%s e.Curl() %}</pre>
         </div>
@@ -39,7 +39,7 @@
   </div>
 {% endfunc %}
 
-{% func RenderEntry(i int, e *har.Entry, ps *cutil.PageState) %}
+{% func RenderEntry(key string, e *har.Entry, ps *cutil.PageState) %}
   <table class="min-200 expanded">
     <tbody>
       <tr>
@@ -50,7 +50,7 @@
       </tr>
       <tr>
         <th class="shrink">Request</th>
-        <td>{%= RenderRequest(i, e.Request, ps) %}</td>
+        <td>{%= RenderRequest(key, e.Request, ps) %}</td>
       </tr>
       <tr>
         <th class="shrink">Response Size</th>
@@ -58,7 +58,7 @@
       </tr>
       <tr>
         <th class="shrink">Response</th>
-        <td>{%= RenderResponse(i, e.Response, ps) %}</td>
+        <td>{%= RenderResponse(key, e.Response, ps) %}</td>
       </tr>
     </tbody>
   </table>

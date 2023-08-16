@@ -6,7 +6,7 @@
   "github.com/kyleu/loadtoad/app/util"
 ) %}
 
-{% func RenderResponse(i int, r *har.Response, ps *cutil.PageState) %}
+{% func RenderResponse(key string, r *har.Response, ps *cutil.PageState) %}
   <table class="min-200 expanded">
     <tbody>
       <tr>
@@ -21,7 +21,7 @@
       {%- endif -%}
       <tr>
         <th class="shrink">Headers </th>
-        <td>{%= renderNVPsHidden(fmt.Sprintf("response-header-%d", i), "Header", r.Headers, r.HeadersSize, ps) %}</td>
+        <td>{%= renderNVPsHidden(fmt.Sprintf("response-header-%s", key), "Header", r.Headers, r.HeadersSize, ps) %}</td>
       </tr>
       <tr>
         <th class="shrink">Content Type</th>
@@ -30,7 +30,7 @@
       {%- if len(r.Cookies) > 0 -%}
       <tr>
         <th class="shrink">Cookies</th>
-        <td>{%= renderCookiesHidden(fmt.Sprintf("response-cookies-%d", i), r.Cookies, ps) %}</td>
+        <td>{%= renderCookiesHidden(fmt.Sprintf("response-cookies-%s", key), r.Cookies, ps) %}</td>
       </tr>
       {%- endif -%}
       {%- if r.Content != nil && r.Content.Text != "" -%}
@@ -40,14 +40,13 @@
           <div class="right"><em>{%s util.ByteSizeSI(int64(r.Content.Size)) %}</em></div>
           <ul class="accordion">
             <li>
-              <input id="accordion-response-body-{%d i %}" type="checkbox" hidden />
-              <label class="no-padding" for="accordion-response-body-{%d i %}"><em>(click to show)</em></label>
+              <input id="accordion-response-body-{%s key %}" type="checkbox" hidden />
+              <label class="no-padding" for="accordion-response-body-{%s key %}"><em>(click to show)</em></label>
               <div class="bd">
                 <pre>{%s r.Content.Text %}</pre>
               </div>
             </li>
           </ul>
-
         </td>
       </tr>
       {%- endif -%}

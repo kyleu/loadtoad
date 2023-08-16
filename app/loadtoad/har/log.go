@@ -1,5 +1,7 @@
 package har
 
+import "net/url"
+
 type Creator struct {
 	Name    string `json:"name"`
 	Version string `json:"version"`
@@ -23,7 +25,7 @@ type Log struct {
 }
 
 func (l *Log) WebPath() string {
-	return "/har/" + l.Key
+	return "/har/" + url.QueryEscape(l.Key)
 }
 
 type Logs []*Log

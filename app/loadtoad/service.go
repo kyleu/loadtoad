@@ -7,17 +7,11 @@ import (
 )
 
 type Service struct {
-	FS     *filesystem.FileSystem
+	FS     filesystem.FileLoader
 	Socket *websocket.Service
 }
 
-func NewService(ws *websocket.Service, logger util.Logger) *Service {
-	p := util.GetEnv("loadtoad_path", "./data")
-	fs := filesystem.NewFileSystem(p)
-	if !fs.Exists(".") {
-		logger.Infof("creating data directory at [%s]", p)
-		_ = fs.CreateDirectory(".")
-	}
+func NewService(fs filesystem.FileLoader, ws *websocket.Service, logger util.Logger) *Service {
 	ret := &Service{FS: fs, Socket: ws}
 	return ret
 }

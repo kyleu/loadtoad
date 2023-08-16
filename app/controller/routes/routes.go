@@ -30,6 +30,8 @@ func AppRoutes(as *app.State, logger util.Logger) fasthttp.RequestHandler {
 	// $PF_SECTION_END(routes)$
 
 	r.GET("/admin", clib.Admin)
+	execRoutes(r)
+	scriptingRoutes(r)
 	r.GET("/admin/{path:*}", clib.Admin)
 	r.POST("/admin/{path:*}", clib.Admin)
 

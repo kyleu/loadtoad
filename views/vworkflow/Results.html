@@ -78,6 +78,6 @@
   </table>
 {% endfunc %}
 
-{% func RenderResultModal(rIdx int, r *loadtoad.WorkflowResult, ps *cutil.PageState) %}
-  {%= vhar.RenderResponse(rIdx, r.Response, ps) %}
+{% func RenderResultModal(key string, r *loadtoad.WorkflowResult, ps *cutil.PageState) %}
+  {%= vhar.RenderResponse(key, r.Response, ps) %}
 {% endfunc %}

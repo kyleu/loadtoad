@@ -29,13 +29,13 @@ var (
 )
 
 //line views/vhar/Entry.html:11
-func StreamRenderEntryOptions(qw422016 *qt422016.Writer, i int, e *har.Entry, js bool) {
+func StreamRenderEntryOptions(qw422016 *qt422016.Writer, key string, e *har.Entry, js bool) {
 //line views/vhar/Entry.html:11
 	qw422016.N().S(`
   <div class="right">
     <a href="#modal-entry-`)
 //line views/vhar/Entry.html:13
-	qw422016.N().D(i)
+	qw422016.E().S(key)
 //line views/vhar/Entry.html:13
 	qw422016.N().S(`-curl"><button type="button">cURL</button></a>
 `)
@@ -44,7 +44,7 @@ func StreamRenderEntryOptions(qw422016 *qt422016.Writer, i int, e *har.Entry, js
 //line views/vhar/Entry.html:14
 		qw422016.N().S(`    <a href="#modal-entry-`)
 //line views/vhar/Entry.html:15
-		qw422016.N().D(i)
+		qw422016.E().S(key)
 //line views/vhar/Entry.html:15
 		qw422016.N().S(`"><button type="button">JSON</button></a>
 `)
@@ -57,22 +57,22 @@ func StreamRenderEntryOptions(qw422016 *qt422016.Writer, i int, e *har.Entry, js
 }
 
 //line views/vhar/Entry.html:18
-func WriteRenderEntryOptions(qq422016 qtio422016.Writer, i int, e *har.Entry, js bool) {
+func WriteRenderEntryOptions(qq422016 qtio422016.Writer, key string, e *har.Entry, js bool) {
 //line views/vhar/Entry.html:18
 	qw422016 := qt422016.AcquireWriter(qq422016)
 //line views/vhar/Entry.html:18
-	StreamRenderEntryOptions(qw422016, i, e, js)
+	StreamRenderEntryOptions(qw422016, key, e, js)
 //line views/vhar/Entry.html:18
 	qt422016.ReleaseWriter(qw422016)
 //line views/vhar/Entry.html:18
 }
 
 //line views/vhar/Entry.html:18
-func RenderEntryOptions(i int, e *har.Entry, js bool) string {
+func RenderEntryOptions(key string, e *har.Entry, js bool) string {
 //line views/vhar/Entry.html:18
 	qb422016 := qt422016.AcquireByteBuffer()
 //line views/vhar/Entry.html:18
-	WriteRenderEntryOptions(qb422016, i, e, js)
+	WriteRenderEntryOptions(qb422016, key, e, js)
 //line views/vhar/Entry.html:18
 	qs422016 := string(qb422016.B)
 //line views/vhar/Entry.html:18
@@ -83,7 +83,7 @@ func RenderEntryOptions(i int, e *har.Entry, js bool) string {
 }
 
 //line views/vhar/Entry.html:20
-func StreamRenderEntryModals(qw422016 *qt422016.Writer, i int, e *har.Entry, js bool) {
+func StreamRenderEntryModals(qw422016 *qt422016.Writer, key string, e *har.Entry, js bool) {
 //line views/vhar/Entry.html:20
 	qw422016.N().S(`
 `)
@@ -92,7 +92,7 @@ func StreamRenderEntryModals(qw422016 *qt422016.Writer, i int, e *har.Entry, js 
 //line views/vhar/Entry.html:21
 		qw422016.N().S(`  `)
 //line views/vhar/Entry.html:22
-		components.StreamJSONModal(qw422016, fmt.Sprintf("entry-%d", i), e.String(), e.Cleaned(), 3)
+		components.StreamJSONModal(qw422016, fmt.Sprintf("entry-%s", key), e.String(), e.Cleaned(), 3)
 //line views/vhar/Entry.html:22
 		qw422016.N().S(`
 `)
@@ -101,7 +101,7 @@ func StreamRenderEntryModals(qw422016 *qt422016.Writer, i int, e *har.Entry, js 
 //line views/vhar/Entry.html:23
 	qw422016.N().S(`  <div id="modal-entry-`)
 //line views/vhar/Entry.html:24
-	qw422016.N().D(i)
+	qw422016.E().S(key)
 //line views/vhar/Entry.html:24
 	qw422016.N().S(`-curl" class="modal" style="display: none;">
     <a class="backdrop" href="#"></a>
@@ -117,7 +117,7 @@ func StreamRenderEntryModals(qw422016 *qt422016.Writer, i int, e *har.Entry, js 
       <div class="modal-body">
         <div id="modal-entry-`)
 //line views/vhar/Entry.html:32
-	qw422016.N().D(i)
+	qw422016.E().S(key)
 //line views/vhar/Entry.html:32
 	qw422016.N().S(`-curl-data" hidden="hidden" style="display:none;">`)
 //line views/vhar/Entry.html:32
@@ -126,7 +126,7 @@ func StreamRenderEntryModals(qw422016 *qt422016.Writer, i int, e *har.Entry, js 
 	qw422016.N().S(`</div>
         <button onclick="clip('`)
 //line views/vhar/Entry.html:33
-	qw422016.N().D(i)
+	qw422016.E().S(key)
 //line views/vhar/Entry.html:33
 	qw422016.N().S(`');">Copy to clipboard</button>
         <div class="mt">
@@ -144,22 +144,22 @@ func StreamRenderEntryModals(qw422016 *qt422016.Writer, i int, e *har.Entry, js 
 }
 
 //line views/vhar/Entry.html:40
-func WriteRenderEntryModals(qq422016 qtio422016.Writer, i int, e *har.Entry, js bool) {
+func WriteRenderEntryModals(qq422016 qtio422016.Writer, key string, e *har.Entry, js bool) {
 //line views/vhar/Entry.html:40
 	qw422016 := qt422016.AcquireWriter(qq422016)
 //line views/vhar/Entry.html:40
-	StreamRenderEntryModals(qw422016, i, e, js)
+	StreamRenderEntryModals(qw422016, key, e, js)
 //line views/vhar/Entry.html:40
 	qt422016.ReleaseWriter(qw422016)
 //line views/vhar/Entry.html:40
 }
 
 //line views/vhar/Entry.html:40
-func RenderEntryModals(i int, e *har.Entry, js bool) string {
+func RenderEntryModals(key string, e *har.Entry, js bool) string {
 //line views/vhar/Entry.html:40
 	qb422016 := qt422016.AcquireByteBuffer()
 //line views/vhar/Entry.html:40
-	WriteRenderEntryModals(qb422016, i, e, js)
+	WriteRenderEntryModals(qb422016, key, e, js)
 //line views/vhar/Entry.html:40
 	qs422016 := string(qb422016.B)
 //line views/vhar/Entry.html:40
@@ -170,7 +170,7 @@ func RenderEntryModals(i int, e *har.Entry, js bool) string {
 }
 
 //line views/vhar/Entry.html:42
-func StreamRenderEntry(qw422016 *qt422016.Writer, i int, e *har.Entry, ps *cutil.PageState) {
+func StreamRenderEntry(qw422016 *qt422016.Writer, key string, e *har.Entry, ps *cutil.PageState) {
 //line views/vhar/Entry.html:42
 	qw422016.N().S(`
   <table class="min-200 expanded">
@@ -193,7 +193,7 @@ func StreamRenderEntry(qw422016 *qt422016.Writer, i int, e *har.Entry, ps *cutil
         <th class="shrink">Request</th>
         <td>`)
 //line views/vhar/Entry.html:53
-	StreamRenderRequest(qw422016, i, e.Request, ps)
+	StreamRenderRequest(qw422016, key, e.Request, ps)
 //line views/vhar/Entry.html:53
 	qw422016.N().S(`</td>
       </tr>
@@ -209,7 +209,7 @@ func StreamRenderEntry(qw422016 *qt422016.Writer, i int, e *har.Entry, ps *cutil
         <th class="shrink">Response</th>
         <td>`)
 //line views/vhar/Entry.html:61
-	StreamRenderResponse(qw422016, i, e.Response, ps)
+	StreamRenderResponse(qw422016, key, e.Response, ps)
 //line views/vhar/Entry.html:61
 	qw422016.N().S(`</td>
       </tr>
@@ -220,22 +220,22 @@ func StreamRenderEntry(qw422016 *qt422016.Writer, i int, e *har.Entry, ps *cutil
 }
 
 //line views/vhar/Entry.html:65
-func WriteRenderEntry(qq422016 qtio422016.Writer, i int, e *har.Entry, ps *cutil.PageState) {
+func WriteRenderEntry(qq422016 qtio422016.Writer, key string, e *har.Entry, ps *cutil.PageState) {
 //line views/vhar/Entry.html:65
 	qw422016 := qt422016.AcquireWriter(qq422016)
 //line views/vhar/Entry.html:65
-	StreamRenderEntry(qw422016, i, e, ps)
+	StreamRenderEntry(qw422016, key, e, ps)
 //line views/vhar/Entry.html:65
 	qt422016.ReleaseWriter(qw422016)
 //line views/vhar/Entry.html:65
 }
 
 //line views/vhar/Entry.html:65
-func RenderEntry(i int, e *har.Entry, ps *cutil.PageState) string {
+func RenderEntry(key string, e *har.Entry, ps *cutil.PageState) string {
 //line views/vhar/Entry.html:65
 	qb422016 := qt422016.AcquireByteBuffer()
 //line views/vhar/Entry.html:65
-	WriteRenderEntry(qb422016, i, e, ps)
+	WriteRenderEntry(qb422016, key, e, ps)
 //line views/vhar/Entry.html:65
 	qs422016 := string(qb422016.B)
 //line views/vhar/Entry.html:65

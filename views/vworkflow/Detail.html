@@ -1,4 +1,6 @@
 {% import (
+  "fmt"
+
   "github.com/kyleu/loadtoad/app"
   "github.com/kyleu/loadtoad/app/controller/cutil"
   "github.com/kyleu/loadtoad/app/loadtoad"
@@ -18,7 +20,7 @@
 {% func (p *Detail) Body(as *app.State, ps *cutil.PageState) %}
   <div class="card">
     <div class="right">
-      <a href="/workflow/{%s p.Workflow.ID %}/edit"><button type="button">Edit</button></a>
+      <a href="/workflow/{%u p.Workflow.ID %}/edit"><button type="button">Edit</button></a>
       <a href="#modal-workflow"><button type="button">JSON</button></a>
     </div>
     {%= components.JSONModal("workflow", "Workflow", p.Workflow, 3) %}
@@ -66,17 +68,18 @@
   <div class="mt">
     <ul class="accordion">
       {%- for _, e := range selEnts -%}
+      {%- code key := fmt.Sprintf("%d", idx) -%}
       <li>
-        <input id="accordion-entry-{%d idx %}" type="checkbox" hidden />
-        <label for="accordion-entry-{%d idx %}">
-          {%= vhar.RenderEntryOptions(idx, e, false) %}
+        <input id="accordion-entry-{%s key %}" type="checkbox" hidden />
+        <label for="accordion-entry-{%s key %}">
+          {%= vhar.RenderEntryOptions(key, e, false) %}
           {%= components.ExpandCollapse(3, ps) %} {%s e.String() %}
           <div class="clear"></div>
         </label>
         <div class="bd">
-          {%= vhar.RenderEntry(idx, e, ps) %}
+          {%= vhar.RenderEntry(key, e, ps) %}
         </div>
-        {%= vhar.RenderEntryModals(idx, e, false) %}
+        {%= vhar.RenderEntryModals(key, e, false) %}
       </li>
       {%- code idx++ -%}
       {%- endfor -%}

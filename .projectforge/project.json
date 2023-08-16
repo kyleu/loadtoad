@@ -10,6 +10,8 @@
     "filesystem",
     "marketing",
     "notarize",
+    "process",
+    "scripting",
     "websocket"
   ],
   "tags": [

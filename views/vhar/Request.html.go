@@ -28,7 +28,7 @@ var (
 )
 
 //line views/vhar/Request.html:10
-func StreamRenderRequest(qw422016 *qt422016.Writer, i int, r *har.Request, ps *cutil.PageState) {
+func StreamRenderRequest(qw422016 *qt422016.Writer, key string, r *har.Request, ps *cutil.PageState) {
 //line views/vhar/Request.html:10
 	qw422016.N().S(`
   <table class="min-200 expanded">
@@ -57,7 +57,7 @@ func StreamRenderRequest(qw422016 *qt422016.Writer, i int, r *har.Request, ps *c
         <th class="shrink">Headers </th>
         <td>`)
 //line views/vhar/Request.html:23
-	streamrenderNVPsHidden(qw422016, fmt.Sprintf("request-header-%d", i), "Header", r.Headers, r.HeadersSize, ps)
+	streamrenderNVPsHidden(qw422016, fmt.Sprintf("request-header-%s", key), "Header", r.Headers, r.HeadersSize, ps)
 //line views/vhar/Request.html:23
 	qw422016.N().S(`</td>
       </tr>
@@ -69,7 +69,7 @@ func StreamRenderRequest(qw422016 *qt422016.Writer, i int, r *har.Request, ps *c
         <th class="shrink">Query String</th>
         <td>`)
 //line views/vhar/Request.html:28
-		streamrenderNVPsHidden(qw422016, fmt.Sprintf("request-query-string-%d", i), "Query String", r.QueryString, 0, ps)
+		streamrenderNVPsHidden(qw422016, fmt.Sprintf("request-query-string-%s", key), "Query String", r.QueryString, 0, ps)
 //line views/vhar/Request.html:28
 		qw422016.N().S(`</td>
       </tr>
@@ -83,7 +83,7 @@ func StreamRenderRequest(qw422016 *qt422016.Writer, i int, r *har.Request, ps *c
         <th class="shrink">Cookies</th>
         <td>`)
 //line views/vhar/Request.html:34
-		streamrenderCookiesHidden(qw422016, fmt.Sprintf("request-cookies-%d", i), r.Cookies, ps)
+		streamrenderCookiesHidden(qw422016, fmt.Sprintf("request-cookies-%s", key), r.Cookies, ps)
 //line views/vhar/Request.html:34
 		qw422016.N().S(`</td>
       </tr>
@@ -116,22 +116,22 @@ func StreamRenderRequest(qw422016 *qt422016.Writer, i int, r *har.Request, ps *c
 }
 
 //line views/vhar/Request.html:45
-func WriteRenderRequest(qq422016 qtio422016.Writer, i int, r *har.Request, ps *cutil.PageState) {
+func WriteRenderRequest(qq422016 qtio422016.Writer, key string, r *har.Request, ps *cutil.PageState) {
 //line views/vhar/Request.html:45
 	qw422016 := qt422016.AcquireWriter(qq422016)
 //line views/vhar/Request.html:45
-	StreamRenderRequest(qw422016, i, r, ps)
+	StreamRenderRequest(qw422016, key, r, ps)
 //line views/vhar/Request.html:45
 	qt422016.ReleaseWriter(qw422016)
 //line views/vhar/Request.html:45
 }
 
 //line views/vhar/Request.html:45
-func RenderRequest(i int, r *har.Request, ps *cutil.PageState) string {
+func RenderRequest(key string, r *har.Request, ps *cutil.PageState) string {
 //line views/vhar/Request.html:45
 	qb422016 := qt422016.AcquireByteBuffer()
 //line views/vhar/Request.html:45
-	WriteRenderRequest(qb422016, i, r, ps)
+	WriteRenderRequest(qb422016, key, r, ps)
 //line views/vhar/Request.html:45
 	qs422016 := string(qb422016.B)
 //line views/vhar/Request.html:45

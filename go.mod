@@ -6,6 +6,7 @@ require (
 	github.com/alecthomas/chroma v0.10.0
 	github.com/araddon/dateparse v0.0.0-20210429162001-6b43995a97de
 	github.com/buildkite/shellwords v0.0.0-20180315110454-59467a9b8e10
+	github.com/dop251/goja v0.0.0-20230812105242-81d76064690d
 	github.com/dsoprea/go-exif/v3 v3.0.1
 	github.com/dustin/go-humanize v1.0.1
 	github.com/fasthttp/router v1.4.20
@@ -20,6 +21,7 @@ require (
 	github.com/muesli/coral v1.0.0
 	github.com/pkg/errors v0.9.1
 	github.com/prometheus/client_golang v1.16.0
+	github.com/robert-nix/ansihtml v1.0.1
 	github.com/samber/lo v1.38.1
 	github.com/valyala/fasthttp v1.48.0
 	github.com/valyala/quicktemplate v1.7.0
@@ -46,8 +48,10 @@ require (
 	github.com/go-errors/errors v1.4.2 // indirect
 	github.com/go-logr/logr v1.2.4 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
+	github.com/go-sourcemap/sourcemap v2.1.3+incompatible // indirect
 	github.com/golang/geo v0.0.0-20230421003525-6adc56603217 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
+	github.com/google/pprof v0.0.0-20230207041349-798e818bf904 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.16.2 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/klauspost/compress v1.16.7 // indirect

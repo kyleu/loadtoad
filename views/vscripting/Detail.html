@@ -1,0 +1,52 @@
+<!-- Content managed by Project Forge, see [projectforge.md] for details. -->
+{% import (
+  "github.com/kyleu/loadtoad/app"
+  "github.com/kyleu/loadtoad/app/controller/cutil"
+  "github.com/kyleu/loadtoad/views/components"
+  "github.com/kyleu/loadtoad/views/layout"
+) %}
+
+{% code type Detail struct {
+  layout.Basic
+  Path string
+  Script string
+  Results map[string]string
+} %}
+
+{% func (p *Detail) Body(as *app.State, ps *cutil.PageState) %}
+  <div class="card">
+    <div class="right"><a href="/scripting/{%u p.Path %}/edit"><button type="button">Edit</button></a></div>
+    <h3>{%= components.SVGRefIcon(`file-code`, ps) %} {%s p.Path %}</h3>
+    <div class="mt">
+      {%- code out, err := cutil.FormatLang(p.Script, "js") -%}
+      {%- if err == nil -%}
+      {%s= out %}
+      {%- else -%}
+      {%s err.Error() %}
+      {%- endif -%}
+    </div>
+  </div>
+  {% if len(p.Results) > 0 -%}
+  <div class="card">
+    <h3>{%= components.SVGRefIcon(`play`, ps) %} Results</h3>
+    <div class="mt">
+      <table>
+        <thead>
+          <tr>
+            <th>Example</th>
+            <th>Result</th>
+          </tr>
+        </thead>
+        <tbody>
+          {%- for k, v := range p.Results -%}
+          <tr>
+            <td>{%s k %}</td>
+            <td>{%s v %}</td>
+          </tr>
+          {%- endfor -%}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {%- endif -%}
+{% endfunc %}
