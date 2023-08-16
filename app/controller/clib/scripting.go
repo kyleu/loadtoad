@@ -2,13 +2,14 @@
 package clib
 
 import (
-	"fmt"
+	"strings"
 
 	"github.com/valyala/fasthttp"
 
 	"github.com/kyleu/loadtoad/app"
 	"github.com/kyleu/loadtoad/app/controller"
 	"github.com/kyleu/loadtoad/app/controller/cutil"
+	"github.com/kyleu/loadtoad/app/util"
 	"github.com/kyleu/loadtoad/views/vscripting"
 )
 
@@ -21,7 +22,7 @@ func ScriptingList(rc *fasthttp.RequestCtx) {
 	})
 }
 
-var examples = []string{"a", "b", "c"}
+var Examples = [][]any{{"a"}, {"b"}, {"c"}}
 
 func ScriptingDetail(rc *fasthttp.RequestCtx) {
 	controller.Act("scripting.detail", rc, func(as *app.State, ps *cutil.PageState) (string, error) {
@@ -33,13 +34,14 @@ func ScriptingDetail(rc *fasthttp.RequestCtx) {
 		if err != nil {
 			return "", err
 		}
-		res := make(map[string]string, len(examples))
-		for _, ex := range examples {
-			x, err := as.Services.Script.RunScript(src, "test", ex)
+		res := make(map[string]any, len(Examples))
+		for _, ex := range Examples {
+			x, err := as.Services.Script.RunScript(src, "test", ex...)
 			if err != nil {
 				return "", err
 			}
-			res[ex] = fmt.Sprintf("%v", x)
+			xKey := strings.TrimPrefix(strings.TrimSuffix(util.ToJSONCompact(ex), "]"), "[")
+			res[xKey] = x
 		}
 		ps.Title = "Scripting"
 		ps.Data = map[string]any{"script": src, "results": res}
