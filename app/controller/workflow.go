@@ -33,7 +33,7 @@ func WorkflowDetail(rc *fasthttp.RequestCtx) {
 		if err != nil {
 			return "", err
 		}
-		ents, err := as.Services.LoadToad.LoadEntries(nil, nil, w.Tests...)
+		_, ents, err := as.Services.LoadToad.LoadEntries(nil, nil, w.Scripts, ps.Logger, w.Tests...)
 		if err != nil {
 			return "", err
 		}
@@ -45,7 +45,7 @@ func WorkflowDetail(rc *fasthttp.RequestCtx) {
 
 func WorkflowNew(rc *fasthttp.RequestCtx) {
 	Act("workflow.new", rc, func(as *app.State, ps *cutil.PageState) (string, error) {
-		w := &loadtoad.Workflow{Tests: har.Selectors{}, Replacements: map[string]string{}, Variables: util.ValueMap{}}
+		w := &loadtoad.Workflow{Tests: har.Selectors{}, Replacements: map[string]string{}, Variables: util.ValueMap{}, Scripts: []string{}}
 		arcs := as.Services.LoadToad.ListHars(ps.Logger)
 		ps.Title = "New Workflow"
 		ps.Data = w
@@ -137,6 +137,10 @@ func workflowFromForm(w *loadtoad.Workflow, rc *fasthttp.RequestCtx) error {
 	if err != nil {
 		return err
 	}
+	err = util.FromJSON([]byte(frm.GetStringOpt("scripts")), &w.Scripts)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -164,7 +168,7 @@ func WorkflowStart(rc *fasthttp.RequestCtx) {
 			delete(repls, "variables")
 		}
 
-		ents, err := as.Services.LoadToad.LoadEntries(repls, w.Variables, w.Tests...)
+		_, ents, err := as.Services.LoadToad.LoadEntries(repls, w.Variables, w.Scripts, ps.Logger, w.Tests...)
 		if err != nil {
 			return "", err
 		}

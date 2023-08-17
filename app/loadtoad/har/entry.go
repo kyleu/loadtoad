@@ -29,9 +29,9 @@ type Entry struct {
 
 func (e *Entry) String() string {
 	if len(e.Request.URL) > 64 {
-		return e.Request.URL[:64] + "..."
+		return e.Request.Method + " " + e.Request.URL[:64] + "..."
 	}
-	return e.Request.URL
+	return e.Request.Method + " " + e.Request.URL
 }
 
 func (e *Entry) Duration() int {

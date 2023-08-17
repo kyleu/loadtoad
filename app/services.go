@@ -29,7 +29,7 @@ func NewServices(_ context.Context, _ *State, logger util.Logger) (*Services, er
 	ex := exec.NewService()
 	ws := websocket.NewService(nil, nil, nil)
 	sc := scripting.NewService(fs, "scripts")
-	lt := loadtoad.NewService(fs, ws, logger)
+	lt := loadtoad.NewService(fs, ws, sc)
 	return &Services{Exec: ex, Socket: ws, Script: sc, LoadToad: lt}, nil
 }
 

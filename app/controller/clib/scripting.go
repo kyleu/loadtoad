@@ -10,6 +10,7 @@ import (
 	"github.com/kyleu/loadtoad/app"
 	"github.com/kyleu/loadtoad/app/controller"
 	"github.com/kyleu/loadtoad/app/controller/cutil"
+	"github.com/kyleu/loadtoad/app/lib/scripting"
 	"github.com/kyleu/loadtoad/views/vscripting"
 )
 
@@ -32,17 +33,18 @@ func ScriptingDetail(rc *fasthttp.RequestCtx) {
 		if err != nil {
 			return "", err
 		}
-		vm, err := as.Services.Script.LoadVM(src)
+		loadResult, vm, err := scripting.LoadVM(key, src, ps.Logger)
 		if err != nil {
 			return "", err
 		}
-		res, err := as.Services.Script.RunExamples(vm)
+		res, err := scripting.RunExamples(vm)
 		if err != nil {
 			return "", err
 		}
 		ps.Title = "Scripting"
 		ps.Data = map[string]any{"script": src, "results": res}
-		return controller.Render(rc, as, &vscripting.Detail{Path: key, Script: src, Results: res}, ps, "scripting", key)
+		page := &vscripting.Detail{Path: key, Script: src, LoadResult: loadResult, Results: res}
+		return controller.Render(rc, as, page, ps, "scripting", key)
 	})
 }
 

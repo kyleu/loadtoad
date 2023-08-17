@@ -23,4 +23,5 @@ var ExampleWorkflow = &Workflow{
 		"username": "admin",
 		"password": "foo",
 	},
+	Scripts: []string{"test"},
 }

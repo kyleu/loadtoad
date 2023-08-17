@@ -52,6 +52,7 @@ func WorkflowConnect(rc *fasthttp.RequestCtx) {
 			}
 			repls = argRes.Values
 		}
+
 		return socketConnect(ps.Context, w, repls, rc, as, ps)
 	})
 }
@@ -87,7 +88,7 @@ func socketConnect(
 		send("ok", &WorkflowMessage{Idx: i, Ctx: c})
 	}
 	go func() {
-		final, e := as.Services.LoadToad.Run(ctx, w, repls, logF, errF, okF)
+		final, e := as.Services.LoadToad.Run(ctx, w, repls, ps.Logger, logF, errF, okF)
 		if e != nil {
 			errF(-1, e)
 		}

@@ -20,6 +20,7 @@
     testsHelp := "An array of tests, see example"
     replsHelp := "String replacements, applied throughout the workflow"
     varsHelp := "Custom variable keys and values used by the workflow"
+    scriptsHelp := "JavaScript files used by the workflow"
   -%}
   <div class="card">
     {%- if w.ID != "" -%}
@@ -66,6 +67,13 @@
                 <div>(<a href="#modal-vars">example</a>)</div>
               </td>
               <td>{%= components.FormTextarea("variables", "edit-variables", 12, util.ToJSON(w.Variables), varsHelp) %}</td>
+            </tr>
+            <tr>
+              <td class="shrink">
+                <label for="edit-scripts" title="{%s scriptsHelp %}"><strong>Scripts</strong></label>
+                <div>(<a href="#modal-scripts">example</a>)</div>
+              </td>
+              <td>{%= components.FormTextarea("scripts", "edit-scripts", 12, util.ToJSON(w.Scripts), scriptsHelp) %}</td>
             </tr>
             <tr>
               <td colspan="2"><button type="submit">Save Workflow</button></td>
@@ -138,6 +146,22 @@
         <button onclick="clip('vars');">Copy to clipboard</button>
         <div class="mt">
           <pre>{%s util.ToJSON(loadtoad.ExampleWorkflow.Variables) %}</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="modal-scripts" class="modal" style="display: none;">
+    <a class="backdrop" href="#"></a>
+    <div class="modal-content">
+      <div class="modal-header">
+        <a href="#" class="modal-close">×</a>
+        <h2>Variables Example</h2>
+      </div>
+      <div class="modal-body">
+        <div id="modal-scripts-data" hidden="hidden" style="display:none;">{%s util.ToJSON(loadtoad.ExampleWorkflow.Scripts) %}</div>
+        <button onclick="clip('scripts');">Copy to clipboard</button>
+        <div class="mt">
+          <pre>{%s util.ToJSON(loadtoad.ExampleWorkflow.Scripts) %}</pre>
         </div>
       </div>
     </div>
