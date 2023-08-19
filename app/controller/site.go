@@ -8,6 +8,7 @@ import (
 	"github.com/kyleu/loadtoad/app/controller/cutil"
 	"github.com/kyleu/loadtoad/app/site"
 	"github.com/kyleu/loadtoad/app/util"
+	"github.com/kyleu/loadtoad/views/verror"
 )
 
 func Site(rc *fasthttp.RequestCtx) {
@@ -16,6 +17,9 @@ func Site(rc *fasthttp.RequestCtx) {
 		redir, page, bc, err := site.Handle(path, as, ps)
 		if err != nil {
 			return "", err
+		}
+		if _, ok := page.(*verror.NotFound); ok {
+			rc.Response.SetStatusCode(404)
 		}
 		if redir != "" {
 			return redir, nil

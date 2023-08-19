@@ -3,14 +3,16 @@ package loadtoad
 import (
 	"context"
 	"fmt"
+	"io"
+	"net/http"
+
 	"github.com/dop251/goja"
+	"github.com/pkg/errors"
+	"github.com/samber/lo"
+
 	"github.com/kyleu/loadtoad/app/lib/scripting"
 	"github.com/kyleu/loadtoad/app/loadtoad/har"
 	"github.com/kyleu/loadtoad/app/util"
-	"github.com/pkg/errors"
-	"github.com/samber/lo"
-	"io"
-	"net/http"
 )
 
 func (s *Service) LoadEntries(

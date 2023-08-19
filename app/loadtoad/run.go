@@ -4,9 +4,10 @@ import (
 	"context"
 	"crypto/tls"
 	"fmt"
-	"golang.org/x/exp/slices"
 	"net/http"
 	"net/http/cookiejar"
+
+	"golang.org/x/exp/slices"
 
 	"github.com/kyleu/loadtoad/app/loadtoad/har"
 	"github.com/kyleu/loadtoad/app/util"
