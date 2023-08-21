@@ -6,8 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/cookiejar"
-
-	"golang.org/x/exp/slices"
+	"slices"
 
 	"github.com/kyleu/loadtoad/app/loadtoad/har"
 	"github.com/kyleu/loadtoad/app/util"

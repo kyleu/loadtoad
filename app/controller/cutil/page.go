@@ -4,12 +4,12 @@ package cutil
 import (
 	"context"
 	"fmt"
+	"slices"
 	"strings"
 	"time"
 
 	"github.com/samber/lo"
 	"github.com/valyala/fasthttp"
-	"golang.org/x/exp/slices"
 
 	"github.com/kyleu/loadtoad/app"
 	"github.com/kyleu/loadtoad/app/controller/cmenu"

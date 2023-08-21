@@ -20,7 +20,10 @@ type Services struct {
 
 func NewServices(_ context.Context, _ *State, logger util.Logger) (*Services, error) {
 	p := util.GetEnv("loadtoad_path", "./data")
-	fs := filesystem.NewFileSystem(p)
+	fs, err := filesystem.NewFileSystem(p, false, "")
+	if err != nil {
+		return nil, err
+	}
 	if !fs.Exists(".") {
 		logger.Infof("creating data directory at [%s]", p)
 		_ = fs.CreateDirectory(".")
