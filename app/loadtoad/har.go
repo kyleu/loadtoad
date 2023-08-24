@@ -1,13 +1,13 @@
 package loadtoad
 
 import (
+	har2 "github.com/kyleu/loadtoad/app/lib/har"
 	"path"
 	"strings"
 
 	"github.com/pkg/errors"
 
 	"github.com/kyleu/loadtoad/app/lib/filesystem"
-	"github.com/kyleu/loadtoad/app/loadtoad/har"
 	"github.com/kyleu/loadtoad/app/util"
 )
 
@@ -15,10 +15,10 @@ func (s *Service) ListHars(logger util.Logger) []string {
 	return s.FS.ListExtension("./har", "har", nil, true, logger)
 }
 
-func (s *Service) LoadHar(fn string) (*har.Log, error) {
+func (s *Service) LoadHar(fn string) (*har2.Log, error) {
 	key := fn
-	if !strings.HasSuffix(fn, har.Ext) {
-		fn += har.Ext
+	if !strings.HasSuffix(fn, har2.Ext) {
+		fn += har2.Ext
 	}
 	if !strings.Contains(fn, "har/") {
 		fn = path.Join("har", fn)
@@ -30,20 +30,20 @@ func (s *Service) LoadHar(fn string) (*har.Log, error) {
 	if err != nil {
 		return nil, errors.Wrapf(err, "error reading file [%s]", fn)
 	}
-	ret := &har.Wrapper{}
+	ret := &har2.Wrapper{}
 	err = util.FromJSON(b, ret)
 	if err != nil {
 		return nil, errors.Wrapf(err, "error decoding file [%s]", fn)
 	}
-	ret.Log.Key = strings.TrimSuffix(key, har.Ext)
+	ret.Log.Key = strings.TrimSuffix(key, har2.Ext)
 	ret.Log.Entries = ret.Log.Entries.Trimmed()
 	return ret.Log, nil
 }
 
 func (s *Service) DeleteHar(key string, logger util.Logger) error {
 	fn := key
-	if !strings.HasSuffix(fn, har.Ext) {
-		fn += har.Ext
+	if !strings.HasSuffix(fn, har2.Ext) {
+		fn += har2.Ext
 	}
 	if !strings.Contains(fn, "har/") {
 		fn = path.Join("har", fn)
@@ -59,8 +59,8 @@ func (s *Service) DeleteHar(key string, logger util.Logger) error {
 }
 
 func (s *Service) SaveHar(fn string, b []byte) error {
-	if !strings.HasSuffix(fn, har.Ext) {
-		fn += har.Ext
+	if !strings.HasSuffix(fn, har2.Ext) {
+		fn += har2.Ext
 	}
 	if !strings.Contains(fn, "har/") {
 		fn = path.Join("har", fn)

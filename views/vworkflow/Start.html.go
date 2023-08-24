@@ -10,8 +10,8 @@ import (
 
 	"github.com/kyleu/loadtoad/app"
 	"github.com/kyleu/loadtoad/app/controller/cutil"
+	"github.com/kyleu/loadtoad/app/lib/har"
 	"github.com/kyleu/loadtoad/app/loadtoad"
-	"github.com/kyleu/loadtoad/app/loadtoad/har"
 	"github.com/kyleu/loadtoad/views/components"
 	"github.com/kyleu/loadtoad/views/layout"
 	"github.com/kyleu/loadtoad/views/vhar"

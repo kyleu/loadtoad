@@ -1,9 +1,9 @@
 package loadtoad
 
 import (
+	"github.com/kyleu/loadtoad/app/lib/har"
 	"net/url"
 
-	"github.com/kyleu/loadtoad/app/loadtoad/har"
 	"github.com/kyleu/loadtoad/app/util"
 )
 

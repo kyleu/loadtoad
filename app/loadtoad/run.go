@@ -8,7 +8,7 @@ import (
 	"net/http/cookiejar"
 	"slices"
 
-	"github.com/kyleu/loadtoad/app/loadtoad/har"
+	har2 "github.com/kyleu/loadtoad/app/lib/har"
 	"github.com/kyleu/loadtoad/app/util"
 )
 
@@ -46,10 +46,10 @@ func (s *Service) Run(
 }
 
 func (s *Service) RunEntry(
-	ctx context.Context, wf string, idx int, e *har.Entry, cl http.Client, jar *cookiejar.Jar, hot []string, logF func(int, string),
+	ctx context.Context, wf string, idx int, e *har2.Entry, cl http.Client, jar *cookiejar.Jar, hot []string, logF func(int, string),
 ) (*WorkflowResult, error) {
 	id := fmt.Sprintf("%s-%d", wf, idx)
-	ret := &WorkflowResult{ID: id, Domain: e.Request.URL, Entry: e.Cleaned(), Timing: &har.PageTimings{}}
+	ret := &WorkflowResult{ID: id, Domain: e.Request.URL, Entry: e.Cleaned(), Timing: &har2.PageTimings{}}
 	u := e.Request.GetURL()
 	if u != nil {
 		ret.Domain = u.Host
@@ -72,7 +72,7 @@ func (s *Service) RunEntry(
 		return nil, err
 	}
 	ret.Timing.Total = t.End()
-	ret.Response = har.ResponseFromHTTP(resp)
+	ret.Response = har2.ResponseFromHTTP(resp)
 
 	if resp != nil {
 		_ = resp.Body.Close()

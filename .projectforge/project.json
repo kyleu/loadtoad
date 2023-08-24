@@ -8,6 +8,7 @@
   "modules": [
     "core",
     "filesystem",
+    "har",
     "marketing",
     "notarize",
     "process",
@@ -75,7 +76,6 @@
     }
   },
   "build": {
-    "publish": true,
     "notarize": true,
     "signing": true
   }

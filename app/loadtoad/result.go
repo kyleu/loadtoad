@@ -5,16 +5,16 @@ import (
 
 	"github.com/samber/lo"
 
-	"github.com/kyleu/loadtoad/app/loadtoad/har"
+	har2 "github.com/kyleu/loadtoad/app/lib/har"
 )
 
 type WorkflowResult struct {
-	ID       string           `json:"id"`
-	Domain   string           `json:"domain,omitempty"`
-	Entry    *har.Entry       `json:"entry,omitempty"`
-	Timing   *har.PageTimings `json:"duration,omitempty"`
-	Logs     []string         `json:"logs,omitempty"`
-	Response *har.Response    `json:"response,omitempty"`
+	ID       string            `json:"id"`
+	Domain   string            `json:"domain,omitempty"`
+	Entry    *har2.Entry       `json:"entry,omitempty"`
+	Timing   *har2.PageTimings `json:"duration,omitempty"`
+	Logs     []string          `json:"logs,omitempty"`
+	Response *har2.Response    `json:"response,omitempty"`
 }
 
 func (w *WorkflowResult) Title() string {

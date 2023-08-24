@@ -1,13 +1,13 @@
 package cmenu
 
 import (
+	"github.com/kyleu/loadtoad/app/lib/har"
 	"strings"
 
 	"github.com/samber/lo"
 
 	"github.com/kyleu/loadtoad/app/lib/menu"
 	"github.com/kyleu/loadtoad/app/loadtoad"
-	"github.com/kyleu/loadtoad/app/loadtoad/har"
 	"github.com/kyleu/loadtoad/app/util"
 )
 

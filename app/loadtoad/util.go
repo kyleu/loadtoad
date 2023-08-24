@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"net/http/httptrace"
 
-	"github.com/kyleu/loadtoad/app/loadtoad/har"
+	"github.com/kyleu/loadtoad/app/lib/har"
 	"github.com/kyleu/loadtoad/app/util"
 )
 
