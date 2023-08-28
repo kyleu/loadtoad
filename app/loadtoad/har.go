@@ -1,13 +1,13 @@
 package loadtoad
 
 import (
-	har2 "github.com/kyleu/loadtoad/app/lib/har"
 	"path"
 	"strings"
 
 	"github.com/pkg/errors"
 
 	"github.com/kyleu/loadtoad/app/lib/filesystem"
+	har2 "github.com/kyleu/loadtoad/app/lib/har"
 	"github.com/kyleu/loadtoad/app/util"
 )
 
