@@ -12,10 +12,10 @@ sign {
 }
 
 dmg {
-  output_path = "./build/dist/loadtoad_0.0.7_darwin_amd64.dmg"
+  output_path = "./build/dist/loadtoad_0.0.8_darwin_amd64.dmg"
   volume_name = "Load Toad"
 }
 
 zip {
-  output_path = "./build/dist/loadtoad_0.0.7_darwin_amd64_notarized.zip"
+  output_path = "./build/dist/loadtoad_0.0.8_darwin_amd64_notarized.zip"
 }
