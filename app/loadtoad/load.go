@@ -15,27 +15,41 @@ import (
 	"github.com/kyleu/loadtoad/app/util"
 )
 
-func (s *Service) LoadEntries(
-	repls map[string]string, vars util.ValueMap, scripts []string, logger util.Logger, keys ...*har2.Selector,
-) (map[string]*goja.Runtime, har2.Entries, error) {
+func (s *Service) LoadScripts(scripts []string, logger util.Logger) (map[string]*goja.Runtime, error) {
+	vms := make(map[string]*goja.Runtime, len(scripts))
+	for _, x := range lo.Uniq(scripts) {
+		src, err := s.Script.LoadScript(x, logger)
+		if err != nil {
+			return nil, err
+		}
+		_, vm, err := scripting.LoadVM(x, src, logger)
+		if err != nil {
+			return nil, err
+		}
+		vms[x] = vm
+	}
+	return vms, nil
+}
+
+func (s *Service) LoadEntries(keys ...*har2.Selector) (har2.Entries, error) {
 	var ret har2.Entries
 	cache := map[string]*har2.Log{}
 	for _, k := range keys {
 		if k.Har == "" {
-			return nil, nil, errors.New("each entry must specify an archive")
+			return nil, errors.New("each entry must specify an archive")
 		}
 		h, ok := cache[k.Har]
 		if !ok {
 			var err error
 			h, err = s.LoadHar(k.Har)
 			if err != nil {
-				return nil, nil, err
+				return nil, err
 			}
 			cache[k.Har] = h
 		}
 		ents, err := h.Entries.Find(k)
 		if err != nil {
-			return nil, nil, errors.Wrapf(err, "no entries found in [%s] with selector [%s]", k.Har, util.ToJSONCompact(k))
+			return nil, errors.Wrapf(err, "no entries found in [%s] with selector [%s]", k.Har, util.ToJSONCompact(k))
 		}
 		ents = lo.Filter(ents, func(e *har2.Entry, _ int) bool {
 			return e.Response != nil && e.Response.Status != 0
@@ -46,29 +60,17 @@ func (s *Service) LoadEntries(
 		ret = append(ret, ents...)
 	}
 
-	vms := make(map[string]*goja.Runtime, len(scripts))
-	for _, x := range lo.Uniq(scripts) {
-		src, err := s.Script.LoadScript(x, logger)
-		if err != nil {
-			return nil, nil, err
-		}
-		_, vm, err := scripting.LoadVM(x, src, logger)
-		if err != nil {
-			return nil, nil, err
-		}
-		vms[x] = vm
-	}
-
-	for _, e := range ret {
-		for _, vm := range vms {
-			err := scriptUpdateEntry(vm, e)
-			if err != nil {
-				return nil, nil, err
-			}
-		}
-	}
-	ret = ret.WithReplacementsMap(repls, vars)
-	return vms, ret.WithReplacementsMap(repls, vars), nil
+	//for _, e := range ret {
+	//	for _, vm := range vms {
+	//		err := scriptUpdateEntry(vm, e)
+	//		if err != nil {
+	//			return nil, nil, err
+	//		}
+	//	}
+	//}
+	//ret = ret.WithReplacementsMap(repls, vars)
+	//return vms, ret.WithReplacementsMap(repls, vars), nil
+	return ret, nil
 }
 
 func scriptUpdateEntry(vm *goja.Runtime, e *har2.Entry) error {

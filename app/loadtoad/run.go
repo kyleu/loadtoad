@@ -19,10 +19,14 @@ func (s *Service) Run(
 	var ret WorkflowResults
 	jar, _ := cookiejar.New(nil)
 	client := http.Client{Jar: jar, Transport: &http.Transport{TLSClientConfig: &tls.Config{InsecureSkipVerify: true}}} //nolint:gosec
-	_, entries, err := s.LoadEntries(repls, w.Variables, w.Scripts, logger, w.Tests...)
+	entries, err := s.LoadEntries(w.Tests...)
 	if err != nil {
 		return nil, err
 	}
+	//vms, err := s.LoadScripts(w.Scripts, logger)
+	//if err != nil {
+	//	return nil, err
+	//}
 	var hot []string
 	for i, e := range entries {
 		cl := e.Clone()

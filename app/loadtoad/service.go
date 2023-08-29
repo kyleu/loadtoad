@@ -68,7 +68,9 @@ func (s *Service) LoadWorkflow(fn string) (*Workflow, error) {
 }
 
 func (s *Service) SaveWorkflow(w *Workflow) error {
-	return s.FS.WriteFile(fmt.Sprintf("workflow/%s.json", w.ID), util.ToJSONBytes(w, true), filesystem.DefaultMode, true)
+	p := fmt.Sprintf("workflow/%s.json", w.ID)
+	content := util.ToJSONBytes(w, true)
+	return s.FS.WriteFile(p, content, filesystem.DefaultMode, true)
 }
 
 func (s *Service) DeleteWorkflow(id string, logger util.Logger) error {
