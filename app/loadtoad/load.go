@@ -10,7 +10,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/samber/lo"
 
-	har2 "github.com/kyleu/loadtoad/app/lib/har"
+	"github.com/kyleu/loadtoad/app/lib/har"
 	"github.com/kyleu/loadtoad/app/lib/scripting"
 	"github.com/kyleu/loadtoad/app/util"
 )
@@ -31,9 +31,9 @@ func (s *Service) LoadScripts(scripts []string, logger util.Logger) (map[string]
 	return vms, nil
 }
 
-func (s *Service) LoadEntries(keys ...*har2.Selector) (har2.Entries, error) {
-	var ret har2.Entries
-	cache := map[string]*har2.Log{}
+func (s *Service) LoadEntries(keys ...*har.Selector) (har.Entries, error) {
+	var ret har.Entries
+	cache := map[string]*har.Log{}
 	for _, k := range keys {
 		if k.Har == "" {
 			return nil, errors.New("each entry must specify an archive")
@@ -51,36 +51,25 @@ func (s *Service) LoadEntries(keys ...*har2.Selector) (har2.Entries, error) {
 		if err != nil {
 			return nil, errors.Wrapf(err, "no entries found in [%s] with selector [%s]", k.Har, util.ToJSONCompact(k))
 		}
-		ents = lo.Filter(ents, func(e *har2.Entry, _ int) bool {
+		ents = lo.Filter(ents, func(e *har.Entry, _ int) bool {
 			return e.Response != nil && e.Response.Status != 0
 		})
-		lo.ForEach(ents, func(x *har2.Entry, _ int) {
+		lo.ForEach(ents, func(x *har.Entry, _ int) {
 			x.Selector = k
 		})
 		ret = append(ret, ents...)
 	}
-
-	//for _, e := range ret {
-	//	for _, vm := range vms {
-	//		err := scriptUpdateEntry(vm, e)
-	//		if err != nil {
-	//			return nil, nil, err
-	//		}
-	//	}
-	//}
-	//ret = ret.WithReplacementsMap(repls, vars)
-	//return vms, ret.WithReplacementsMap(repls, vars), nil
 	return ret, nil
 }
 
-func scriptUpdateEntry(vm *goja.Runtime, e *har2.Entry) error {
+func scriptUpdateEntry(vm *goja.Runtime, e *har.Entry) error {
 	if f, ok := goja.AssertFunction(vm.Get("updateRequest")); ok {
 		reqVM := vm.ToValue(e.Request)
 		ret, err := f(goja.Undefined(), reqVM)
 		if err != nil {
 			return err
 		}
-		_, ok := ret.Export().(*har2.Request)
+		_, ok := ret.Export().(*har.Request)
 		if !ok {
 			return errors.Errorf("return value of [%s] is [%T], not [%s]", "updateRequest", ret.Export(), "*har.Request")
 		}
@@ -91,7 +80,7 @@ func scriptUpdateEntry(vm *goja.Runtime, e *har2.Entry) error {
 		if err != nil {
 			return err
 		}
-		_, ok := ret.Export().(*har2.Response)
+		_, ok := ret.Export().(*har.Response)
 		if !ok {
 			return errors.Errorf("return value of [%s] is [%T], not [%s]", "updateResponse", ret.Export(), "*har.Response")
 		}
@@ -99,7 +88,24 @@ func scriptUpdateEntry(vm *goja.Runtime, e *har2.Entry) error {
 	return nil
 }
 
-func preload(ctx context.Context, scheme string, host string, headers har2.NVPs, idx int, cl http.Client, logF func(int, string)) error {
+func scriptExtractVariables(vm *goja.Runtime, wr *WorkflowResult) (util.ValueMap, error) {
+	ret := util.ValueMap{}
+	if f, ok := goja.AssertFunction(vm.Get("extractVariables")); ok {
+		wrVM := vm.ToValue(wr)
+		jsret, err := f(goja.Undefined(), wrVM)
+		if err != nil {
+			return nil, err
+		}
+		vars, ok := jsret.Export().(map[string]any)
+		if !ok {
+			return nil, errors.Errorf("return value of [%s] is [%T], not [%s]", "updateRequest", jsret.Export(), "map[string]any")
+		}
+		ret = ret.Merge(vars)
+	}
+	return ret, nil
+}
+
+func preload(ctx context.Context, scheme string, host string, headers har.NVPs, idx int, cl http.Client, logF func(int, string)) error {
 	root := scheme + "://" + host
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, root, http.NoBody)
 	if err != nil {

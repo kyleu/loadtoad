@@ -10,7 +10,7 @@ import (
 
 	"github.com/kyleu/loadtoad/app"
 	"github.com/kyleu/loadtoad/app/controller/cutil"
-	har2 "github.com/kyleu/loadtoad/app/lib/har"
+	"github.com/kyleu/loadtoad/app/lib/har"
 	"github.com/kyleu/loadtoad/app/loadtoad"
 	"github.com/kyleu/loadtoad/app/util"
 	"github.com/kyleu/loadtoad/views/vhar"
@@ -77,8 +77,8 @@ func HarUpload(rc *fasthttp.RequestCtx) {
 		}
 		if name == "" {
 			name = fileHeader.Filename
-			if !strings.HasSuffix(name, har2.Ext) {
-				name += har2.Ext
+			if !strings.HasSuffix(name, har.Ext) {
+				name += har.Ext
 			}
 		}
 
@@ -111,7 +111,7 @@ func HarStart(rc *fasthttp.RequestCtx) {
 		if err != nil {
 			return "", err
 		}
-		w := &loadtoad.Workflow{ID: ret.Key, Name: ret.Key, Tests: har2.Selectors{{Har: ret.Key}}}
+		w := &loadtoad.Workflow{ID: ret.Key, Name: ret.Key, Tests: har.Selectors{{Har: ret.Key}}}
 		ps.Title = "Archive [" + key + "]"
 		ps.Data = ret
 		channel := "run-" + util.RandomString(16)

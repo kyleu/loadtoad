@@ -8,7 +8,7 @@ import (
 	"net/http/cookiejar"
 	"slices"
 
-	har2 "github.com/kyleu/loadtoad/app/lib/har"
+	"github.com/kyleu/loadtoad/app/lib/har"
 	"github.com/kyleu/loadtoad/app/util"
 )
 
@@ -23,15 +23,31 @@ func (s *Service) Run(
 	if err != nil {
 		return nil, err
 	}
-	//vms, err := s.LoadScripts(w.Scripts, logger)
-	//if err != nil {
-	//	return nil, err
-	//}
+	vms, err := s.LoadScripts(w.Scripts, logger)
+	if err != nil {
+		return nil, err
+	}
+	vars := w.Variables.Clone()
 	var hot []string
 	for i, e := range entries {
-		cl := e.Clone()
-		wr, err := s.RunEntry(ctx, w.ID, i, cl, client, jar, hot, logF)
+		e = e.Clone()
+		for _, vm := range vms {
+			err = scriptUpdateEntry(vm, e)
+			if err != nil {
+				return nil, err
+			}
+		}
+		e = e.WithReplacementsMap(repls, vars)
+		var wr *WorkflowResult
+		wr, err = s.RunEntry(ctx, w.ID, i, e, client, jar, hot, logF)
 		if err == nil {
+			for _, vm := range vms {
+				newVars, err2 := scriptExtractVariables(vm, wr)
+				if err2 != nil {
+					return nil, err2
+				}
+				vars = vars.Merge(newVars)
+			}
 			if okF != nil {
 				okF(i, wr)
 			}
@@ -50,10 +66,10 @@ func (s *Service) Run(
 }
 
 func (s *Service) RunEntry(
-	ctx context.Context, wf string, idx int, e *har2.Entry, cl http.Client, jar *cookiejar.Jar, hot []string, logF func(int, string),
+	ctx context.Context, wf string, idx int, e *har.Entry, cl http.Client, jar *cookiejar.Jar, hot []string, logF func(int, string),
 ) (*WorkflowResult, error) {
 	id := fmt.Sprintf("%s-%d", wf, idx)
-	ret := &WorkflowResult{ID: id, Domain: e.Request.URL, Entry: e.Cleaned(), Timing: &har2.PageTimings{}}
+	ret := &WorkflowResult{ID: id, Domain: e.Request.URL, Entry: e.Cleaned(), Timing: &har.PageTimings{}}
 	u := e.Request.GetURL()
 	if u != nil {
 		ret.Domain = u.Host
@@ -76,7 +92,7 @@ func (s *Service) RunEntry(
 		return nil, err
 	}
 	ret.Timing.Total = t.End()
-	ret.Response = har2.ResponseFromHTTP(resp)
+	ret.Response = har.ResponseFromHTTP(resp)
 
 	if resp != nil {
 		_ = resp.Body.Close()
