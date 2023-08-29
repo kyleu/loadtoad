@@ -9,7 +9,7 @@ on:
       - master
       - main
   pull_request:
-    branches: [ master ]
+    branches: [ master, main ]
 permissions:
   contents: write
 jobs:
