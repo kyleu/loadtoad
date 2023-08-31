@@ -100,7 +100,9 @@ func scriptExtractVariables(vm *goja.Runtime, wr *WorkflowResult) (util.ValueMap
 		if !ok {
 			return nil, errors.Errorf("return value of [%s] is [%T], not [%s]", "updateRequest", jsret.Export(), "map[string]any")
 		}
-		ret = ret.Merge(vars)
+		if len(vars) > 0 {
+			ret = ret.Merge(vars)
+		}
 	}
 	return ret, nil
 }

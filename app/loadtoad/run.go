@@ -4,12 +4,11 @@ import (
 	"context"
 	"crypto/tls"
 	"fmt"
+	"github.com/kyleu/loadtoad/app/lib/har"
+	"github.com/kyleu/loadtoad/app/util"
 	"net/http"
 	"net/http/cookiejar"
 	"slices"
-
-	"github.com/kyleu/loadtoad/app/lib/har"
-	"github.com/kyleu/loadtoad/app/util"
 )
 
 func (s *Service) Run(
@@ -37,16 +36,18 @@ func (s *Service) Run(
 				return nil, err
 			}
 		}
-		e = e.WithReplacementsMap(repls, vars)
 		var wr *WorkflowResult
-		wr, err = s.RunEntry(ctx, w.ID, i, e, client, jar, hot, logF)
+		wr, err = s.RunEntry(ctx, w.ID, i, e, client, jar, hot, repls, vars, logF)
 		if err == nil {
 			for _, vm := range vms {
 				newVars, err2 := scriptExtractVariables(vm, wr)
 				if err2 != nil {
 					return nil, err2
 				}
-				vars = vars.Merge(newVars)
+				if len(newVars) > 0 {
+					logF(i, fmt.Sprintf("observed [%d] new variables (%s)", len(newVars), util.ToJSONCompact(newVars)))
+					vars = vars.Merge(newVars)
+				}
 			}
 			if okF != nil {
 				okF(i, wr)
@@ -66,10 +67,12 @@ func (s *Service) Run(
 }
 
 func (s *Service) RunEntry(
-	ctx context.Context, wf string, idx int, e *har.Entry, cl http.Client, jar *cookiejar.Jar, hot []string, logF func(int, string),
+	ctx context.Context, wf string, idx int, e *har.Entry, cl http.Client, jar *cookiejar.Jar,
+	hot []string, repls map[string]string, vars util.ValueMap, logF func(int, string),
 ) (*WorkflowResult, error) {
+	e = e.WithReplacementsMap(repls, vars)
 	id := fmt.Sprintf("%s-%d", wf, idx)
-	ret := &WorkflowResult{ID: id, Domain: e.Request.URL, Entry: e.Cleaned(), Timing: &har.PageTimings{}}
+	ret := &WorkflowResult{ID: id, Domain: e.Request.URL, Entry: e.Cleaned(), Replacements: repls, Variables: vars.Clone(), Timing: &har.PageTimings{}}
 	u := e.Request.GetURL()
 	if u != nil {
 		ret.Domain = u.Host

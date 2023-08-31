@@ -2,6 +2,7 @@ package loadtoad
 
 import (
 	"fmt"
+	"github.com/kyleu/loadtoad/app/util"
 
 	"github.com/samber/lo"
 
@@ -9,12 +10,14 @@ import (
 )
 
 type WorkflowResult struct {
-	ID       string           `json:"id"`
-	Domain   string           `json:"domain,omitempty"`
-	Entry    *har.Entry       `json:"entry,omitempty"`
-	Timing   *har.PageTimings `json:"duration,omitempty"`
-	Logs     []string         `json:"logs,omitempty"`
-	Response *har.Response    `json:"response,omitempty"`
+	ID           string            `json:"id"`
+	Domain       string            `json:"domain,omitempty"`
+	Entry        *har.Entry        `json:"entry,omitempty"`
+	Replacements map[string]string `json:"repls,omitempty"`
+	Variables    util.ValueMap     `json:"vars,omitempty"`
+	Timing       *har.PageTimings  `json:"duration,omitempty"`
+	Logs         []string          `json:"logs,omitempty"`
+	Response     *har.Response     `json:"response,omitempty"`
 }
 
 func (w *WorkflowResult) Title() string {

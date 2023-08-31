@@ -330,35 +330,47 @@ func StreamRenderResultModal(qw422016 *qt422016.Writer, key string, r *loadtoad.
 	qw422016.N().S(`
   `)
 //line views/vworkflow/Results.html:82
-	vhar.StreamRenderResponse(qw422016, key, r.Response, ps)
+	vhar.StreamRenderRequest(qw422016, key, r.Entry.Request, ps)
 //line views/vworkflow/Results.html:82
 	qw422016.N().S(`
+  <hr />
+  `)
+//line views/vworkflow/Results.html:84
+	vhar.StreamRenderResponse(qw422016, key, r.Response, ps)
+//line views/vworkflow/Results.html:84
+	qw422016.N().S(`
+  <hr />
+  `)
+//line views/vworkflow/Results.html:86
+	components.StreamJSON(qw422016, r.Variables)
+//line views/vworkflow/Results.html:86
+	qw422016.N().S(`
 `)
-//line views/vworkflow/Results.html:83
+//line views/vworkflow/Results.html:87
 }
 
-//line views/vworkflow/Results.html:83
+//line views/vworkflow/Results.html:87
 func WriteRenderResultModal(qq422016 qtio422016.Writer, key string, r *loadtoad.WorkflowResult, ps *cutil.PageState) {
-//line views/vworkflow/Results.html:83
+//line views/vworkflow/Results.html:87
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line views/vworkflow/Results.html:83
+//line views/vworkflow/Results.html:87
 	StreamRenderResultModal(qw422016, key, r, ps)
-//line views/vworkflow/Results.html:83
+//line views/vworkflow/Results.html:87
 	qt422016.ReleaseWriter(qw422016)
-//line views/vworkflow/Results.html:83
+//line views/vworkflow/Results.html:87
 }
 
-//line views/vworkflow/Results.html:83
+//line views/vworkflow/Results.html:87
 func RenderResultModal(key string, r *loadtoad.WorkflowResult, ps *cutil.PageState) string {
-//line views/vworkflow/Results.html:83
+//line views/vworkflow/Results.html:87
 	qb422016 := qt422016.AcquireByteBuffer()
-//line views/vworkflow/Results.html:83
+//line views/vworkflow/Results.html:87
 	WriteRenderResultModal(qb422016, key, r, ps)
-//line views/vworkflow/Results.html:83
+//line views/vworkflow/Results.html:87
 	qs422016 := string(qb422016.B)
-//line views/vworkflow/Results.html:83
+//line views/vworkflow/Results.html:87
 	qt422016.ReleaseByteBuffer(qb422016)
-//line views/vworkflow/Results.html:83
+//line views/vworkflow/Results.html:87
 	return qs422016
-//line views/vworkflow/Results.html:83
+//line views/vworkflow/Results.html:87
 }
