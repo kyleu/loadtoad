@@ -91,8 +91,8 @@ func scriptUpdateEntry(vm *goja.Runtime, e *har.Entry) error {
 func scriptExtractVariables(vm *goja.Runtime, wr *WorkflowResult) (util.ValueMap, error) {
 	ret := util.ValueMap{}
 	if f, ok := goja.AssertFunction(vm.Get("extractVariables")); ok {
-		wrVM := vm.ToValue(wr)
-		jsret, err := f(goja.Undefined(), wrVM)
+		reqVM, rspVM := vm.ToValue(wr.Entry.Request), vm.ToValue(wr.Response)
+		jsret, err := f(goja.Undefined(), reqVM, rspVM)
 		if err != nil {
 			return nil, err
 		}
