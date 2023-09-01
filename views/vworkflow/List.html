@@ -25,6 +25,8 @@
       <tr>
         <th class="shrink">Name</th>
         <th>Tests</th>
+        <th>Replacements</th>
+        <th>Scripts</th>
       </tr>
     </thead>
     <tbody>
@@ -32,6 +34,8 @@
       <tr>
         <td><a href="{%s w.WebPath() %}">{%s w.Title() %}</a></td>
         <td>{%d len(w.Tests) %}</td>
+        <td>{%d len(w.Replacements) %}</td>
+        <td>{%d len(w.Scripts) %}</td>
       </tr>
       {%- endfor -%}
     </tbody>

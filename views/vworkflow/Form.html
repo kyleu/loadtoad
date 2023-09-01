@@ -11,6 +11,7 @@
   layout.Basic
   Workflow *loadtoad.Workflow
   Archives []string
+  Scripts []string
 } %}
 
 {% func (p *Form) Body(as *app.State, ps *cutil.PageState) %}
@@ -72,6 +73,19 @@
               <td class="shrink">
                 <label for="edit-scripts" title="{%s scriptsHelp %}"><strong>Scripts</strong></label>
                 <div>(<a href="#modal-scripts">example</a>)</div>
+                {%- if len(p.Scripts) > 0 -%}
+                <div class="mt">
+                  <select id="script-select">
+                    <option value="">choose a script</option>
+                    {%- for _, s := range p.Scripts -%}
+                    <option>{%s s %}</option>
+                    {%- endfor -%}
+                  </select>
+                </div>
+                <div class="mt">
+                  <a href="" onclick="addScript();return false;"><button>Add Script</button></a>
+                </div>
+                {%- endif -%}
               </td>
               <td>{%= components.FormTextarea("scripts", "edit-scripts", 12, util.ToJSON(w.Scripts), scriptsHelp) %}</td>
             </tr>
@@ -96,7 +110,19 @@
       const currArray = JSON.parse(curr);
       currArray.push({"har": har});
       ta.value = JSON.stringify(currArray, null, 2);
-      console.log(har, curr);
+    }
+
+    function addScript() {
+      const scr = document.querySelector("#script-select").value;
+      if (scr === "") {
+        alert("Please select an script");
+        return;
+      }
+      const el = document.querySelector("#edit-scripts");
+      const curr = el.value;
+      const currArray = JSON.parse(curr);
+      currArray.push(scr);
+      el.value = JSON.stringify(currArray, null, 2);
     }
   </script>
 {% endfunc %}

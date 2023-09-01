@@ -6,20 +6,25 @@ package vworkflow
 
 //line views/vworkflow/Script.html:1
 import (
+	"github.com/kyleu/loadtoad/app/util"
+)
+
+//line views/vworkflow/Script.html:5
+import (
 	qtio422016 "io"
 
 	qt422016 "github.com/valyala/quicktemplate"
 )
 
-//line views/vworkflow/Script.html:1
+//line views/vworkflow/Script.html:5
 var (
 	_ = qtio422016.Copy
 	_ = qt422016.AcquireByteBuffer
 )
 
-//line views/vworkflow/Script.html:1
-func streamstartScript(qw422016 *qt422016.Writer, ch string, pth string) {
-//line views/vworkflow/Script.html:1
+//line views/vworkflow/Script.html:5
+func streamstartScript(qw422016 *qt422016.Writer, ch string, pth string, replacements map[string]string) {
+//line views/vworkflow/Script.html:5
 	qw422016.N().S(`
   <script>
     let sock;
@@ -88,44 +93,49 @@ func streamstartScript(qw422016 *qt422016.Writer, ch string, pth string) {
     document.addEventListener("DOMContentLoaded", function() {
       const up = new URLSearchParams(window.location.search);
       up.set("channel", "`)
-//line views/vworkflow/Script.html:68
+//line views/vworkflow/Script.html:72
 	qw422016.E().S(ch)
-//line views/vworkflow/Script.html:68
+//line views/vworkflow/Script.html:72
 	qw422016.N().S(`");
+      up.set("replacements", "`)
+//line views/vworkflow/Script.html:73
+	qw422016.E().S(util.ToJSONCompact(replacements))
+//line views/vworkflow/Script.html:73
+	qw422016.N().S(`")
       sock = new loadtoad.Socket(false, open, recv, err, "`)
-//line views/vworkflow/Script.html:69
+//line views/vworkflow/Script.html:74
 	qw422016.E().S(pth)
-//line views/vworkflow/Script.html:69
+//line views/vworkflow/Script.html:74
 	qw422016.N().S(`?" + up.toString());
       console.log("[Load]");
     });
   </script>
 `)
-//line views/vworkflow/Script.html:73
+//line views/vworkflow/Script.html:78
 }
 
-//line views/vworkflow/Script.html:73
-func writestartScript(qq422016 qtio422016.Writer, ch string, pth string) {
-//line views/vworkflow/Script.html:73
+//line views/vworkflow/Script.html:78
+func writestartScript(qq422016 qtio422016.Writer, ch string, pth string, replacements map[string]string) {
+//line views/vworkflow/Script.html:78
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line views/vworkflow/Script.html:73
-	streamstartScript(qw422016, ch, pth)
-//line views/vworkflow/Script.html:73
+//line views/vworkflow/Script.html:78
+	streamstartScript(qw422016, ch, pth, replacements)
+//line views/vworkflow/Script.html:78
 	qt422016.ReleaseWriter(qw422016)
-//line views/vworkflow/Script.html:73
+//line views/vworkflow/Script.html:78
 }
 
-//line views/vworkflow/Script.html:73
-func startScript(ch string, pth string) string {
-//line views/vworkflow/Script.html:73
+//line views/vworkflow/Script.html:78
+func startScript(ch string, pth string, replacements map[string]string) string {
+//line views/vworkflow/Script.html:78
 	qb422016 := qt422016.AcquireByteBuffer()
-//line views/vworkflow/Script.html:73
-	writestartScript(qb422016, ch, pth)
-//line views/vworkflow/Script.html:73
+//line views/vworkflow/Script.html:78
+	writestartScript(qb422016, ch, pth, replacements)
+//line views/vworkflow/Script.html:78
 	qs422016 := string(qb422016.B)
-//line views/vworkflow/Script.html:73
+//line views/vworkflow/Script.html:78
 	qt422016.ReleaseByteBuffer(qb422016)
-//line views/vworkflow/Script.html:73
+//line views/vworkflow/Script.html:78
 	return qs422016
-//line views/vworkflow/Script.html:73
+//line views/vworkflow/Script.html:78
 }

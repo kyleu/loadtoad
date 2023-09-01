@@ -99,7 +99,7 @@ func (p *Start) StreamBody(qw422016 *qt422016.Writer, as *app.State, ps *cutil.P
 //line views/vworkflow/Start.html:43
 	qw422016.N().S(`  `)
 //line views/vworkflow/Start.html:44
-	streamstartScript(qw422016, p.Channel, p.Path)
+	streamstartScript(qw422016, p.Channel, p.Path, p.Replacements)
 //line views/vworkflow/Start.html:44
 	qw422016.N().S(`
 `)

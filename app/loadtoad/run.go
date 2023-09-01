@@ -4,11 +4,14 @@ import (
 	"context"
 	"crypto/tls"
 	"fmt"
-	"github.com/kyleu/loadtoad/app/lib/har"
-	"github.com/kyleu/loadtoad/app/util"
+	"github.com/samber/lo"
 	"net/http"
 	"net/http/cookiejar"
 	"slices"
+	"strings"
+
+	"github.com/kyleu/loadtoad/app/lib/har"
+	"github.com/kyleu/loadtoad/app/util"
 )
 
 func (s *Service) Run(
@@ -26,7 +29,21 @@ func (s *Service) Run(
 	if err != nil {
 		return nil, err
 	}
+	for _, e := range entries {
+		for _, vm := range vms {
+			newRepls, err2 := scriptExtractReplacements(vm, e)
+			if err2 != nil {
+				return nil, err2
+			}
+			if len(newRepls) > 0 {
+				for k, v := range newRepls {
+					repls[k] = v
+				}
+			}
+		}
+	}
 	vars := w.Variables.Clone()
+
 	var hot []string
 	for i, e := range entries {
 		e = e.Clone()
@@ -45,7 +62,7 @@ func (s *Service) Run(
 					return nil, err2
 				}
 				if len(newVars) > 0 {
-					logF(i, fmt.Sprintf("observed [%d] new variables (%s)", len(newVars), util.ToJSONCompact(newVars)))
+					logF(i, fmt.Sprintf("observed [%d] new variables (%s)", len(newVars), strings.Join(lo.Keys(newVars), ", ")))
 					vars = vars.Merge(newVars)
 				}
 			}

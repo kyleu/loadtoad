@@ -41,7 +41,7 @@
   {%- for idx, e := range p.Entries -%}
   {%= entryPlaceholder(idx, e, ps) %}
   {%- endfor -%}
-  {%= startScript(p.Channel, p.Path) %}
+  {%= startScript(p.Channel, p.Path, p.Replacements) %}
 {% endfunc %}
 
 {% func entryPlaceholder(idx int, ent *har.Entry, ps *cutil.PageState) %}

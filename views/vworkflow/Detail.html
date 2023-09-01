@@ -2,6 +2,8 @@
   "fmt"
   "strings"
 
+  "github.com/samber/lo"
+
   "github.com/kyleu/loadtoad/app"
   "github.com/kyleu/loadtoad/app/controller/cutil"
   "github.com/kyleu/loadtoad/app/lib/har"
@@ -48,6 +50,29 @@
               }
             -%}
             <td class="shrink"><a href="/admin/scripting/{%u link %}">{%s scr %}</a></td>
+          </tr>
+          {%- endfor -%}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {%- endif -%}
+  {%- if len(p.Workflow.Replacements) > 0 -%}
+  <div class="card">
+    <h3>{%= components.SVGRefIcon(`cog`, ps) %} {%d len(p.Workflow.Replacements) %} {%s util.StringPluralMaybe("Replacement", len(p.Workflow.Replacements)) %}</h3>
+    <div class="mt">
+      <table class="min-200">
+        <tbody>
+          {%- for _, k := range util.ArraySorted(lo.Keys(p.Workflow.Replacements)) -%}
+          {%- code
+            v := p.Workflow.Replacements[k]
+            if len(k) > 50 {
+              k = k[:50] + "..."
+            }
+          -%}
+          <tr>
+            <td class="shrink">{%s k %}</a></td>
+            <td>{%s v %}</a></td>
           </tr>
           {%- endfor -%}
         </tbody>

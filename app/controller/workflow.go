@@ -81,9 +81,10 @@ func WorkflowForm(rc *fasthttp.RequestCtx) {
 			return "", err
 		}
 		arcs := as.Services.LoadToad.ListHars(ps.Logger)
+		scripts := as.Services.Script.ListScripts(ps.Logger)
 		ps.Title = "Edit [" + w.ID + "]"
 		ps.Data = w
-		return Render(rc, as, &vworkflow.Form{Workflow: w, Archives: arcs}, ps, "workflow", w.ID, "Edit")
+		return Render(rc, as, &vworkflow.Form{Workflow: w, Archives: arcs, Scripts: scripts}, ps, "workflow", w.ID, "Edit")
 	})
 }
 
@@ -124,19 +125,28 @@ func workflowFromForm(w *loadtoad.Workflow, rc *fasthttp.RequestCtx) error {
 	if err != nil {
 		return err
 	}
+
 	w.Name = frm.GetStringOpt("name")
+
 	err = util.FromJSON([]byte(frm.GetStringOpt("tests")), &w.Tests)
 	if err != nil {
 		return err
 	}
-	err = util.FromJSON([]byte(frm.GetStringOpt("replacements")), &w.Replacements)
+
+	repls := map[string]string{}
+	err = util.FromJSON([]byte(frm.GetStringOpt("replacements")), &repls)
 	if err != nil {
 		return err
 	}
-	err = util.FromJSON([]byte(frm.GetStringOpt("variables")), &w.Variables)
+	w.Replacements = repls
+
+	vars := util.ValueMap{}
+	err = util.FromJSON([]byte(frm.GetStringOpt("variables")), &vars)
 	if err != nil {
 		return err
 	}
+	w.Variables = vars
+
 	err = util.FromJSON([]byte(frm.GetStringOpt("scripts")), &w.Scripts)
 	if err != nil {
 		return err
