@@ -168,7 +168,7 @@ func (p *Detail) StreamBody(qw422016 *qt422016.Writer, as *app.State, ps *cutil.
 //line views/vworkflow/Detail.html:66
 		for _, k := range util.ArraySorted(lo.Keys(p.Workflow.Replacements)) {
 //line views/vworkflow/Detail.html:68
-			v := p.Workflow.Replacements[k]
+			v := strings.Split(p.Workflow.Replacements[k], "||")
 			if len(k) > 50 {
 				k = k[:50] + "..."
 			}
@@ -179,244 +179,273 @@ func (p *Detail) StreamBody(qw422016 *qt422016.Writer, as *app.State, ps *cutil.
 //line views/vworkflow/Detail.html:74
 			qw422016.E().S(k)
 //line views/vworkflow/Detail.html:74
-			qw422016.N().S(`</a></td>
-            <td>`)
-//line views/vworkflow/Detail.html:75
-			qw422016.E().S(v)
-//line views/vworkflow/Detail.html:75
-			qw422016.N().S(`</a></td>
+			qw422016.N().S(`</td>
+            <td>
+`)
+//line views/vworkflow/Detail.html:76
+			if len(v) == 1 {
+//line views/vworkflow/Detail.html:76
+				qw422016.N().S(`              `)
+//line views/vworkflow/Detail.html:77
+				qw422016.E().S(v[0])
+//line views/vworkflow/Detail.html:77
+				qw422016.N().S(`
+`)
+//line views/vworkflow/Detail.html:78
+			} else {
+//line views/vworkflow/Detail.html:78
+				qw422016.N().S(`              <ul>
+`)
+//line views/vworkflow/Detail.html:80
+				for _, x := range v {
+//line views/vworkflow/Detail.html:80
+					qw422016.N().S(`                <li>`)
+//line views/vworkflow/Detail.html:81
+					qw422016.E().S(x)
+//line views/vworkflow/Detail.html:81
+					qw422016.N().S(`</li>
+`)
+//line views/vworkflow/Detail.html:82
+				}
+//line views/vworkflow/Detail.html:82
+				qw422016.N().S(`              </ul>
+`)
+//line views/vworkflow/Detail.html:84
+			}
+//line views/vworkflow/Detail.html:84
+			qw422016.N().S(`            </td>
           </tr>
 `)
-//line views/vworkflow/Detail.html:77
+//line views/vworkflow/Detail.html:87
 		}
-//line views/vworkflow/Detail.html:77
+//line views/vworkflow/Detail.html:87
 		qw422016.N().S(`        </tbody>
       </table>
     </div>
   </div>
 `)
-//line views/vworkflow/Detail.html:82
+//line views/vworkflow/Detail.html:92
 	}
-//line views/vworkflow/Detail.html:83
+//line views/vworkflow/Detail.html:93
 	if len(p.Workflow.Variables) > 0 {
-//line views/vworkflow/Detail.html:83
+//line views/vworkflow/Detail.html:93
 		qw422016.N().S(`  <div class="card">
     <h3>`)
-//line views/vworkflow/Detail.html:85
+//line views/vworkflow/Detail.html:95
 		components.StreamSVGRefIcon(qw422016, `sitemap`, ps)
-//line views/vworkflow/Detail.html:85
+//line views/vworkflow/Detail.html:95
 		qw422016.N().S(` `)
-//line views/vworkflow/Detail.html:85
+//line views/vworkflow/Detail.html:95
 		qw422016.N().D(len(p.Workflow.Variables))
-//line views/vworkflow/Detail.html:85
+//line views/vworkflow/Detail.html:95
 		qw422016.N().S(` `)
-//line views/vworkflow/Detail.html:85
+//line views/vworkflow/Detail.html:95
 		qw422016.E().S(util.StringPluralMaybe("Variable", len(p.Workflow.Variables)))
-//line views/vworkflow/Detail.html:85
+//line views/vworkflow/Detail.html:95
 		qw422016.N().S(`</h3>
     <div class="mt">
       <table class="min-200">
         <tbody>
 `)
-//line views/vworkflow/Detail.html:89
+//line views/vworkflow/Detail.html:99
 		for k, v := range p.Workflow.Variables {
-//line views/vworkflow/Detail.html:89
+//line views/vworkflow/Detail.html:99
 			qw422016.N().S(`          <tr>
             <th class="shrink">`)
-//line views/vworkflow/Detail.html:91
+//line views/vworkflow/Detail.html:101
 			qw422016.E().S(k)
-//line views/vworkflow/Detail.html:91
+//line views/vworkflow/Detail.html:101
 			qw422016.N().S(`</th>
             <td>`)
-//line views/vworkflow/Detail.html:92
+//line views/vworkflow/Detail.html:102
 			qw422016.E().V(v)
-//line views/vworkflow/Detail.html:92
+//line views/vworkflow/Detail.html:102
 			qw422016.N().S(`</td>
           </tr>
 `)
-//line views/vworkflow/Detail.html:94
+//line views/vworkflow/Detail.html:104
 		}
-//line views/vworkflow/Detail.html:94
+//line views/vworkflow/Detail.html:104
 		qw422016.N().S(`        </tbody>
       </table>
     </div>
   </div>
 `)
-//line views/vworkflow/Detail.html:99
+//line views/vworkflow/Detail.html:109
 	}
-//line views/vworkflow/Detail.html:99
+//line views/vworkflow/Detail.html:109
 	qw422016.N().S(`  <div class="card">
     <h3>`)
-//line views/vworkflow/Detail.html:101
+//line views/vworkflow/Detail.html:111
 	components.StreamSVGRefIcon(qw422016, `play`, ps)
-//line views/vworkflow/Detail.html:101
+//line views/vworkflow/Detail.html:111
 	qw422016.N().S(` `)
-//line views/vworkflow/Detail.html:101
+//line views/vworkflow/Detail.html:111
 	qw422016.N().D(len(p.Entries))
-//line views/vworkflow/Detail.html:101
+//line views/vworkflow/Detail.html:111
 	qw422016.N().S(` `)
-//line views/vworkflow/Detail.html:101
+//line views/vworkflow/Detail.html:111
 	qw422016.E().S(util.StringPluralMaybe("Request", len(p.Entries)))
-//line views/vworkflow/Detail.html:101
+//line views/vworkflow/Detail.html:111
 	qw422016.N().S(`</h3>
     <div class="mt">
       `)
-//line views/vworkflow/Detail.html:103
+//line views/vworkflow/Detail.html:113
 	streamshowEntries(qw422016, p.Entries, ps)
-//line views/vworkflow/Detail.html:103
+//line views/vworkflow/Detail.html:113
 	qw422016.N().S(`
     </div>
   </div>
 `)
-//line views/vworkflow/Detail.html:106
+//line views/vworkflow/Detail.html:116
 }
 
-//line views/vworkflow/Detail.html:106
+//line views/vworkflow/Detail.html:116
 func (p *Detail) WriteBody(qq422016 qtio422016.Writer, as *app.State, ps *cutil.PageState) {
-//line views/vworkflow/Detail.html:106
+//line views/vworkflow/Detail.html:116
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line views/vworkflow/Detail.html:106
+//line views/vworkflow/Detail.html:116
 	p.StreamBody(qw422016, as, ps)
-//line views/vworkflow/Detail.html:106
+//line views/vworkflow/Detail.html:116
 	qt422016.ReleaseWriter(qw422016)
-//line views/vworkflow/Detail.html:106
+//line views/vworkflow/Detail.html:116
 }
 
-//line views/vworkflow/Detail.html:106
+//line views/vworkflow/Detail.html:116
 func (p *Detail) Body(as *app.State, ps *cutil.PageState) string {
-//line views/vworkflow/Detail.html:106
+//line views/vworkflow/Detail.html:116
 	qb422016 := qt422016.AcquireByteBuffer()
-//line views/vworkflow/Detail.html:106
+//line views/vworkflow/Detail.html:116
 	p.WriteBody(qb422016, as, ps)
-//line views/vworkflow/Detail.html:106
+//line views/vworkflow/Detail.html:116
 	qs422016 := string(qb422016.B)
-//line views/vworkflow/Detail.html:106
+//line views/vworkflow/Detail.html:116
 	qt422016.ReleaseByteBuffer(qb422016)
-//line views/vworkflow/Detail.html:106
+//line views/vworkflow/Detail.html:116
 	return qs422016
-//line views/vworkflow/Detail.html:106
+//line views/vworkflow/Detail.html:116
 }
 
-//line views/vworkflow/Detail.html:108
+//line views/vworkflow/Detail.html:118
 func streamshowEntries(qw422016 *qt422016.Writer, ents har.Entries, ps *cutil.PageState) {
-//line views/vworkflow/Detail.html:108
+//line views/vworkflow/Detail.html:118
 	qw422016.N().S(`
 `)
-//line views/vworkflow/Detail.html:109
+//line views/vworkflow/Detail.html:119
 	var idx int
 
-//line views/vworkflow/Detail.html:110
+//line views/vworkflow/Detail.html:120
 	for _, sel := range ents.Selectors() {
-//line views/vworkflow/Detail.html:110
+//line views/vworkflow/Detail.html:120
 		qw422016.N().S(`  <h4 class="mt">`)
-//line views/vworkflow/Detail.html:111
+//line views/vworkflow/Detail.html:121
 		qw422016.E().S(sel.String())
-//line views/vworkflow/Detail.html:111
+//line views/vworkflow/Detail.html:121
 		qw422016.N().S(`</h4>
 `)
-//line views/vworkflow/Detail.html:112
+//line views/vworkflow/Detail.html:122
 		selEnts := ents.BySelector(sel)
 
-//line views/vworkflow/Detail.html:113
+//line views/vworkflow/Detail.html:123
 		if len(selEnts) == 0 {
-//line views/vworkflow/Detail.html:113
+//line views/vworkflow/Detail.html:123
 			qw422016.N().S(`  <em>no requests matched</em>
 `)
-//line views/vworkflow/Detail.html:115
+//line views/vworkflow/Detail.html:125
 		} else {
-//line views/vworkflow/Detail.html:115
+//line views/vworkflow/Detail.html:125
 			qw422016.N().S(`  <div class="mt">
     <ul class="accordion">
 `)
-//line views/vworkflow/Detail.html:118
+//line views/vworkflow/Detail.html:128
 			for _, e := range selEnts {
-//line views/vworkflow/Detail.html:119
+//line views/vworkflow/Detail.html:129
 				key := fmt.Sprintf("%d", idx)
 
-//line views/vworkflow/Detail.html:119
+//line views/vworkflow/Detail.html:129
 				qw422016.N().S(`      <li title="`)
-//line views/vworkflow/Detail.html:120
+//line views/vworkflow/Detail.html:130
 				qw422016.E().S(e.Request.URL)
-//line views/vworkflow/Detail.html:120
+//line views/vworkflow/Detail.html:130
 				qw422016.N().S(`">
         <input id="accordion-entry-`)
-//line views/vworkflow/Detail.html:121
+//line views/vworkflow/Detail.html:131
 				qw422016.E().S(key)
-//line views/vworkflow/Detail.html:121
+//line views/vworkflow/Detail.html:131
 				qw422016.N().S(`" type="checkbox" hidden />
         <label for="accordion-entry-`)
-//line views/vworkflow/Detail.html:122
+//line views/vworkflow/Detail.html:132
 				qw422016.E().S(key)
-//line views/vworkflow/Detail.html:122
+//line views/vworkflow/Detail.html:132
 				qw422016.N().S(`">
           `)
-//line views/vworkflow/Detail.html:123
+//line views/vworkflow/Detail.html:133
 				vhar.StreamRenderEntryOptions(qw422016, key, e, false)
-//line views/vworkflow/Detail.html:123
+//line views/vworkflow/Detail.html:133
 				qw422016.N().S(`
           `)
-//line views/vworkflow/Detail.html:124
+//line views/vworkflow/Detail.html:134
 				components.StreamExpandCollapse(qw422016, 3, ps)
-//line views/vworkflow/Detail.html:124
+//line views/vworkflow/Detail.html:134
 				qw422016.N().S(` `)
-//line views/vworkflow/Detail.html:124
+//line views/vworkflow/Detail.html:134
 				qw422016.E().S(e.String())
-//line views/vworkflow/Detail.html:124
+//line views/vworkflow/Detail.html:134
 				qw422016.N().S(`
           <div class="clear"></div>
         </label>
         <div class="bd">
           `)
-//line views/vworkflow/Detail.html:128
+//line views/vworkflow/Detail.html:138
 				vhar.StreamRenderEntry(qw422016, key, e, ps)
-//line views/vworkflow/Detail.html:128
+//line views/vworkflow/Detail.html:138
 				qw422016.N().S(`
         </div>
         `)
-//line views/vworkflow/Detail.html:130
+//line views/vworkflow/Detail.html:140
 				vhar.StreamRenderEntryModals(qw422016, key, e, false)
-//line views/vworkflow/Detail.html:130
+//line views/vworkflow/Detail.html:140
 				qw422016.N().S(`
       </li>
 `)
-//line views/vworkflow/Detail.html:132
+//line views/vworkflow/Detail.html:142
 				idx++
 
-//line views/vworkflow/Detail.html:133
+//line views/vworkflow/Detail.html:143
 			}
-//line views/vworkflow/Detail.html:133
+//line views/vworkflow/Detail.html:143
 			qw422016.N().S(`    </ul>
   </div>
 `)
-//line views/vworkflow/Detail.html:136
+//line views/vworkflow/Detail.html:146
 		}
-//line views/vworkflow/Detail.html:137
+//line views/vworkflow/Detail.html:147
 	}
-//line views/vworkflow/Detail.html:138
+//line views/vworkflow/Detail.html:148
 }
 
-//line views/vworkflow/Detail.html:138
+//line views/vworkflow/Detail.html:148
 func writeshowEntries(qq422016 qtio422016.Writer, ents har.Entries, ps *cutil.PageState) {
-//line views/vworkflow/Detail.html:138
+//line views/vworkflow/Detail.html:148
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line views/vworkflow/Detail.html:138
+//line views/vworkflow/Detail.html:148
 	streamshowEntries(qw422016, ents, ps)
-//line views/vworkflow/Detail.html:138
+//line views/vworkflow/Detail.html:148
 	qt422016.ReleaseWriter(qw422016)
-//line views/vworkflow/Detail.html:138
+//line views/vworkflow/Detail.html:148
 }
 
-//line views/vworkflow/Detail.html:138
+//line views/vworkflow/Detail.html:148
 func showEntries(ents har.Entries, ps *cutil.PageState) string {
-//line views/vworkflow/Detail.html:138
+//line views/vworkflow/Detail.html:148
 	qb422016 := qt422016.AcquireByteBuffer()
-//line views/vworkflow/Detail.html:138
+//line views/vworkflow/Detail.html:148
 	writeshowEntries(qb422016, ents, ps)
-//line views/vworkflow/Detail.html:138
+//line views/vworkflow/Detail.html:148
 	qs422016 := string(qb422016.B)
-//line views/vworkflow/Detail.html:138
+//line views/vworkflow/Detail.html:148
 	qt422016.ReleaseByteBuffer(qb422016)
-//line views/vworkflow/Detail.html:138
+//line views/vworkflow/Detail.html:148
 	return qs422016
-//line views/vworkflow/Detail.html:138
+//line views/vworkflow/Detail.html:148
 }

@@ -182,6 +182,8 @@ func WorkflowStart(rc *fasthttp.RequestCtx) {
 		if err != nil {
 			return "", err
 		}
+		ents = ents.WithReplacementsMap(repls, w.Variables)
+
 		ps.Title = "Workflow " + w.Title()
 		ps.Data = w
 		channel := "run-" + util.RandomString(16)

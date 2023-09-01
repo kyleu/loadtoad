@@ -1,7 +1,3 @@
-{% import (
-  "github.com/kyleu/loadtoad/app/util"
-) %}
-
 {% func startScript(ch string, pth string, replacements map[string]string) %}
   <script>
     let sock;
@@ -70,7 +66,6 @@
     document.addEventListener("DOMContentLoaded", function() {
       const up = new URLSearchParams(window.location.search);
       up.set("channel", "{%s ch %}");
-      up.set("replacements", "{%s util.ToJSONCompact(replacements) %}")
       sock = new loadtoad.Socket(false, open, recv, err, "{%s pth %}?" + up.toString());
       console.log("[Load]");
     });

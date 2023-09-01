@@ -50,7 +50,9 @@ func WorkflowConnect(rc *fasthttp.RequestCtx) {
 			if argRes.HasMissing() {
 				return "", errors.Errorf("missing replacements [%s]", strings.Join(argRes.Missing, ", "))
 			}
-			repls = argRes.Values
+			for k, v := range argRes.Values {
+				repls[k] = v
+			}
 		}
 
 		return socketConnect(ps.Context, w, repls, rc, as, ps)

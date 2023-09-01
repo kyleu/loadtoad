@@ -183,7 +183,9 @@ func (e Entries) WithReplacementsMap(repls map[string]string, vars util.ValueMap
 	if len(repls) == 0 {
 		return e
 	}
-	return e.WithReplacementsMap(repls, vars)
+	return lo.Map(e, func(ent *Entry, _ int) *Entry {
+		return ent.WithReplacementsMap(repls, vars)
+	})
 }
 
 func (e Entries) WithReplacements(repl func(s string) string) Entries {

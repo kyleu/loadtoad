@@ -65,14 +65,24 @@
         <tbody>
           {%- for _, k := range util.ArraySorted(lo.Keys(p.Workflow.Replacements)) -%}
           {%- code
-            v := p.Workflow.Replacements[k]
+            v := strings.Split(p.Workflow.Replacements[k], "||")
             if len(k) > 50 {
               k = k[:50] + "..."
             }
           -%}
           <tr>
-            <td class="shrink">{%s k %}</a></td>
-            <td>{%s v %}</a></td>
+            <td class="shrink">{%s k %}</td>
+            <td>
+              {%- if len(v) == 1 -%}
+              {%s v[0] %}
+              {%- else -%}
+              <ul>
+                {%- for _, x := range v -%}
+                <li>{%s x %}</li>
+                {%- endfor -%}
+              </ul>
+              {%- endif -%}
+            </td>
           </tr>
           {%- endfor -%}
         </tbody>
