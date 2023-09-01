@@ -4,11 +4,12 @@ import (
 	"context"
 	"crypto/tls"
 	"fmt"
-	"github.com/samber/lo"
 	"net/http"
 	"net/http/cookiejar"
 	"slices"
 	"strings"
+
+	"github.com/samber/lo"
 
 	"github.com/kyleu/loadtoad/app/lib/har"
 	"github.com/kyleu/loadtoad/app/util"

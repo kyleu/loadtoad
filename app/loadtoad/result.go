@@ -2,11 +2,11 @@ package loadtoad
 
 import (
 	"fmt"
-	"github.com/kyleu/loadtoad/app/util"
 
 	"github.com/samber/lo"
 
 	"github.com/kyleu/loadtoad/app/lib/har"
+	"github.com/kyleu/loadtoad/app/util"
 )
 
 type WorkflowResult struct {
