@@ -118,7 +118,7 @@ func (e *Entry) WithReplacementsMap(repls map[string]string, vars util.ValueMap)
 				r := startToken + match + endToken
 				variable := vars.GetStringOpt(strings.TrimSpace(match))
 				if variable == "" {
-					//return "missing variable [" + strings.TrimSpace(match) + "]"
+					// return "missing variable [" + strings.TrimSpace(match) + "]"
 				}
 				v = strings.Replace(v, r, variable, 1)
 				sIdx = strings.Index(v, startToken)
