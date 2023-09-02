@@ -4,6 +4,11 @@
 ## Pre-built binaries
 Download any package from the [release page](https://github.com/kyleu/loadtoad/releases).
 
+### Homebrew
+```shell
+brew install kyleu/kyleu/loadtoad
+```
+
 ## Running with Docker
 ```shell
 docker run -p 15550:15550 ghcr.io/kyleu/loadtoad:latest

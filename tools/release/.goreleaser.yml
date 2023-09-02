@@ -8,12 +8,33 @@ archives:
     files:
       - none*
 
+brews:
+  -
+    repository:
+      owner: "kyleu"
+      name: "homebrew-kyleu"
+    commit_author:
+      name: "Kyle U"
+      email: "loadtoad@kyleu.com"
+    folder: Formula
+    homepage: "https://github.com/kyleu/loadtoad"
+    description: "Load Toad helps you test your web application using HTTP Archive (.har) files"
+    license: "CC0"
+    skip_upload: "false"
+    install: "bin.install \"loadtoad\""
+
 changelog:
   skip: true
 
 checksum:
   name_template: "checksums.txt"
   extra_files:
+    - glob: "./build/dist/*_desktop.dmg"
+    - glob: "./build/dist/*_desktop.zip"
+    - glob: "./build/dist/*_aar.zip"
+    - glob: "./build/dist/*_apk.zip"
+    - glob: "./build/dist/*_framework.zip"
+    - glob: "./build/dist/*_app.zip"
     - glob: "./build/dist/*_notarized.zip"
     # $PF_SECTION_START(checksums)$
     # $PF_SECTION_END(checksums)$
@@ -43,6 +64,12 @@ release:
     - [Windows Intel 64 bit](https://github.com/kyleu/loadtoad/releases/download/{{ .Tag }}/loadtoad_{{ .Version }}_windows_amd64.zip)
 
   extra_files:
+    - glob: "./build/dist/*.dmg"
+    - glob: "./build/dist/*_desktop.zip"
+    - glob: "./build/dist/*_aar.zip"
+    - glob: "./build/dist/*_apk.zip"
+    - glob: "./build/dist/*_framework.zip"
+    - glob: "./build/dist/*_app.zip"
     - glob: "./build/dist/*_notarized.zip"
     # $PF_SECTION_START(releasefiles)$
     # $PF_SECTION_END(releasefiles)$
@@ -65,6 +92,9 @@ universal_binaries:
   hooks:
     # This is a good place to put one-time use scripts
     post:
+      - "./bin/build/android.sh {{ .Version }}"
+      - "./bin/build/ios.sh {{ .Version }}"
+      - "./bin/build/desktop.release.sh {{ .Version }}"
       - "./tools/notarize/notarize.sh"
       # $PF_SECTION_START(extrascripts)$
       # $PF_SECTION_END(extrascripts)$
@@ -82,8 +112,33 @@ builds:
     goos:
       - "linux"
     goarch:
+      - "386"
       - "amd64"
       - "arm64"
+    mod_timestamp: "{{ .CommitTimestamp }}"
+
+  - id: "linux-arm"
+    goos:
+      - "linux"
+    goarch:
+      - "arm"
+    goarm:
+      - "5"
+      - "6"
+      - "7"
+    mod_timestamp: "{{ .CommitTimestamp }}"
+
+  - id: "linux-mips"
+    goos:
+      - "linux"
+    goarch:
+      - "mips"
+      - "mipsle"
+      - "mips64"
+      - "mips64le"
+    gomips:
+      - "hardfloat"
+      - "softfloat"
     mod_timestamp: "{{ .CommitTimestamp }}"
 
   - id: "windows"
@@ -91,4 +146,63 @@ builds:
       - "windows"
     goarch:
       - "amd64"
+    mod_timestamp: "{{ .CommitTimestamp }}"
+
+  - id: "windows_386"
+    goos:
+      - "windows"
+    goarch:
+      - "386"
+    mod_timestamp: "{{ .CommitTimestamp }}"
+
+  - id: "windows-arm"
+    goos:
+      - "windows"
+    goarch:
+      - "arm"
+      - "arm64"
+    goarm:
+      - "5"
+      - "6"
+      - "7"
+    mod_timestamp: "{{ .CommitTimestamp }}"
+
+  - id: "freebsd"
+    goos:
+      - "freebsd"
+    goarch:
+      - "386"
+      - "amd64"
+      - "arm"
+      - "arm64"
+    goarm:
+      - "5"
+      - "6"
+      - "7"
+    mod_timestamp: "{{ .CommitTimestamp }}"
+
+  - id: "netbsd"
+    goos:
+      - "netbsd"
+    goarch:
+      - "386"
+      - "amd64"
+      - "arm"
+      - "arm64"
+    goarm:
+      - "7"
+    mod_timestamp: "{{ .CommitTimestamp }}"
+
+  - id: "openbsd"
+    goos:
+      - "openbsd"
+    goarch:
+      - "386"
+      - "amd64"
+      - "arm"
+      - "arm64"
+    goarm:
+      - "5"
+      - "6"
+      - "7"
     mod_timestamp: "{{ .CommitTimestamp }}"

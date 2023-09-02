@@ -2,6 +2,11 @@
 source = ["./build/dist/darwin_darwin_amd64_v1/loadtoad"]
 bundle_id = "dev.kyleu.loadtoad"
 
+notarize {
+  path = "./build/dist/loadtoad_0.0.10_darwin_amd64_desktop.dmg"
+  bundle_id = "dev.kyleu.loadtoad"
+}
+
 apple_id {
   username = "kyle@kyleu.com"
   password = "@env:APPLE_PASSWORD"

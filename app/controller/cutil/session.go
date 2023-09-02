@@ -17,7 +17,7 @@ import (
 	"github.com/kyleu/loadtoad/app/util"
 )
 
-var initialIcons = []string{}
+var initialIcons = []string{"searchbox"}
 
 func LoadPageState(as *app.State, rc *fasthttp.RequestCtx, key string, logger util.Logger) *PageState {
 	parentCtx, logger := httpmetrics.ExtractHeaders(rc, logger)

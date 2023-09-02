@@ -22,6 +22,7 @@ import (
 )
 
 const (
+	DefaultSearchPath  = "/search"
 	DefaultProfilePath = "/profile"
 	defaultIcon        = "app"
 )
@@ -53,6 +54,7 @@ type PageState struct {
 	RootIcon       string            `json:"rootIcon,omitempty"`
 	RootPath       string            `json:"rootPath,omitempty"`
 	RootTitle      string            `json:"rootTitle,omitempty"`
+	SearchPath     string            `json:"searchPath,omitempty"`
 	ProfilePath    string            `json:"profilePath,omitempty"`
 	HideMenu       bool              `json:"hideMenu,omitempty"`
 	ForceRedirect  string            `json:"forceRedirect,omitempty"`
@@ -105,6 +107,9 @@ func (p *PageState) Clean(_ *fasthttp.RequestCtx, as *app.State) error {
 	}
 	if defaultRootTitleAppend != "" {
 		p.RootTitle += " " + defaultRootTitleAppend
+	}
+	if p.SearchPath == "" {
+		p.SearchPath = DefaultSearchPath
 	}
 	if p.ProfilePath == "" {
 		p.ProfilePath = DefaultProfilePath

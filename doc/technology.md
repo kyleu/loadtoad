@@ -22,6 +22,7 @@ Load Toad relies on a ton of open source projects. First among them is the [Go l
 - [prometheus][16]
 - [lo][17]
 - [opentelemetry][18]
+- [xcodegen][23]
 
 
 [1]: https://golang.org "What a great contribution to the world of engineering"
@@ -42,3 +43,4 @@ Load Toad relies on a ton of open source projects. First among them is the [Go l
 [16]: https://github.com/prometheus/client_golang "Metrics for all aspects of the system"
 [17]: https://github.com/samber/lo "Functional programming conveniences, used everywhere"
 [18]: https://go.opentelemetry.io/otel "Telemetry for full system tracing"
+[23]: https://github.com/yonaskolb/XcodeGen "Generates messy iOS XCode projects"

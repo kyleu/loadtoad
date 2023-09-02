@@ -23,6 +23,7 @@ func AppRoutes(as *app.State, logger util.Logger) fasthttp.RequestHandler {
 
 	r.GET(cutil.DefaultProfilePath, clib.Profile)
 	r.POST(cutil.DefaultProfilePath, clib.ProfileSave)
+	r.GET(cutil.DefaultSearchPath, clib.Search)
 	themeRoutes(r)
 
 	// $PF_SECTION_START(routes)$

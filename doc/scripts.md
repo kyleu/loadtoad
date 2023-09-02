@@ -4,9 +4,13 @@
 There's a variety of shell scripts available in `./bin`. Here's a few of them:
 
 - `bootstrap.sh`: Downloads and installs the Go libraries and tools needed in other scripts
+- `build/android.sh`: Builds the Android library and application
 - `build/build.sh`: Builds the app (or just use make build)
 - `build/client.sh`: Uses `esbuild` to compile the scripts in `client`
 - `build/client-watch.sh`: Builds the TypeScript resources, then watches for changes via `watchexec`
+- `build/desktop.sh`: Uses `tools/desktop` to build a desktop application
+- `build/desktop-release.sh`: Meant to be run as part of the release process, builds desktop apps
+- `build/ios.sh`: Builds the iOS framework and application
 - `build/release.sh`: Runs `goreleaser`
 - `build/release-test.sh`: Runs `goreleaser` in test mode
 - `check.sh`: Runs code statistics, checks for outdated dependencies, then runs linters

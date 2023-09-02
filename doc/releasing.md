@@ -15,6 +15,10 @@ All release binaries are checksummed, available in `checksums.txt` in the root o
 
 Multiple Docker images will be created. The main image is `ghcr.io/kyleu/loadtoad/x.x.x`, and a debug image is provided at `ghcr.io/kyleu/loadtoad/x.x.x-debug` that includes `delve` for debugging
 
+### Homebrew
+
+Packages for macOS and Linux will be pushed to Homebrew at `kyleu/homebrew-kyleu`
+
 ### Notarization
 
 Release binaries for macOS and iOS are notarized using Apple Notarization services
@@ -30,4 +34,12 @@ The source code will be bundled in the release, available as `loadtoad_x.x.x_sou
 ### Universal Binaries
 
 A universal macOS app will be created, containing the complete app for x86-64 and ARM
+
+### Desktop Build
+
+A standalone desktop application, bundling the server and a web view, will be built for Linux, macOS, and Windows
+
+### Mobile Build
+
+A standalone mobile app, bundling the server and a web view, will be built for Android and iOS
 

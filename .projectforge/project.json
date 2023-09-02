@@ -6,13 +6,18 @@
   "package": "github.com/kyleu/loadtoad",
   "port": 15550,
   "modules": [
+    "android",
     "core",
+    "desktop",
     "filesystem",
     "har",
+    "ios",
     "marketing",
     "notarize",
     "process",
     "scripting",
+    "search",
+    "upgrade",
     "websocket"
   ],
   "ignore": [
@@ -33,7 +38,8 @@
     "description": "Load Toad helps you test your web application using HTTP Archive (.har) files",
     "bundle": "dev.kyleu.loadtoad",
     "signingIdentity": "Developer ID Application: Kyle Unverferth (C6S478FYLD)",
-    "notarizeEmail": "kyle@kyleu.com"
+    "notarizeEmail": "kyle@kyleu.com",
+    "javaPackage": "dev.kyleu.loadtoad"
   },
   "theme": {
     "light": {
@@ -76,7 +82,19 @@
     }
   },
   "build": {
+    "testsFail": true,
+    "desktop": true,
     "notarize": true,
-    "signing": true
+    "signing": true,
+    "android": true,
+    "iOS": true,
+    "x86": true,
+    "windowsARM": true,
+    "linuxARM": true,
+    "linuxMIPS": true,
+    "freeBSD": true,
+    "netBSD": true,
+    "openBSD": true,
+    "homebrew": true
   }
 }
