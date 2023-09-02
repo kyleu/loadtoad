@@ -55,142 +55,163 @@ func (p *Home) StreamBody(qw422016 *qt422016.Writer, as *app.State, ps *cutil.Pa
   </div>
   <div class="card">
     <div class="right"><a href="/har"><button>New</button></a></div>
-    <h3>`)
-//line views/Home.html:24
+    <h3>
+      <a href="/har">
+        `)
+//line views/Home.html:26
 	components.StreamSVGRefIcon(qw422016, `book`, ps)
-//line views/Home.html:24
+//line views/Home.html:26
+	qw422016.N().S(`
+        `)
+//line views/Home.html:27
 	qw422016.N().D(len(p.Hars))
-//line views/Home.html:24
+//line views/Home.html:27
 	qw422016.N().S(` `)
-//line views/Home.html:24
+//line views/Home.html:27
 	qw422016.E().S(util.StringPluralMaybe("Archive", len(p.Hars)))
-//line views/Home.html:24
-	qw422016.N().S(`</h3>
+//line views/Home.html:27
+	qw422016.N().S(`
+      </a>
+    </h3>
     <div class="mt">
       <table>
         <tbody>
 `)
-//line views/Home.html:28
+//line views/Home.html:33
 	for _, h := range p.Hars {
-//line views/Home.html:28
+//line views/Home.html:33
 		qw422016.N().S(`          <tr><td><a href="/har/`)
-//line views/Home.html:29
+//line views/Home.html:34
 		qw422016.E().S(h)
-//line views/Home.html:29
+//line views/Home.html:34
 		qw422016.N().S(`">`)
-//line views/Home.html:29
+//line views/Home.html:34
 		qw422016.E().S(h)
-//line views/Home.html:29
+//line views/Home.html:34
 		qw422016.N().S(`</a></td></tr>
 `)
-//line views/Home.html:30
+//line views/Home.html:35
 	}
-//line views/Home.html:30
+//line views/Home.html:35
 	qw422016.N().S(`        </tbody>
       </table>
     </div>
   </div>
   <div class="card">
     <div class="right"><a href="/workflow/new"><button>New</button></a></div>
-    <h3>`)
-//line views/Home.html:37
+    <h3>
+      <a href="/workflow">
+        `)
+//line views/Home.html:44
 	components.StreamSVGRefIcon(qw422016, `sitemap`, ps)
-//line views/Home.html:37
+//line views/Home.html:44
+	qw422016.N().S(`
+        `)
+//line views/Home.html:45
 	qw422016.N().D(len(p.Workflows))
-//line views/Home.html:37
+//line views/Home.html:45
 	qw422016.N().S(` `)
-//line views/Home.html:37
+//line views/Home.html:45
 	qw422016.E().S(util.StringPluralMaybe("Workflow", len(p.Workflows)))
-//line views/Home.html:37
-	qw422016.N().S(`</h3>
+//line views/Home.html:45
+	qw422016.N().S(`
+      </a>
+    </h3>
     <div class="mt">
       <table>
         <tbody>
 `)
-//line views/Home.html:41
+//line views/Home.html:51
 	for _, w := range p.Workflows {
-//line views/Home.html:41
+//line views/Home.html:51
 		qw422016.N().S(`        <tr><td><a href="/workflow/`)
-//line views/Home.html:42
+//line views/Home.html:52
 		qw422016.E().S(w.ID)
-//line views/Home.html:42
+//line views/Home.html:52
 		qw422016.N().S(`">`)
-//line views/Home.html:42
+//line views/Home.html:52
 		qw422016.E().S(w.Title())
-//line views/Home.html:42
+//line views/Home.html:52
 		qw422016.N().S(`</a></td></tr>
 `)
-//line views/Home.html:43
+//line views/Home.html:53
 	}
-//line views/Home.html:43
+//line views/Home.html:53
 	qw422016.N().S(`        </tbody>
       </table>
     </div>
   </div>
   <div class="card">
     <div class="right"><a href="/admin/scripting/new"><button>New</button></a></div>
-    <h3>`)
-//line views/Home.html:50
+    <h3>
+      <a href="/admin/scripting">
+        `)
+//line views/Home.html:62
 	components.StreamSVGRefIcon(qw422016, `file-code`, ps)
-//line views/Home.html:50
+//line views/Home.html:62
+	qw422016.N().S(`
+        `)
+//line views/Home.html:63
 	qw422016.N().D(len(p.Scripts))
-//line views/Home.html:50
+//line views/Home.html:63
 	qw422016.N().S(` `)
-//line views/Home.html:50
+//line views/Home.html:63
 	qw422016.E().S(util.StringPluralMaybe("Script", len(p.Scripts)))
-//line views/Home.html:50
-	qw422016.N().S(`</h3>
+//line views/Home.html:63
+	qw422016.N().S(`
+      </a>
+    </h3>
     <div class="mt">
       <table>
         <tbody>
 `)
-//line views/Home.html:54
+//line views/Home.html:69
 	for _, s := range p.Scripts {
-//line views/Home.html:54
+//line views/Home.html:69
 		qw422016.N().S(`        <tr><td><a href="/admin/scripting/`)
-//line views/Home.html:55
+//line views/Home.html:70
 		qw422016.E().S(s)
-//line views/Home.html:55
+//line views/Home.html:70
 		qw422016.N().S(`">`)
-//line views/Home.html:55
+//line views/Home.html:70
 		qw422016.E().S(s)
-//line views/Home.html:55
+//line views/Home.html:70
 		qw422016.N().S(`</a></td></tr>
 `)
-//line views/Home.html:56
+//line views/Home.html:71
 	}
-//line views/Home.html:56
+//line views/Home.html:71
 	qw422016.N().S(`        </tbody>
       </table>
     </div>
   </div>
 
 `)
-//line views/Home.html:62
+//line views/Home.html:77
 }
 
-//line views/Home.html:62
+//line views/Home.html:77
 func (p *Home) WriteBody(qq422016 qtio422016.Writer, as *app.State, ps *cutil.PageState) {
-//line views/Home.html:62
+//line views/Home.html:77
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line views/Home.html:62
+//line views/Home.html:77
 	p.StreamBody(qw422016, as, ps)
-//line views/Home.html:62
+//line views/Home.html:77
 	qt422016.ReleaseWriter(qw422016)
-//line views/Home.html:62
+//line views/Home.html:77
 }
 
-//line views/Home.html:62
+//line views/Home.html:77
 func (p *Home) Body(as *app.State, ps *cutil.PageState) string {
-//line views/Home.html:62
+//line views/Home.html:77
 	qb422016 := qt422016.AcquireByteBuffer()
-//line views/Home.html:62
+//line views/Home.html:77
 	p.WriteBody(qb422016, as, ps)
-//line views/Home.html:62
+//line views/Home.html:77
 	qs422016 := string(qb422016.B)
-//line views/Home.html:62
+//line views/Home.html:77
 	qt422016.ReleaseByteBuffer(qb422016)
-//line views/Home.html:62
+//line views/Home.html:77
 	return qs422016
-//line views/Home.html:62
+//line views/Home.html:77
 }
