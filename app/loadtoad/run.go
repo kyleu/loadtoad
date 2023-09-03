@@ -115,7 +115,10 @@ func (s *Service) RunEntry(
 		return nil, err
 	}
 	ret.Timing.Total = t.End()
-	ret.Response = har.ResponseFromHTTP(resp)
+	ret.Response, err = har.ResponseFromHTTP(resp)
+	if err != nil {
+		return nil, err
+	}
 
 	if resp != nil {
 		_ = resp.Body.Close()

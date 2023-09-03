@@ -79,9 +79,10 @@
 {% endfunc %}
 
 {% func RenderResultModal(key string, r *loadtoad.WorkflowResult, ps *cutil.PageState) %}
+  <h4>Request</h4>
+  <hr />
   {%= vhar.RenderRequest(key, r.Entry.Request, ps) %}
+  <h4>Response</h4>
   <hr />
   {%= vhar.RenderResponse(key, r.Response, ps) %}
-  <hr />
-  {%= components.JSON(r.Variables) %}
 {% endfunc %}

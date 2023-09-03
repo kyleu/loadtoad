@@ -80,7 +80,7 @@ func socketConnect(
 		send("log", &WorkflowMessage{Idx: i, Ctx: s})
 	}
 	errF := func(i int, err error) {
-		ps.Logger.Warnf("[%d] [ERROR] %s", i, err.Error())
+		ps.Logger.Warnf("[%d] [ERROR] %+v", i, err)
 		send("error", &WorkflowMessage{Idx: i, Ctx: err.Error()})
 	}
 	okF := func(i int, w *loadtoad.WorkflowResult) {
