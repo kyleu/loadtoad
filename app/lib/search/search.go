@@ -26,10 +26,16 @@ func Search(ctx context.Context, params *Params, as *app.State, page *cutil.Page
 	}
 	var allProviders []Provider
 	// $PF_SECTION_START(search_functions)$
-	testFunc := func(ctx context.Context, p *Params, as *app.State, page *cutil.PageState, logger util.Logger) (result.Results, error) {
-		return result.Results{{URL: "/search?q=test", Title: "Test Result", Icon: "star", Matches: nil}}, nil
+	workflowFunc := func(ctx context.Context, p *Params, as *app.State, page *cutil.PageState, logger util.Logger) (result.Results, error) {
+		return as.Services.LoadToad.SearchWorkflows(ctx, p.PS, p.Q, logger)
 	}
-	allProviders = append(allProviders, testFunc)
+	scriptFunc := func(ctx context.Context, p *Params, as *app.State, page *cutil.PageState, logger util.Logger) (result.Results, error) {
+		return as.Services.Script.SearchScripts(ctx, p.PS, p.Q, logger)
+	}
+	harFunc := func(ctx context.Context, p *Params, as *app.State, page *cutil.PageState, logger util.Logger) (result.Results, error) {
+		return as.Services.LoadToad.SearchHars(ctx, p.PS, p.Q, logger)
+	}
+	allProviders = append(allProviders, workflowFunc, scriptFunc, harFunc)
 	// $PF_SECTION_END(search_functions)$
 	if len(allProviders) == 0 {
 		return nil, []error{errors.New("no search providers configured")}

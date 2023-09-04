@@ -33,6 +33,7 @@
       {%- if len(p.Workflow.Replacements) > 0 -%}
       <a href="{%s p.Workflow.WebPath() %}/run"><button>Run w/ Options</button></a>
       {%- endif -%}
+      <a href="{%s p.Workflow.WebPath() %}/bench"><button>Benchmark</button></a>
     </div>
   </div>
   {%- if len(p.Workflow.Scripts) > 0 -%}

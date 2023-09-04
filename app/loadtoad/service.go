@@ -1,14 +1,18 @@
 package loadtoad
 
 import (
+	"context"
 	"fmt"
 	"path"
 	"strings"
 
 	"github.com/pkg/errors"
+	"github.com/samber/lo"
 
 	"github.com/kyleu/loadtoad/app/lib/filesystem"
+	"github.com/kyleu/loadtoad/app/lib/filter"
 	"github.com/kyleu/loadtoad/app/lib/scripting"
+	"github.com/kyleu/loadtoad/app/lib/search/result"
 	"github.com/kyleu/loadtoad/app/lib/websocket"
 	"github.com/kyleu/loadtoad/app/util"
 )
@@ -75,4 +79,18 @@ func (s *Service) SaveWorkflow(w *Workflow) error {
 
 func (s *Service) DeleteWorkflow(id string, logger util.Logger) error {
 	return s.FS.Remove(fmt.Sprintf("workflow/%s.json", id), logger)
+}
+
+func (s *Service) SearchWorkflows(ctx context.Context, ps filter.ParamSet, q string, logger util.Logger) (result.Results, error) {
+	wfs, err := s.ListWorkflows(logger)
+	if err != nil {
+		return nil, err
+	}
+	return lo.FilterMap(wfs, func(w *Workflow, _ int) (*result.Result, bool) {
+		res := result.NewResult("workflow", w.ID, w.WebPath(), w.Title(), "sitemap", w, w, q)
+		if len(res.Matches) > 0 {
+			return res, true
+		}
+		return nil, false
+	}), nil
 }

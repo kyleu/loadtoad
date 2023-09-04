@@ -1,13 +1,17 @@
 package loadtoad
 
 import (
+	"context"
 	"path"
 	"strings"
 
 	"github.com/pkg/errors"
+	"github.com/samber/lo"
 
 	"github.com/kyleu/loadtoad/app/lib/filesystem"
+	"github.com/kyleu/loadtoad/app/lib/filter"
 	"github.com/kyleu/loadtoad/app/lib/har"
+	"github.com/kyleu/loadtoad/app/lib/search/result"
 	"github.com/kyleu/loadtoad/app/util"
 )
 
@@ -36,7 +40,7 @@ func (s *Service) LoadHar(fn string) (*har.Log, error) {
 		return nil, errors.Wrapf(err, "error decoding file [%s]", fn)
 	}
 	ret.Log.Key = strings.TrimSuffix(key, har.Ext)
-	ret.Log.Entries = ret.Log.Entries.Trimmed()
+	ret.Log.Entries = ret.Log.Entries.Trimmed().WithJSON()
 	return ret.Log, nil
 }
 
@@ -66,4 +70,19 @@ func (s *Service) SaveHar(fn string, b []byte) error {
 		fn = path.Join("har", fn)
 	}
 	return s.FS.WriteFile(fn, b, filesystem.DefaultMode, true)
+}
+
+func (s *Service) SearchHars(ctx context.Context, ps filter.ParamSet, q string, logger util.Logger) (result.Results, error) {
+	return lo.FilterMap(s.ListHars(logger), func(fn string, _ int) (*result.Result, bool) {
+		log, err := s.LoadHar(fn)
+		if err != nil {
+			logger.Warnf("error loading har [%s]: %+v", fn, err)
+			return nil, false
+		}
+		res := result.NewResult("archive", log.Key, log.WebPath(), log.Key, "book", log, log, q)
+		if len(res.Matches) > 0 {
+			return res, true
+		}
+		return nil, false
+	}), nil
 }

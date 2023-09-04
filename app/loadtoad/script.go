@@ -2,10 +2,12 @@ package loadtoad
 
 import (
 	"fmt"
+
 	"github.com/dop251/goja"
+	"github.com/pkg/errors"
+
 	"github.com/kyleu/loadtoad/app/lib/har"
 	"github.com/kyleu/loadtoad/app/util"
-	"github.com/pkg/errors"
 )
 
 func scriptUpdateEntry(vm *goja.Runtime, e *har.Entry) error {
