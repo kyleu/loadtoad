@@ -105,11 +105,7 @@ func (p *Detail) StreamBody(qw422016 *qt422016.Writer, as *app.State, ps *cutil.
 //line views/vworkflow/Detail.html:41
 		qw422016.N().S(` `)
 //line views/vworkflow/Detail.html:41
-		qw422016.N().D(len(p.Workflow.Scripts))
-//line views/vworkflow/Detail.html:41
-		qw422016.N().S(` `)
-//line views/vworkflow/Detail.html:41
-		qw422016.E().S(util.StringPluralMaybe("Script", len(p.Workflow.Scripts)))
+		qw422016.E().S(util.StringPlural(len(p.Workflow.Scripts), "Script"))
 //line views/vworkflow/Detail.html:41
 		qw422016.N().S(`</h3>
     <div class="mt">
@@ -159,11 +155,7 @@ func (p *Detail) StreamBody(qw422016 *qt422016.Writer, as *app.State, ps *cutil.
 //line views/vworkflow/Detail.html:63
 		qw422016.N().S(` `)
 //line views/vworkflow/Detail.html:63
-		qw422016.N().D(len(p.Workflow.Replacements))
-//line views/vworkflow/Detail.html:63
-		qw422016.N().S(` `)
-//line views/vworkflow/Detail.html:63
-		qw422016.E().S(util.StringPluralMaybe("Replacement", len(p.Workflow.Replacements)))
+		qw422016.E().S(util.StringPlural(len(p.Workflow.Replacements), "Replacement"))
 //line views/vworkflow/Detail.html:63
 		qw422016.N().S(`</h3>
     <div class="mt">
@@ -241,11 +233,7 @@ func (p *Detail) StreamBody(qw422016 *qt422016.Writer, as *app.State, ps *cutil.
 //line views/vworkflow/Detail.html:96
 		qw422016.N().S(` `)
 //line views/vworkflow/Detail.html:96
-		qw422016.N().D(len(p.Workflow.Variables))
-//line views/vworkflow/Detail.html:96
-		qw422016.N().S(` `)
-//line views/vworkflow/Detail.html:96
-		qw422016.E().S(util.StringPluralMaybe("Variable", len(p.Workflow.Variables)))
+		qw422016.E().S(util.StringPlural(len(p.Workflow.Variables), "Variable"))
 //line views/vworkflow/Detail.html:96
 		qw422016.N().S(`</h3>
     <div class="mt">
@@ -286,11 +274,7 @@ func (p *Detail) StreamBody(qw422016 *qt422016.Writer, as *app.State, ps *cutil.
 //line views/vworkflow/Detail.html:112
 	qw422016.N().S(` `)
 //line views/vworkflow/Detail.html:112
-	qw422016.N().D(len(p.Entries))
-//line views/vworkflow/Detail.html:112
-	qw422016.N().S(` `)
-//line views/vworkflow/Detail.html:112
-	qw422016.E().S(util.StringPluralMaybe("Request", len(p.Entries)))
+	qw422016.E().S(util.StringPlural(len(p.Entries), "Request"))
 //line views/vworkflow/Detail.html:112
 	qw422016.N().S(`</h3>
     <div class="mt">

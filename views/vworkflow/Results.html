@@ -22,7 +22,7 @@
     <div class="right"><a href="#modal-workflow"><button type="button">JSON</button></a></div>
     {%= components.JSONModal("workflow", "Workflow", p.Workflow, 3) %}
     <h3>{%= components.SVGRefIcon(`file-code`, ps) %} {%s p.Workflow.Title() %} Results</h3>
-    <div class="mts"><em>{%d len(p.Results) %} {%s util.StringPluralMaybe("result", len(p.Results)) %} in {%s util.MicrosToMillis(p.Results.Duration()) %}</em></div>
+    <div class="mts"><em>{%s util.StringPlural(len(p.Results), "result") %} in {%s util.MicrosToMillis(p.Results.Duration()) %}</em></div>
   </div>
   {%- for rIdx, r := range p.Results -%}
   {%= RenderResult(rIdx, r, ps) %}

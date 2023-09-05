@@ -64,11 +64,7 @@ func (p *Home) StreamBody(qw422016 *qt422016.Writer, as *app.State, ps *cutil.Pa
 	qw422016.N().S(`
         `)
 //line views/Home.html:27
-	qw422016.N().D(len(p.Hars))
-//line views/Home.html:27
-	qw422016.N().S(` `)
-//line views/Home.html:27
-	qw422016.E().S(util.StringPluralMaybe("Archive", len(p.Hars)))
+	qw422016.E().S(util.StringPlural(len(p.Hars), "Archive"))
 //line views/Home.html:27
 	qw422016.N().S(`
       </a>
@@ -108,11 +104,7 @@ func (p *Home) StreamBody(qw422016 *qt422016.Writer, as *app.State, ps *cutil.Pa
 	qw422016.N().S(`
         `)
 //line views/Home.html:45
-	qw422016.N().D(len(p.Workflows))
-//line views/Home.html:45
-	qw422016.N().S(` `)
-//line views/Home.html:45
-	qw422016.E().S(util.StringPluralMaybe("Workflow", len(p.Workflows)))
+	qw422016.E().S(util.StringPlural(len(p.Workflows), "Workflow"))
 //line views/Home.html:45
 	qw422016.N().S(`
       </a>
@@ -152,11 +144,7 @@ func (p *Home) StreamBody(qw422016 *qt422016.Writer, as *app.State, ps *cutil.Pa
 	qw422016.N().S(`
         `)
 //line views/Home.html:63
-	qw422016.N().D(len(p.Scripts))
-//line views/Home.html:63
-	qw422016.N().S(` `)
-//line views/Home.html:63
-	qw422016.E().S(util.StringPluralMaybe("Script", len(p.Scripts)))
+	qw422016.E().S(util.StringPlural(len(p.Scripts), "Script"))
 //line views/Home.html:63
 	qw422016.N().S(`
       </a>

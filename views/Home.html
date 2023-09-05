@@ -24,7 +24,7 @@
     <h3>
       <a href="/har">
         {%= components.SVGRefIcon(`book`, ps) %}
-        {%d len(p.Hars) %} {%s util.StringPluralMaybe("Archive", len(p.Hars)) %}
+        {%s util.StringPlural(len(p.Hars), "Archive") %}
       </a>
     </h3>
     <div class="mt">
@@ -42,7 +42,7 @@
     <h3>
       <a href="/workflow">
         {%= components.SVGRefIcon(`sitemap`, ps) %}
-        {%d len(p.Workflows) %} {%s util.StringPluralMaybe("Workflow", len(p.Workflows)) %}
+        {%s util.StringPlural(len(p.Workflows), "Workflow") %}
       </a>
     </h3>
     <div class="mt">
@@ -60,7 +60,7 @@
     <h3>
       <a href="/admin/scripting">
         {%= components.SVGRefIcon(`file-code`, ps) %}
-        {%d len(p.Scripts) %} {%s util.StringPluralMaybe("Script", len(p.Scripts)) %}
+        {%s util.StringPlural(len(p.Scripts), "Script") %}
       </a>
     </h3>
     <div class="mt">

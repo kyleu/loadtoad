@@ -63,9 +63,9 @@ func (s *Service) Run(
 					return nil, err2
 				}
 				if len(newVars) > 0 {
-					title := util.StringPluralMaybe("variable", len(newVars))
+					title := util.StringPlural(len(newVars), "variable")
 					keys := strings.Join(lo.Keys(newVars), ", ")
-					logF(i, fmt.Sprintf("observed [%d] new %s (%s)", len(newVars), title, keys))
+					logF(i, fmt.Sprintf("observed [%s] (%s)", title, keys))
 					vars = vars.Merge(newVars)
 				}
 			}

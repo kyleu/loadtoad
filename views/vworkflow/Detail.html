@@ -38,7 +38,7 @@
   </div>
   {%- if len(p.Workflow.Scripts) > 0 -%}
   <div class="card">
-    <h3>{%= components.SVGRefIcon(`file-code`, ps) %} {%d len(p.Workflow.Scripts) %} {%s util.StringPluralMaybe("Script", len(p.Workflow.Scripts)) %}</h3>
+    <h3>{%= components.SVGRefIcon(`file-code`, ps) %} {%s util.StringPlural(len(p.Workflow.Scripts), "Script") %}</h3>
     <div class="mt">
       <table class="min-200">
         <tbody>
@@ -60,7 +60,7 @@
   {%- endif -%}
   {%- if len(p.Workflow.Replacements) > 0 -%}
   <div class="card">
-    <h3>{%= components.SVGRefIcon(`cog`, ps) %} {%d len(p.Workflow.Replacements) %} {%s util.StringPluralMaybe("Replacement", len(p.Workflow.Replacements)) %}</h3>
+    <h3>{%= components.SVGRefIcon(`cog`, ps) %} {%s util.StringPlural(len(p.Workflow.Replacements), "Replacement") %}</h3>
     <div class="mt">
       <table class="min-200">
         <tbody>
@@ -93,7 +93,7 @@
   {%- endif -%}
   {%- if len(p.Workflow.Variables) > 0 -%}
   <div class="card">
-    <h3>{%= components.SVGRefIcon(`sitemap`, ps) %} {%d len(p.Workflow.Variables) %} {%s util.StringPluralMaybe("Variable", len(p.Workflow.Variables)) %}</h3>
+    <h3>{%= components.SVGRefIcon(`sitemap`, ps) %} {%s util.StringPlural(len(p.Workflow.Variables), "Variable") %}</h3>
     <div class="mt">
       <table class="min-200">
         <tbody>
@@ -109,7 +109,7 @@
   </div>
   {%- endif -%}
   <div class="card">
-    <h3>{%= components.SVGRefIcon(`play`, ps) %} {%d len(p.Entries) %} {%s util.StringPluralMaybe("Request", len(p.Entries)) %}</h3>
+    <h3>{%= components.SVGRefIcon(`play`, ps) %} {%s util.StringPlural(len(p.Entries), "Request") %}</h3>
     <div class="mt">
       {%= showEntries(p.Entries, ps) %}
     </div>

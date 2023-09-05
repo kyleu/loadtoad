@@ -60,11 +60,7 @@ func (p *Results) StreamBody(qw422016 *qt422016.Writer, as *app.State, ps *cutil
 	qw422016.N().S(` Results</h3>
     <div class="mts"><em>`)
 //line views/vworkflow/Results.html:25
-	qw422016.N().D(len(p.Results))
-//line views/vworkflow/Results.html:25
-	qw422016.N().S(` `)
-//line views/vworkflow/Results.html:25
-	qw422016.E().S(util.StringPluralMaybe("result", len(p.Results)))
+	qw422016.E().S(util.StringPlural(len(p.Results), "result"))
 //line views/vworkflow/Results.html:25
 	qw422016.N().S(` in `)
 //line views/vworkflow/Results.html:25
