@@ -19,6 +19,9 @@ func (s *Service) Run(
 	ctx context.Context, w *Workflow, repls map[string]string, logger util.Logger,
 	logF func(i int, s string), errF func(i int, e error), okF func(i int, result *WorkflowResult),
 ) (WorkflowResults, error) {
+	if repls == nil {
+		repls = map[string]string{}
+	}
 	var ret WorkflowResults
 	jar, _ := cookiejar.New(nil)
 	client := http.Client{Jar: jar, Transport: &http.Transport{TLSClientConfig: &tls.Config{InsecureSkipVerify: true}}} //nolint:gosec
@@ -63,9 +66,9 @@ func (s *Service) Run(
 					return nil, err2
 				}
 				if len(newVars) > 0 {
-					title := util.StringPlural(len(newVars), "variable")
+					title := util.StringPlural(len(newVars), "new variable")
 					keys := strings.Join(lo.Keys(newVars), ", ")
-					logF(i, fmt.Sprintf("observed [%s] (%s)", title, keys))
+					logF(i, fmt.Sprintf("observed %s: %s", title, keys))
 					vars = vars.Merge(newVars)
 				}
 			}
