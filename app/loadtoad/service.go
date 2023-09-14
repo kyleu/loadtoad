@@ -3,6 +3,7 @@ package loadtoad
 import (
 	"context"
 	"fmt"
+	"github.com/kyleu/loadtoad/app/lib/har"
 	"path"
 	"strings"
 
@@ -19,12 +20,13 @@ import (
 
 type Service struct {
 	FS     filesystem.FileLoader
+	Har    *har.Service
 	Socket *websocket.Service
 	Script *scripting.Service
 }
 
-func NewService(fs filesystem.FileLoader, ws *websocket.Service, script *scripting.Service) *Service {
-	ret := &Service{FS: fs, Socket: ws, Script: script}
+func NewService(fs filesystem.FileLoader, harSvc *har.Service, ws *websocket.Service, script *scripting.Service) *Service {
+	ret := &Service{FS: fs, Har: harSvc, Socket: ws, Script: script}
 	return ret
 }
 
@@ -67,6 +69,15 @@ func (s *Service) LoadWorkflow(fn string) (*Workflow, error) {
 		if v == "" {
 			ret.Replacements[k] = k
 		}
+	}
+	if ret.Replacements == nil {
+		ret.Replacements = map[string]string{}
+	}
+	if ret.Variables == nil {
+		ret.Variables = util.ValueMap{}
+	}
+	if ret.Scripts == nil {
+		ret.Scripts = []string{}
 	}
 	return ret, nil
 }

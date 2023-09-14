@@ -2,15 +2,10 @@ package routes
 
 import (
 	"github.com/fasthttp/router"
-
 	"github.com/kyleu/loadtoad/app/controller"
 )
 
 func loadtoadRoutes(r *router.Router) {
-	r.GET("/har", controller.HarList)
-	r.POST("/har", controller.HarUpload)
-	r.GET("/har/{key}", controller.HarDetail)
-	r.GET("/har/{key}/delete", controller.HarDelete)
 	r.GET("/har/{key}/run", controller.HarStartRun)
 	r.GET("/har/{key}/bench", controller.HarStartBench)
 	r.GET("/har/{key}/connect", controller.HarConnect)

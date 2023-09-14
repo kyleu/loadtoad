@@ -1,4 +1,5 @@
-package loadtoad
+// Content managed by Project Forge, see [projectforge.md] for details.
+package har
 
 import (
 	"context"
@@ -10,19 +11,26 @@ import (
 
 	"github.com/kyleu/loadtoad/app/lib/filesystem"
 	"github.com/kyleu/loadtoad/app/lib/filter"
-	"github.com/kyleu/loadtoad/app/lib/har"
 	"github.com/kyleu/loadtoad/app/lib/search/result"
 	"github.com/kyleu/loadtoad/app/util"
 )
 
-func (s *Service) ListHars(logger util.Logger) []string {
+type Service struct {
+	FS filesystem.FileLoader
+}
+
+func NewService(fs filesystem.FileLoader) *Service {
+	return &Service{FS: fs}
+}
+
+func (s *Service) List(logger util.Logger) []string {
 	return s.FS.ListExtension("./har", "har", nil, true, logger)
 }
 
-func (s *Service) LoadHar(fn string) (*har.Log, error) {
+func (s *Service) Load(fn string) (*Log, error) {
 	key := fn
-	if !strings.HasSuffix(fn, har.Ext) {
-		fn += har.Ext
+	if !strings.HasSuffix(fn, Ext) {
+		fn += Ext
 	}
 	if !strings.Contains(fn, "har/") {
 		fn = path.Join("har", fn)
@@ -34,20 +42,20 @@ func (s *Service) LoadHar(fn string) (*har.Log, error) {
 	if err != nil {
 		return nil, errors.Wrapf(err, "error reading file [%s]", fn)
 	}
-	ret := &har.Wrapper{}
+	ret := &Wrapper{}
 	err = util.FromJSON(b, ret)
 	if err != nil {
 		return nil, errors.Wrapf(err, "error decoding file [%s]", fn)
 	}
-	ret.Log.Key = strings.TrimSuffix(key, har.Ext)
+	ret.Log.Key = strings.TrimSuffix(key, Ext)
 	ret.Log.Entries = ret.Log.Entries.Trimmed().WithJSON()
 	return ret.Log, nil
 }
 
-func (s *Service) DeleteHar(key string, logger util.Logger) error {
+func (s *Service) Delete(key string, logger util.Logger) error {
 	fn := key
-	if !strings.HasSuffix(fn, har.Ext) {
-		fn += har.Ext
+	if !strings.HasSuffix(fn, Ext) {
+		fn += Ext
 	}
 	if !strings.Contains(fn, "har/") {
 		fn = path.Join("har", fn)
@@ -62,19 +70,21 @@ func (s *Service) DeleteHar(key string, logger util.Logger) error {
 	return nil
 }
 
-func (s *Service) SaveHar(fn string, b []byte) error {
-	if !strings.HasSuffix(fn, har.Ext) {
-		fn += har.Ext
+func (s *Service) Save(log *Log) error {
+	fn := log.Key
+	if !strings.HasSuffix(fn, Ext) {
+		fn += Ext
 	}
 	if !strings.Contains(fn, "har/") {
 		fn = path.Join("har", fn)
 	}
+	b := util.ToJSONBytes(&Wrapper{Log: log}, true)
 	return s.FS.WriteFile(fn, b, filesystem.DefaultMode, true)
 }
 
-func (s *Service) SearchHars(ctx context.Context, ps filter.ParamSet, q string, logger util.Logger) (result.Results, error) {
-	return lo.FilterMap(s.ListHars(logger), func(fn string, _ int) (*result.Result, bool) {
-		log, err := s.LoadHar(fn)
+func (s *Service) Search(ctx context.Context, ps filter.ParamSet, q string, logger util.Logger) (result.Results, error) {
+	return lo.FilterMap(s.List(logger), func(fn string, _ int) (*result.Result, bool) {
+		log, err := s.Load(fn)
 		if err != nil {
 			logger.Warnf("error loading har [%s]: %+v", fn, err)
 			return nil, false

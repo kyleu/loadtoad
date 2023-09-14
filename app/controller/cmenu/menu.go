@@ -19,7 +19,7 @@ func MenuFor(
 	// $PF_SECTION_START(routes_start)$
 	// $PF_SECTION_END(routes_start)$
 	// $PF_SECTION_START(routes_end)$
-	ret = append(ret, loadtoadMenu(as.Services.LoadToad, logger)...)
+	ret = append(ret, harMenu(as.Services.Har, logger), menu.Separator, loadtoadMenu(as.Services.LoadToad, logger))
 	admin := &menu.Item{Key: "admin", Title: "Settings", Description: "System-wide settings and preferences", Icon: "cog", Route: "/admin"}
 	if len(as.Services.Script.ListScripts(logger)) > 0 {
 		ret = append(ret, menu.Separator, scriptingMenu(as.Services.Script, logger))

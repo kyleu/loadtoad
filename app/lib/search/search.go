@@ -33,7 +33,7 @@ func Search(ctx context.Context, params *Params, as *app.State, page *cutil.Page
 		return as.Services.Script.SearchScripts(ctx, p.PS, p.Q, logger)
 	}
 	harFunc := func(ctx context.Context, p *Params, as *app.State, page *cutil.PageState, logger util.Logger) (result.Results, error) {
-		return as.Services.LoadToad.SearchHars(ctx, p.PS, p.Q, logger)
+		return as.Services.Har.Search(ctx, p.PS, p.Q, logger)
 	}
 	allProviders = append(allProviders, workflowFunc, scriptFunc, harFunc)
 	// $PF_SECTION_END(search_functions)$

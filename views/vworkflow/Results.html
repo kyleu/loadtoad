@@ -80,9 +80,8 @@
 
 {% func RenderResultModal(key string, r *loadtoad.WorkflowResult, ps *cutil.PageState) %}
   <h4>Request</h4>
-  <hr />
   {%= vhar.RenderRequest(key, r.Entry.Request, ps) %}
-  <h4>Response</h4>
   <hr />
+  <h4>Response</h4>
   {%= vhar.RenderResponse(key, r.Response, ps) %}
 {% endfunc %}

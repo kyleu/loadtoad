@@ -41,7 +41,7 @@ func (s *Service) LoadEntries(keys ...*har.Selector) (har.Entries, error) {
 		h, ok := cache[k.Har]
 		if !ok {
 			var err error
-			h, err = s.LoadHar(k.Har)
+			h, err = s.Har.Load(k.Har)
 			if err != nil {
 				return nil, err
 			}

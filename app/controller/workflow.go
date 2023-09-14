@@ -42,7 +42,7 @@ func WorkflowDetail(rc *fasthttp.RequestCtx) {
 func WorkflowNew(rc *fasthttp.RequestCtx) {
 	Act("workflow.new", rc, func(as *app.State, ps *cutil.PageState) (string, error) {
 		w := &loadtoad.Workflow{Tests: har.Selectors{}, Replacements: map[string]string{}, Variables: util.ValueMap{}, Scripts: []string{}}
-		arcs := as.Services.LoadToad.ListHars(ps.Logger)
+		arcs := as.Services.Har.List(ps.Logger)
 		ps.Title = "New Workflow"
 		ps.Data = w
 		return Render(rc, as, &vworkflow.Form{Workflow: w, Archives: arcs}, ps, "workflow", "New")
@@ -76,7 +76,7 @@ func WorkflowForm(rc *fasthttp.RequestCtx) {
 		if err != nil {
 			return "", err
 		}
-		arcs := as.Services.LoadToad.ListHars(ps.Logger)
+		arcs := as.Services.Har.List(ps.Logger)
 		scripts := as.Services.Script.ListScripts(ps.Logger)
 		ps.Title = "Edit [" + w.ID + "]"
 		ps.Data = w

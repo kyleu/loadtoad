@@ -27,6 +27,7 @@ func AppRoutes(as *app.State, logger util.Logger) fasthttp.RequestHandler {
 	themeRoutes(r)
 
 	// $PF_SECTION_START(routes)$
+	harRoutes(r)
 	loadtoadRoutes(r)
 	// $PF_SECTION_END(routes)$
 

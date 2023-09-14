@@ -10,7 +10,6 @@ import (
 
 	"github.com/kyleu/loadtoad/app"
 	"github.com/kyleu/loadtoad/app/controller/cutil"
-	"github.com/kyleu/loadtoad/app/lib/har"
 	"github.com/kyleu/loadtoad/app/lib/websocket"
 	"github.com/kyleu/loadtoad/app/loadtoad"
 	"github.com/kyleu/loadtoad/app/util"
@@ -20,21 +19,6 @@ import (
 type WorkflowMessage struct {
 	Idx int `json:"idx"`
 	Ctx any `json:"ctx,omitempty"`
-}
-
-func HarConnect(rc *fasthttp.RequestCtx) {
-	Act("har.connect", rc, func(as *app.State, ps *cutil.PageState) (string, error) {
-		key, err := cutil.RCRequiredString(rc, "key", true)
-		if err != nil {
-			return "", err
-		}
-		ret, err := as.Services.LoadToad.LoadHar(key)
-		if err != nil {
-			return "", err
-		}
-		w := &loadtoad.Workflow{ID: ret.Key, Name: ret.Key, Tests: har.Selectors{{Har: ret.Key}}}
-		return socketConnect(ps.Context, w, map[string]string{}, rc, as, ps)
-	})
 }
 
 func WorkflowConnect(rc *fasthttp.RequestCtx) {
