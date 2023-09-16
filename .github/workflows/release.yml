@@ -3,30 +3,24 @@ name: release
 on:
   push:
     tags:
-      - "*"
-    branches:
-      - main
-      - master
-  pull_request:
-    branches: [ main, master ]
+      - 'DISABLED_v*'
 permissions:
   contents: write
 jobs:
-  release:
-    runs-on: "macos-latest"
+  test:
+    uses: "./.github/workflows/test.yml"
+  build:
+    runs-on: "ubuntu-latest"
     steps:
       - name: "Checkout"
         uses: "actions/checkout@v2"
         with:
           fetch-depth: 0
-      - name: "Docker Install"
-        uses: docker-practice/actions-setup-docker@master
-        timeout-minutes: 12
       - name: "Golang"
         uses: "actions/setup-go@v2"
         with:
           go-version: "1.21"
-      - name: "Docker Login"
+      - name: "Login"
         uses: "docker/login-action@v1"
         with:
           registry: "ghcr.io"
