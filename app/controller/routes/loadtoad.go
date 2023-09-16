@@ -2,6 +2,7 @@ package routes
 
 import (
 	"github.com/fasthttp/router"
+
 	"github.com/kyleu/loadtoad/app/controller"
 )
 

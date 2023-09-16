@@ -18,15 +18,15 @@ import (
 func (s *Service) LoadScripts(scripts []string, logger util.Logger) (map[string]*goja.Runtime, error) {
 	vms := make(map[string]*goja.Runtime, len(scripts))
 	for _, x := range lo.Uniq(scripts) {
-		x, src, err := s.Script.LoadScript(x, logger)
+		fn, src, err := s.Script.LoadScript(x, logger)
 		if err != nil {
 			return nil, err
 		}
-		_, vm, err := scripting.LoadVM(x, src, logger)
+		_, vm, err := scripting.LoadVM(fn, src, logger)
 		if err != nil {
 			return nil, err
 		}
-		vms[x] = vm
+		vms[fn] = vm
 	}
 	return vms, nil
 }

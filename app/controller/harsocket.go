@@ -40,7 +40,8 @@ func HarStartRun(rc *fasthttp.RequestCtx) {
 		ps.Title = "Archive [" + key + "]"
 		ps.Data = ret
 		channel := "run-" + util.RandomString(16)
-		return Render(rc, as, &vworkflow.Start{Workflow: w, Entries: ret.Entries, Channel: channel, Path: "/har/" + ret.Key + "/connect"}, ps, "har", ret.Key, "Run")
+		pth := "/har/" + ret.Key + "/connect"
+		return Render(rc, as, &vworkflow.Start{Workflow: w, Entries: ret.Entries, Channel: channel, Path: pth}, ps, "har", ret.Key, "Run")
 	})
 }
 
@@ -58,6 +59,7 @@ func HarStartBench(rc *fasthttp.RequestCtx) {
 		ps.Title = "Archive [" + key + "]"
 		ps.Data = ret
 		channel := "run-" + util.RandomString(16)
-		return Render(rc, as, &vworkflow.Start{Workflow: w, Entries: ret.Entries, Channel: channel, Path: "/har/" + ret.Key + "/connect"}, ps, "har", ret.Key, "Benchmark")
+		pth := "/har/" + ret.Key + "/connect"
+		return Render(rc, as, &vworkflow.Start{Workflow: w, Entries: ret.Entries, Channel: channel, Path: pth}, ps, "har", ret.Key, "Benchmark")
 	})
 }

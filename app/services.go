@@ -2,10 +2,10 @@ package app
 
 import (
 	"context"
-	"github.com/kyleu/loadtoad/app/lib/har"
 
 	"github.com/kyleu/loadtoad/app/lib/exec"
 	"github.com/kyleu/loadtoad/app/lib/filesystem"
+	"github.com/kyleu/loadtoad/app/lib/har"
 	"github.com/kyleu/loadtoad/app/lib/scripting"
 	"github.com/kyleu/loadtoad/app/lib/websocket"
 	"github.com/kyleu/loadtoad/app/loadtoad"

@@ -74,7 +74,7 @@ func socketConnect(
 		send("ok", &WorkflowMessage{Idx: i, Ctx: c})
 	}
 	go func() {
-		final, e := as.Services.LoadToad.Run(ctx, w, repls, ps.Logger, logF, errF, okF)
+		final, e := as.Services.LoadToad.RunWorkflow(ctx, w, repls, ps.Logger, logF, errF, okF)
 		if e != nil {
 			errF(-1, e)
 		}
