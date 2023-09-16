@@ -6,8 +6,10 @@ import (
 	"github.com/kyleu/loadtoad/app/util"
 	"github.com/kyleu/loadtoad/views/vpage"
 	"github.com/kyleu/loadtoad/views/vworkflow"
+	"github.com/pkg/errors"
 	"github.com/valyala/fasthttp"
 	"maps"
+	"strings"
 )
 
 var benchArgs = cutil.Args{
@@ -51,5 +53,25 @@ func WorkflowStartBench(rc *fasthttp.RequestCtx) {
 		p := w.WebPath() + "/connect"
 		page := &vworkflow.Start{Workflow: w, Entries: ents.Cleaned(), Replacements: repls, Channel: channel, Path: p}
 		return Render(rc, as, page, ps, "workflow", w.ID, "bench")
+	})
+}
+
+func WorkflowConnectBench(rc *fasthttp.RequestCtx) {
+	Act("workflow.connect.bench", rc, func(as *app.State, ps *cutil.PageState) (string, error) {
+		w, err := loadWorkflow(as, rc)
+		if err != nil {
+			return "", err
+		}
+		repls := w.Replacements
+		if string(rc.URI().QueryArgs().Peek("ok")) != util.BoolTrue {
+			_, argRes := collectArgs(benchArgs, w, rc)
+			if argRes.HasMissing() {
+				return "", errors.Errorf("missing arguments [%s]", strings.Join(argRes.Missing, ", "))
+			}
+			for k, v := range argRes.Values {
+				repls[k] = v
+			}
+		}
+		return socketConnectBench(ps.Context, w, repls, rc, as, ps)
 	})
 }

@@ -1,9 +1,11 @@
 package controller
 
 import (
+	"github.com/pkg/errors"
 	"github.com/valyala/fasthttp"
 	"maps"
 	"net/url"
+	"strings"
 
 	"github.com/kyleu/loadtoad/app"
 	"github.com/kyleu/loadtoad/app/controller/cutil"
@@ -48,5 +50,25 @@ func WorkflowStartRun(rc *fasthttp.RequestCtx) {
 		p := "/workflow/" + url.QueryEscape(w.ID) + "/connect"
 		page := &vworkflow.Start{Workflow: w, Entries: ents.Cleaned(), Replacements: repls, Channel: channel, Path: p}
 		return Render(rc, as, page, ps, "workflow", w.ID, "run")
+	})
+}
+
+func WorkflowConnectRun(rc *fasthttp.RequestCtx) {
+	Act("workflow.connect.run", rc, func(as *app.State, ps *cutil.PageState) (string, error) {
+		w, err := loadWorkflow(as, rc)
+		if err != nil {
+			return "", err
+		}
+		repls := w.Replacements
+		if string(rc.URI().QueryArgs().Peek("ok")) != util.BoolTrue {
+			_, argRes := collectArgs(nil, w, rc)
+			if argRes.HasMissing() {
+				return "", errors.Errorf("missing arguments [%s]", strings.Join(argRes.Missing, ", "))
+			}
+			for k, v := range argRes.Values {
+				repls[k] = v
+			}
+		}
+		return socketConnectRun(ps.Context, w, repls, rc, as, ps)
 	})
 }

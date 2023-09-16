@@ -3,6 +3,7 @@ package controller
 import (
 	"github.com/pkg/errors"
 	"github.com/valyala/fasthttp"
+	"strings"
 
 	"github.com/kyleu/loadtoad/app"
 	"github.com/kyleu/loadtoad/app/controller/cutil"
@@ -114,4 +115,17 @@ func WorkflowDelete(rc *fasthttp.RequestCtx) {
 		}
 		return FlashAndRedir(true, "Workflow deleted", "/workflow", rc, ps)
 	})
+}
+
+func collectArgs(args cutil.Args, w *loadtoad.Workflow, rc *fasthttp.RequestCtx) (cutil.Args, *cutil.ArgResults) {
+	for k, v := range w.Replacements {
+		if strings.Contains(v, "||") {
+			choices := util.StringSplitAndTrim(v, "||")
+			args = append(args, &cutil.Arg{Key: k, Title: k, Type: "string", Default: "", Choices: choices})
+		} else {
+			args = append(args, &cutil.Arg{Key: k, Title: k, Type: "string", Default: v})
+		}
+	}
+	args = append(args, &cutil.Arg{Key: "variables", Title: "Other Variables", Type: "textarea", Default: util.ToJSON(w.Variables)})
+	return args, cutil.CollectArgs(rc, args)
 }

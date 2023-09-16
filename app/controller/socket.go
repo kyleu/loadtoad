@@ -3,8 +3,6 @@ package controller
 import (
 	"context"
 	"fmt"
-	"strings"
-
 	"github.com/pkg/errors"
 	"github.com/valyala/fasthttp"
 
@@ -21,34 +19,50 @@ type WorkflowMessage struct {
 	Ctx any `json:"ctx,omitempty"`
 }
 
-func WorkflowConnect(rc *fasthttp.RequestCtx) {
-	Act("workflow.connect", rc, func(as *app.State, ps *cutil.PageState) (string, error) {
-		w, err := loadWorkflow(as, rc)
-		if err != nil {
-			return "", err
-		}
-
-		repls := w.Replacements
-		if string(rc.URI().QueryArgs().Peek("ok")) != util.BoolTrue {
-			_, argRes := collectArgs(nil, w, rc)
-			if argRes.HasMissing() {
-				return "", errors.Errorf("missing replacements [%s]", strings.Join(argRes.Missing, ", "))
-			}
-			for k, v := range argRes.Values {
-				repls[k] = v
-			}
-		}
-
-		return socketConnect(ps.Context, w, repls, rc, as, ps)
-	})
-}
-
-func socketConnect(
+func socketConnectRun(
 	ctx context.Context, w *loadtoad.Workflow, repls map[string]string, rc *fasthttp.RequestCtx, as *app.State, ps *cutil.PageState,
 ) (string, error) {
+	send, logF, errF, okF, err := wireSocketFuncs(rc, as, ps)
+	if err != nil {
+		return "", err
+	}
+	go func() {
+		final, e := as.Services.LoadToad.RunWorkflow(ctx, w, repls, ps.Logger, logF, errF, okF)
+		if e != nil {
+			errF(-1, e)
+		}
+		ps.Logger.Infof("[COMPLETE] %s", w.ID)
+		msg := map[string]any{"message": util.MicrosToMillis(final.Duration()), "status": "Success"}
+		send("complete", &WorkflowMessage{Idx: -1, Ctx: msg})
+	}()
+	return "", nil
+}
+
+func socketConnectBench(
+	ctx context.Context, w *loadtoad.Workflow, repls map[string]string, rc *fasthttp.RequestCtx, as *app.State, ps *cutil.PageState,
+) (string, error) {
+	send, logF, errF, okF, err := wireSocketFuncs(rc, as, ps)
+	if err != nil {
+		return "", err
+	}
+	go func() {
+		final, e := as.Services.LoadToad.BenchWorkflow(ctx, w, repls, ps.Logger, logF, errF, okF)
+		if e != nil {
+			errF(-1, e)
+		}
+		ps.Logger.Infof("[COMPLETE] %s", w.ID)
+		msg := map[string]any{"message": util.MicrosToMillis(final.Duration()), "status": "Success"}
+		send("complete", &WorkflowMessage{Idx: -1, Ctx: msg})
+	}()
+	return "", nil
+}
+
+func wireSocketFuncs(
+	rc *fasthttp.RequestCtx, as *app.State, ps *cutil.PageState,
+) (func(cmd string, x any), func(i int, s string), func(i int, err error), func(i int, w *loadtoad.WorkflowResult), error) {
 	channel := string(rc.URI().QueryArgs().Peek("channel"))
 	if channel == "" {
-		return "", errors.New("must provide channel")
+		return nil, nil, nil, nil, errors.New("must provide channel")
 	}
 	send := func(cmd string, x any) {
 		msg := &websocket.Message{Channel: channel, Cmd: cmd, Param: util.ToJSONBytes(x, true)}
@@ -57,7 +71,7 @@ func socketConnect(
 	err := as.Services.Socket.Upgrade(ps.Context, rc, channel, ps.Profile, ps.Logger) //nolint:contextcheck
 	if err != nil {
 		ps.Logger.Warnf("unable to upgrade connection to WebSocket: %s", err.Error())
-		return "", err
+		return nil, nil, nil, nil, err
 	}
 	logF := func(i int, s string) {
 		ps.Logger.Infof("[%d] [LOG] %s", i, s)
@@ -73,27 +87,5 @@ func socketConnect(
 		c := util.ValueMap{"table": vworkflow.RenderResultTable(i, w, ps), "result": res}
 		send("ok", &WorkflowMessage{Idx: i, Ctx: c})
 	}
-	go func() {
-		final, e := as.Services.LoadToad.RunWorkflow(ctx, w, repls, ps.Logger, logF, errF, okF)
-		if e != nil {
-			errF(-1, e)
-		}
-		ps.Logger.Infof("[COMPLETE] %s", w.ID)
-		msg := map[string]any{"message": util.MicrosToMillis(final.Duration()), "status": "Success"}
-		send("complete", &WorkflowMessage{Idx: -1, Ctx: msg})
-	}()
-	return "", nil
-}
-
-func collectArgs(args cutil.Args, w *loadtoad.Workflow, rc *fasthttp.RequestCtx) (cutil.Args, *cutil.ArgResults) {
-	for k, v := range w.Replacements {
-		if strings.Contains(v, "||") {
-			choices := util.StringSplitAndTrim(v, "||")
-			args = append(args, &cutil.Arg{Key: k, Title: k, Type: "string", Default: "", Choices: choices})
-		} else {
-			args = append(args, &cutil.Arg{Key: k, Title: k, Type: "string", Default: v})
-		}
-	}
-	args = append(args, &cutil.Arg{Key: "variables", Title: "Other Variables", Type: "textarea", Default: util.ToJSON(w.Variables)})
-	return args, cutil.CollectArgs(rc, args)
+	return send, logF, errF, okF, nil
 }

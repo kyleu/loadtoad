@@ -22,7 +22,7 @@ func HarConnect(rc *fasthttp.RequestCtx) {
 			return "", err
 		}
 		w := &loadtoad.Workflow{ID: ret.Key, Name: ret.Key, Tests: har.Selectors{{Har: ret.Key}}}
-		return socketConnect(ps.Context, w, map[string]string{}, rc, as, ps)
+		return socketConnectRun(ps.Context, w, map[string]string{}, rc, as, ps)
 	})
 }
 
