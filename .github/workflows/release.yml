@@ -3,14 +3,19 @@ name: release
 on:
   push:
     tags:
-      - 'DISABLED_v*'
+      - "*"
+    branches:
+      - main
+      - master
+  pull_request:
+    branches: [ main, master ]
 permissions:
   contents: write
 jobs:
   test:
     uses: "./.github/workflows/test.yml"
   build:
-    runs-on: "ubuntu-latest"
+    runs-on: "macos-latest"
     steps:
       - name: "Checkout"
         uses: "actions/checkout@v2"
