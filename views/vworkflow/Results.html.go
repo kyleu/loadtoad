@@ -324,45 +324,216 @@ func RenderResultTable(rIdx int, r *loadtoad.WorkflowResult, ps *cutil.PageState
 func StreamRenderResultModal(qw422016 *qt422016.Writer, key string, r *loadtoad.WorkflowResult, ps *cutil.PageState) {
 //line views/vworkflow/Results.html:81
 	qw422016.N().S(`
-  <h4>Request</h4>
-  `)
-//line views/vworkflow/Results.html:83
+  <ul class="accordion">
+    <li>
+      <input id="accordion-`)
+//line views/vworkflow/Results.html:84
+	qw422016.E().S(r.ID)
+//line views/vworkflow/Results.html:84
+	qw422016.N().S(`-request" type="checkbox" hidden />
+      <label for="accordion-`)
+//line views/vworkflow/Results.html:85
+	qw422016.E().S(r.ID)
+//line views/vworkflow/Results.html:85
+	qw422016.N().S(`-request">
+        <div class="right"><em>`)
+//line views/vworkflow/Results.html:86
+	qw422016.E().S(r.Entry.Request.Method)
+//line views/vworkflow/Results.html:86
+	qw422016.N().S(`</em></div>
+        `)
+//line views/vworkflow/Results.html:87
+	components.StreamExpandCollapse(qw422016, 3, ps)
+//line views/vworkflow/Results.html:87
+	qw422016.N().S(` Request
+      </label>
+      <div class="bd">`)
+//line views/vworkflow/Results.html:89
 	vhar.StreamRenderRequest(qw422016, key, r.Entry.Request, ps)
-//line views/vworkflow/Results.html:83
-	qw422016.N().S(`
-  <hr />
-  <h4>Response</h4>
-  `)
-//line views/vworkflow/Results.html:86
+//line views/vworkflow/Results.html:89
+	qw422016.N().S(`</div>
+    </li>
+    <li>
+      <input id="accordion-`)
+//line views/vworkflow/Results.html:92
+	qw422016.E().S(r.ID)
+//line views/vworkflow/Results.html:92
+	qw422016.N().S(`-response" type="checkbox" hidden />
+      <label for="accordion-`)
+//line views/vworkflow/Results.html:93
+	qw422016.E().S(r.ID)
+//line views/vworkflow/Results.html:93
+	qw422016.N().S(`-response">
+        <div class="right"><em>`)
+//line views/vworkflow/Results.html:94
+	qw422016.E().S(r.Response.StatusText)
+//line views/vworkflow/Results.html:94
+	qw422016.N().S(`</em></div>
+        `)
+//line views/vworkflow/Results.html:95
+	components.StreamExpandCollapse(qw422016, 3, ps)
+//line views/vworkflow/Results.html:95
+	qw422016.N().S(` Response
+      </label>
+      <div class="bd">`)
+//line views/vworkflow/Results.html:97
 	vhar.StreamRenderResponse(qw422016, key, r.Response, ps)
-//line views/vworkflow/Results.html:86
-	qw422016.N().S(`
+//line views/vworkflow/Results.html:97
+	qw422016.N().S(`</div>
+    </li>
+    <li>
+      <input id="accordion-`)
+//line views/vworkflow/Results.html:100
+	qw422016.E().S(r.ID)
+//line views/vworkflow/Results.html:100
+	qw422016.N().S(`-replacements" type="checkbox" hidden />
+      <label for="accordion-`)
+//line views/vworkflow/Results.html:101
+	qw422016.E().S(r.ID)
+//line views/vworkflow/Results.html:101
+	qw422016.N().S(`-replacements">
+        <div class="right"><em>`)
+//line views/vworkflow/Results.html:102
+	qw422016.N().D(len(r.Replacements))
+//line views/vworkflow/Results.html:102
+	qw422016.N().S(`</em></div>
+        `)
+//line views/vworkflow/Results.html:103
+	components.StreamExpandCollapse(qw422016, 3, ps)
+//line views/vworkflow/Results.html:103
+	qw422016.N().S(` Replacements
+      </label>
+      <div class="bd">
+        <table>
+          <tbody>
 `)
-//line views/vworkflow/Results.html:87
+//line views/vworkflow/Results.html:108
+	for k, v := range r.Replacements {
+//line views/vworkflow/Results.html:110
+		kt := k
+		if len(kt) > 64 {
+			kt = kt[:64] + "..."
+		}
+
+//line views/vworkflow/Results.html:114
+		qw422016.N().S(`            <tr>
+              <th title="`)
+//line views/vworkflow/Results.html:116
+		qw422016.E().S(k)
+//line views/vworkflow/Results.html:116
+		qw422016.N().S(`" class="shrink">`)
+//line views/vworkflow/Results.html:116
+		qw422016.E().S(kt)
+//line views/vworkflow/Results.html:116
+		qw422016.N().S(`</th>
+              <td>`)
+//line views/vworkflow/Results.html:117
+		qw422016.E().S(v)
+//line views/vworkflow/Results.html:117
+		qw422016.N().S(`</td>
+            </tr>
+`)
+//line views/vworkflow/Results.html:119
+	}
+//line views/vworkflow/Results.html:119
+	qw422016.N().S(`          </tbody>
+        </table>
+      </div>
+    </li>
+    <li>
+      <input id="accordion-`)
+//line views/vworkflow/Results.html:125
+	qw422016.E().S(r.ID)
+//line views/vworkflow/Results.html:125
+	qw422016.N().S(`-variables" type="checkbox" hidden />
+      <label for="accordion-`)
+//line views/vworkflow/Results.html:126
+	qw422016.E().S(r.ID)
+//line views/vworkflow/Results.html:126
+	qw422016.N().S(`-variables">
+        <div class="right"><em>`)
+//line views/vworkflow/Results.html:127
+	qw422016.N().D(len(r.Variables))
+//line views/vworkflow/Results.html:127
+	qw422016.N().S(`</em></div>
+        `)
+//line views/vworkflow/Results.html:128
+	components.StreamExpandCollapse(qw422016, 3, ps)
+//line views/vworkflow/Results.html:128
+	qw422016.N().S(` Variables
+      </label>
+      <div class="bd">
+        <table>
+          <tbody>
+`)
+//line views/vworkflow/Results.html:133
+	for k, v := range r.Variables {
+//line views/vworkflow/Results.html:135
+		kt := k
+		if len(kt) > 64 {
+			kt = kt[:64] + "..."
+		}
+		vt := fmt.Sprint(v)
+		if len(vt) > 64 {
+			vt = vt[:64] + "..."
+		}
+
+//line views/vworkflow/Results.html:143
+		qw422016.N().S(`            <tr>
+              <th title="`)
+//line views/vworkflow/Results.html:145
+		qw422016.E().S(k)
+//line views/vworkflow/Results.html:145
+		qw422016.N().S(`" class="shrink">`)
+//line views/vworkflow/Results.html:145
+		qw422016.E().S(kt)
+//line views/vworkflow/Results.html:145
+		qw422016.N().S(`</th>
+              <td title="`)
+//line views/vworkflow/Results.html:146
+		qw422016.E().V(v)
+//line views/vworkflow/Results.html:146
+		qw422016.N().S(`">`)
+//line views/vworkflow/Results.html:146
+		qw422016.E().S(vt)
+//line views/vworkflow/Results.html:146
+		qw422016.N().S(`</td>
+            </tr>
+`)
+//line views/vworkflow/Results.html:148
+	}
+//line views/vworkflow/Results.html:148
+	qw422016.N().S(`          </tbody>
+        </table>
+      </div>
+    </li>
+  </ul>
+`)
+//line views/vworkflow/Results.html:154
 }
 
-//line views/vworkflow/Results.html:87
+//line views/vworkflow/Results.html:154
 func WriteRenderResultModal(qq422016 qtio422016.Writer, key string, r *loadtoad.WorkflowResult, ps *cutil.PageState) {
-//line views/vworkflow/Results.html:87
+//line views/vworkflow/Results.html:154
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line views/vworkflow/Results.html:87
+//line views/vworkflow/Results.html:154
 	StreamRenderResultModal(qw422016, key, r, ps)
-//line views/vworkflow/Results.html:87
+//line views/vworkflow/Results.html:154
 	qt422016.ReleaseWriter(qw422016)
-//line views/vworkflow/Results.html:87
+//line views/vworkflow/Results.html:154
 }
 
-//line views/vworkflow/Results.html:87
+//line views/vworkflow/Results.html:154
 func RenderResultModal(key string, r *loadtoad.WorkflowResult, ps *cutil.PageState) string {
-//line views/vworkflow/Results.html:87
+//line views/vworkflow/Results.html:154
 	qb422016 := qt422016.AcquireByteBuffer()
-//line views/vworkflow/Results.html:87
+//line views/vworkflow/Results.html:154
 	WriteRenderResultModal(qb422016, key, r, ps)
-//line views/vworkflow/Results.html:87
+//line views/vworkflow/Results.html:154
 	qs422016 := string(qb422016.B)
-//line views/vworkflow/Results.html:87
+//line views/vworkflow/Results.html:154
 	qt422016.ReleaseByteBuffer(qb422016)
-//line views/vworkflow/Results.html:87
+//line views/vworkflow/Results.html:154
 	return qs422016
-//line views/vworkflow/Results.html:87
+//line views/vworkflow/Results.html:154
 }

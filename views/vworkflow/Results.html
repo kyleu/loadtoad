@@ -79,9 +79,76 @@
 {% endfunc %}
 
 {% func RenderResultModal(key string, r *loadtoad.WorkflowResult, ps *cutil.PageState) %}
-  <h4>Request</h4>
-  {%= vhar.RenderRequest(key, r.Entry.Request, ps) %}
-  <hr />
-  <h4>Response</h4>
-  {%= vhar.RenderResponse(key, r.Response, ps) %}
+  <ul class="accordion">
+    <li>
+      <input id="accordion-{%s r.ID %}-request" type="checkbox" hidden />
+      <label for="accordion-{%s r.ID %}-request">
+        <div class="right"><em>{%s r.Entry.Request.Method %}</em></div>
+        {%= components.ExpandCollapse(3, ps) %} Request
+      </label>
+      <div class="bd">{%= vhar.RenderRequest(key, r.Entry.Request, ps) %}</div>
+    </li>
+    <li>
+      <input id="accordion-{%s r.ID %}-response" type="checkbox" hidden />
+      <label for="accordion-{%s r.ID %}-response">
+        <div class="right"><em>{%s r.Response.StatusText %}</em></div>
+        {%= components.ExpandCollapse(3, ps) %} Response
+      </label>
+      <div class="bd">{%= vhar.RenderResponse(key, r.Response, ps) %}</div>
+    </li>
+    <li>
+      <input id="accordion-{%s r.ID %}-replacements" type="checkbox" hidden />
+      <label for="accordion-{%s r.ID %}-replacements">
+        <div class="right"><em>{%d len(r.Replacements) %}</em></div>
+        {%= components.ExpandCollapse(3, ps) %} Replacements
+      </label>
+      <div class="bd">
+        <table>
+          <tbody>
+            {%- for k, v := range r.Replacements -%}
+            {%- code
+              kt := k
+              if len(kt) > 64 {
+                kt = kt[:64] + "..."
+              }
+            -%}
+            <tr>
+              <th title="{%s k %}" class="shrink">{%s kt %}</th>
+              <td>{%s v %}</td>
+            </tr>
+            {%- endfor -%}
+          </tbody>
+        </table>
+      </div>
+    </li>
+    <li>
+      <input id="accordion-{%s r.ID %}-variables" type="checkbox" hidden />
+      <label for="accordion-{%s r.ID %}-variables">
+        <div class="right"><em>{%d len(r.Variables) %}</em></div>
+        {%= components.ExpandCollapse(3, ps) %} Variables
+      </label>
+      <div class="bd">
+        <table>
+          <tbody>
+            {%- for k, v := range r.Variables -%}
+            {%- code
+              kt := k
+              if len(kt) > 64 {
+                kt = kt[:64] + "..."
+              }
+              vt := fmt.Sprint(v)
+              if len(vt) > 64 {
+                vt = vt[:64] + "..."
+              }
+            -%}
+            <tr>
+              <th title="{%s k %}" class="shrink">{%s kt %}</th>
+              <td title="{%v v %}">{%s vt %}</td>
+            </tr>
+            {%- endfor -%}
+          </tbody>
+        </table>
+      </div>
+    </li>
+  </ul>
 {% endfunc %}
