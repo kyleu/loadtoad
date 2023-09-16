@@ -188,61 +188,83 @@ func streamentryPlaceholder(qw422016 *qt422016.Writer, idx int, ent *har.Entry, 
 	qw422016.N().S(`</h3>
     <div class="clear"></div>
     <div class="mts details">
-      <em>pending...</em>
+      <div>
+        <table class="min-200">
+          <thead>
+          <tr>
+            <th class="shrink"></th>
+            <th class="shrink">Old</th>
+            <th class="shrink">New</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <th>Status</th>
+            <td>TODO</td>
+            <td><em>pending</em></td>
+          </tr>
+          <tr>
+            <th>Duration</th>
+            <td>TODO</td>
+            <td><em>pending</em></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
     <div class="logs">
     </div>
   </div>
   <div id="modal-entry-`)
-//line views/vworkflow/Start.html:75
+//line views/vworkflow/Start.html:97
 	qw422016.N().D(idx)
-//line views/vworkflow/Start.html:75
+//line views/vworkflow/Start.html:97
 	qw422016.N().S(`" class="modal" style="display: none;">
     <a class="backdrop" href="#"></a>
     <div class="modal-content">
       <div class="modal-header">
         <a href="#" class="modal-close">×</a>
         <h2>`)
-//line views/vworkflow/Start.html:80
+//line views/vworkflow/Start.html:102
 	qw422016.E().S(ent.String())
-//line views/vworkflow/Start.html:80
+//line views/vworkflow/Start.html:102
 	qw422016.N().S(`</h2>
       </div>
       <div class="modal-body">
         `)
-//line views/vworkflow/Start.html:83
+//line views/vworkflow/Start.html:105
 	vhar.StreamRenderEntry(qw422016, fmt.Sprintf("%d", idx), ent, ps)
-//line views/vworkflow/Start.html:83
+//line views/vworkflow/Start.html:105
 	qw422016.N().S(`
       </div>
     </div>
   </div>
 `)
-//line views/vworkflow/Start.html:87
+//line views/vworkflow/Start.html:109
 }
 
-//line views/vworkflow/Start.html:87
+//line views/vworkflow/Start.html:109
 func writeentryPlaceholder(qq422016 qtio422016.Writer, idx int, ent *har.Entry, ps *cutil.PageState) {
-//line views/vworkflow/Start.html:87
+//line views/vworkflow/Start.html:109
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line views/vworkflow/Start.html:87
+//line views/vworkflow/Start.html:109
 	streamentryPlaceholder(qw422016, idx, ent, ps)
-//line views/vworkflow/Start.html:87
+//line views/vworkflow/Start.html:109
 	qt422016.ReleaseWriter(qw422016)
-//line views/vworkflow/Start.html:87
+//line views/vworkflow/Start.html:109
 }
 
-//line views/vworkflow/Start.html:87
+//line views/vworkflow/Start.html:109
 func entryPlaceholder(idx int, ent *har.Entry, ps *cutil.PageState) string {
-//line views/vworkflow/Start.html:87
+//line views/vworkflow/Start.html:109
 	qb422016 := qt422016.AcquireByteBuffer()
-//line views/vworkflow/Start.html:87
+//line views/vworkflow/Start.html:109
 	writeentryPlaceholder(qb422016, idx, ent, ps)
-//line views/vworkflow/Start.html:87
+//line views/vworkflow/Start.html:109
 	qs422016 := string(qb422016.B)
-//line views/vworkflow/Start.html:87
+//line views/vworkflow/Start.html:109
 	qt422016.ReleaseByteBuffer(qb422016)
-//line views/vworkflow/Start.html:87
+//line views/vworkflow/Start.html:109
 	return qs422016
-//line views/vworkflow/Start.html:87
+//line views/vworkflow/Start.html:109
 }

@@ -115,11 +115,3 @@ func WorkflowDelete(rc *fasthttp.RequestCtx) {
 		return FlashAndRedir(true, "Workflow deleted", "/workflow", rc, ps)
 	})
 }
-
-func loadWorkflow(as *app.State, rc *fasthttp.RequestCtx) (*loadtoad.Workflow, error) {
-	key, err := cutil.RCRequiredString(rc, "key", true)
-	if err != nil {
-		return nil, err
-	}
-	return as.Services.LoadToad.LoadWorkflow(key)
-}

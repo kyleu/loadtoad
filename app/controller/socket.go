@@ -30,7 +30,7 @@ func WorkflowConnect(rc *fasthttp.RequestCtx) {
 
 		repls := w.Replacements
 		if string(rc.URI().QueryArgs().Peek("ok")) != util.BoolTrue {
-			_, argRes := collectArgs(w, rc)
+			_, argRes := collectArgs(nil, w, rc)
 			if argRes.HasMissing() {
 				return "", errors.Errorf("missing replacements [%s]", strings.Join(argRes.Missing, ", "))
 			}
@@ -85,8 +85,7 @@ func socketConnect(
 	return "", nil
 }
 
-func collectArgs(w *loadtoad.Workflow, rc *fasthttp.RequestCtx) (cutil.Args, *cutil.ArgResults) {
-	var args cutil.Args
+func collectArgs(args cutil.Args, w *loadtoad.Workflow, rc *fasthttp.RequestCtx) (cutil.Args, *cutil.ArgResults) {
 	for k, v := range w.Replacements {
 		if strings.Contains(v, "||") {
 			choices := util.StringSplitAndTrim(v, "||")
