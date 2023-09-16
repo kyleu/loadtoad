@@ -1,9 +1,10 @@
 package controller
 
 import (
+	"strings"
+
 	"github.com/pkg/errors"
 	"github.com/valyala/fasthttp"
-	"strings"
 
 	"github.com/kyleu/loadtoad/app"
 	"github.com/kyleu/loadtoad/app/controller/cutil"
