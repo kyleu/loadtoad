@@ -117,44 +117,58 @@ func StreamTable(qw422016 *qt422016.Writer, workflows loadtoad.Workflows, ps *cu
 		qw422016.N().D(len(w.Replacements))
 //line views/vworkflow/List.html:37
 		qw422016.N().S(`</td>
-        <td>`)
-//line views/vworkflow/List.html:38
-		qw422016.N().D(len(w.Scripts))
-//line views/vworkflow/List.html:38
-		qw422016.N().S(`</td>
+        <td>
+`)
+//line views/vworkflow/List.html:39
+		for _, scr := range w.Scripts {
+//line views/vworkflow/List.html:39
+			qw422016.N().S(`          <a href="/admin/scripting/`)
+//line views/vworkflow/List.html:40
+			qw422016.N().U(scr)
+//line views/vworkflow/List.html:40
+			qw422016.N().S(`">`)
+//line views/vworkflow/List.html:40
+			qw422016.E().S(scr)
+//line views/vworkflow/List.html:40
+			qw422016.N().S(`</a>
+`)
+//line views/vworkflow/List.html:41
+		}
+//line views/vworkflow/List.html:41
+		qw422016.N().S(`        </td>
       </tr>
 `)
-//line views/vworkflow/List.html:40
+//line views/vworkflow/List.html:44
 	}
-//line views/vworkflow/List.html:40
+//line views/vworkflow/List.html:44
 	qw422016.N().S(`    </tbody>
   </table>
 `)
-//line views/vworkflow/List.html:43
+//line views/vworkflow/List.html:47
 }
 
-//line views/vworkflow/List.html:43
+//line views/vworkflow/List.html:47
 func WriteTable(qq422016 qtio422016.Writer, workflows loadtoad.Workflows, ps *cutil.PageState) {
-//line views/vworkflow/List.html:43
+//line views/vworkflow/List.html:47
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line views/vworkflow/List.html:43
+//line views/vworkflow/List.html:47
 	StreamTable(qw422016, workflows, ps)
-//line views/vworkflow/List.html:43
+//line views/vworkflow/List.html:47
 	qt422016.ReleaseWriter(qw422016)
-//line views/vworkflow/List.html:43
+//line views/vworkflow/List.html:47
 }
 
-//line views/vworkflow/List.html:43
+//line views/vworkflow/List.html:47
 func Table(workflows loadtoad.Workflows, ps *cutil.PageState) string {
-//line views/vworkflow/List.html:43
+//line views/vworkflow/List.html:47
 	qb422016 := qt422016.AcquireByteBuffer()
-//line views/vworkflow/List.html:43
+//line views/vworkflow/List.html:47
 	WriteTable(qb422016, workflows, ps)
-//line views/vworkflow/List.html:43
+//line views/vworkflow/List.html:47
 	qs422016 := string(qb422016.B)
-//line views/vworkflow/List.html:43
+//line views/vworkflow/List.html:47
 	qt422016.ReleaseByteBuffer(qb422016)
-//line views/vworkflow/List.html:43
+//line views/vworkflow/List.html:47
 	return qs422016
-//line views/vworkflow/List.html:43
+//line views/vworkflow/List.html:47
 }
