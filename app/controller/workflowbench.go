@@ -54,7 +54,7 @@ func WorkflowStartBench(rc *fasthttp.RequestCtx) {
 		ps.Title = "Workflow " + w.Title()
 		ps.Data = w
 		channel := "run-" + util.RandomString(16)
-		p := w.WebPath() + "/connect"
+		p := w.WebPath() + "/bench/connect"
 		page := &vworkflow.Start{Workflow: w, Entries: ents.Cleaned(), Replacements: repls, Channel: channel, Path: p}
 		return Render(rc, as, page, ps, "workflow", w.ID, "bench")
 	})

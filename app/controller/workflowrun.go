@@ -3,7 +3,6 @@ package controller
 import (
 	"context"
 	"maps"
-	"net/url"
 	"strings"
 
 	"github.com/pkg/errors"
@@ -50,7 +49,7 @@ func WorkflowStartRun(rc *fasthttp.RequestCtx) {
 		ps.Title = "Workflow " + w.Title()
 		ps.Data = w
 		channel := "run-" + util.RandomString(16)
-		p := "/workflow/" + url.QueryEscape(w.ID) + "/connect"
+		p := w.WebPath() + "/run/connect"
 		page := &vworkflow.Start{Workflow: w, Entries: ents.Cleaned(), Replacements: repls, Channel: channel, Path: p}
 		return Render(rc, as, page, ps, "workflow", w.ID, "run")
 	})

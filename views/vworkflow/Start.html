@@ -5,6 +5,7 @@
   "github.com/kyleu/loadtoad/app/controller/cutil"
   "github.com/kyleu/loadtoad/app/lib/har"
   "github.com/kyleu/loadtoad/app/loadtoad"
+  "github.com/kyleu/loadtoad/app/util"
   "github.com/kyleu/loadtoad/views/components"
   "github.com/kyleu/loadtoad/views/layout"
   "github.com/kyleu/loadtoad/views/vhar"
@@ -79,12 +80,12 @@
           <tbody>
           <tr>
             <th>Status</th>
-            <td>TODO</td>
+            <td>{%d ent.Response.Status %}</td>
             <td><em>pending</em></td>
           </tr>
           <tr>
             <th>Duration</th>
-            <td>TODO</td>
+            <td>{%s util.MicrosToMillis(ent.PageTimings.Elapsed() * 1000) %}</td>
             <td><em>pending</em></td>
           </tr>
           </tbody>
