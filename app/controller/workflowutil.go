@@ -2,6 +2,8 @@ package controller
 
 import (
 	"fmt"
+	"slices"
+	"strings"
 
 	"github.com/pkg/errors"
 	"github.com/valyala/fasthttp"
@@ -19,6 +21,11 @@ type WorkflowMessage struct {
 	Ctx any `json:"ctx,omitempty"`
 }
 
+var benchArgs = cutil.Args{
+	{Key: "concurrency", Title: "Concurrent Runners", Description: "The number of workflow runners that will execute at once", Default: "1"},
+	{Key: "count", Title: "Test Count (per runner)", Description: "The number of workflow runs that will execute for each runner", Default: "1"},
+}
+
 func loadWorkflow(as *app.State, rc *fasthttp.RequestCtx) (*loadtoad.Workflow, error) {
 	key, err := cutil.RCRequiredString(rc, "key", true)
 	if err != nil {
@@ -32,28 +39,23 @@ func workflowFromForm(w *loadtoad.Workflow, rc *fasthttp.RequestCtx) error {
 	if err != nil {
 		return err
 	}
-
 	w.Name = frm.GetStringOpt("name")
-
 	err = util.FromJSON([]byte(frm.GetStringOpt("tests")), &w.Tests)
 	if err != nil {
 		return err
 	}
-
 	repls := map[string]string{}
 	err = util.FromJSON([]byte(frm.GetStringOpt("replacements")), &repls)
 	if err != nil {
 		return err
 	}
 	w.Replacements = repls
-
 	vars := util.ValueMap{}
 	err = util.FromJSON([]byte(frm.GetStringOpt("variables")), &vars)
 	if err != nil {
 		return err
 	}
 	w.Variables = vars
-
 	err = util.FromJSON([]byte(frm.GetStringOpt("scripts")), &w.Scripts)
 	if err != nil {
 		return err
@@ -92,4 +94,21 @@ func wireSocketFuncs(
 		send("ok", &WorkflowMessage{Idx: i, Ctx: c})
 	}
 	return send, logF, errF, okF, nil
+}
+
+func collectArgs(key string, w *loadtoad.Workflow, rc *fasthttp.RequestCtx) *cutil.ArgResults {
+	var args cutil.Args
+	if key == "bench" {
+		args = slices.Clone(benchArgs)
+	}
+	for k, v := range w.Replacements {
+		if strings.Contains(v, "||") {
+			choices := util.StringSplitAndTrim(v, "||")
+			args = append(args, &cutil.Arg{Key: k, Title: k, Type: "string", Default: "", Choices: choices})
+		} else {
+			args = append(args, &cutil.Arg{Key: k, Title: k, Type: "string", Default: v})
+		}
+	}
+	args = append(args, &cutil.Arg{Key: "variables", Title: "Other Variables", Type: "textarea", Default: util.ToJSON(w.Variables)})
+	return cutil.CollectArgs(rc, args)
 }

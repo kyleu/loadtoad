@@ -13,7 +13,7 @@ func loadtoadMenu(s *loadtoad.Service, logger util.Logger) *menu.Item {
 	workflowKids := lo.Map(w, func(n *loadtoad.Workflow, _ int) *menu.Item {
 		return &menu.Item{Key: n.ID, Title: n.Title(), Icon: "sitemap", Route: n.WebPath(), Children: menu.Items{
 			{Key: "run", Title: "Run", Icon: "file-code", Route: n.WebPath() + "/run"},
-			{Key: "bench", Title: "Benchmark", Icon: "laptop-code", Route: n.WebPath() + "/benchmark"},
+			{Key: "bench", Title: "Benchmark", Icon: "laptop-code", Route: n.WebPath() + "/bench"},
 		}}
 	})
 	wfDesc := "Workflows for Load Toad!"
