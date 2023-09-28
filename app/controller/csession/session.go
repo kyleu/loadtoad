@@ -1,4 +1,4 @@
-// Content managed by Project Forge, see [projectforge.md] for details.
+// Package csession - Content managed by Project Forge, see [projectforge.md] for details.
 package csession
 
 import (
@@ -10,7 +10,6 @@ import (
 )
 
 const (
-	WebAuthKey  = "auth"
 	WebFlashKey = "flash"
 	ReferKey    = "refer"
 )
