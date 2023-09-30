@@ -22,7 +22,7 @@
     <div class="search-image" style="display: none;"><svg><use xlink:href="#svg-searchbox" /></svg></div>
   </form>
   {%- endif -%}
-  <a class="profile" href="{%s ps.ProfilePath %}">
+  <a class="profile" title="Settings" href="{%s ps.ProfilePath %}">
     {%= components.SVGRef(`profile`, 24, 24, ``, ps) %}
   </a>
   {%- if !ps.HideMenu -%}

@@ -383,13 +383,13 @@ func streamshowEntries(qw422016 *qt422016.Writer, ents har.Entries, ps *cutil.Pa
 				qw422016.N().S(`
           <div class="clear"></div>
         </label>
-        <div class="bd">
+        <div class="bd-animated"><div><div>
           `)
 //line views/vworkflow/Detail.html:139
 				vhar.StreamRenderEntry(qw422016, key, e, ps)
 //line views/vworkflow/Detail.html:139
 				qw422016.N().S(`
-        </div>
+        </div></div></div>
         `)
 //line views/vworkflow/Detail.html:141
 				vhar.StreamRenderEntryModals(qw422016, key, e, false)
