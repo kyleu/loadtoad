@@ -347,7 +347,7 @@ func StreamRenderResultModal(qw422016 *qt422016.Writer, key string, r *loadtoad.
 //line views/vworkflow/Results.html:87
 	qw422016.N().S(` Request
       </label>
-      <div class="bd-animated"><div><div>`)
+      <div class="bd"><div><div>`)
 //line views/vworkflow/Results.html:89
 	vhar.StreamRenderRequest(qw422016, key, r.Entry.Request, ps)
 //line views/vworkflow/Results.html:89
@@ -375,7 +375,7 @@ func StreamRenderResultModal(qw422016 *qt422016.Writer, key string, r *loadtoad.
 //line views/vworkflow/Results.html:95
 	qw422016.N().S(` Response
       </label>
-      <div class="bd-animated"><div><div>`)
+      <div class="bd"><div><div>`)
 //line views/vworkflow/Results.html:97
 	vhar.StreamRenderResponse(qw422016, key, r.Response, ps)
 //line views/vworkflow/Results.html:97
@@ -403,7 +403,7 @@ func StreamRenderResultModal(qw422016 *qt422016.Writer, key string, r *loadtoad.
 //line views/vworkflow/Results.html:103
 	qw422016.N().S(` Replacements
       </label>
-      <div class="bd-animated"><div><div>
+      <div class="bd"><div><div>
         <table>
           <tbody>
 `)
@@ -462,7 +462,7 @@ func StreamRenderResultModal(qw422016 *qt422016.Writer, key string, r *loadtoad.
 //line views/vworkflow/Results.html:128
 	qw422016.N().S(` Variables
       </label>
-      <div class="bd-animated"><div><div>
+      <div class="bd"><div><div>
         <table>
           <tbody>
 `)

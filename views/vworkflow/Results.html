@@ -86,7 +86,7 @@
         <div class="right"><em>{%s r.Entry.Request.Method %}</em></div>
         {%= components.ExpandCollapse(3, ps) %} Request
       </label>
-      <div class="bd-animated"><div><div>{%= vhar.RenderRequest(key, r.Entry.Request, ps) %}</div></div></div>
+      <div class="bd"><div><div>{%= vhar.RenderRequest(key, r.Entry.Request, ps) %}</div></div></div>
     </li>
     <li>
       <input id="accordion-{%s r.ID %}-response" type="checkbox" hidden />
@@ -94,7 +94,7 @@
         <div class="right"><em>{%s r.Response.StatusText %}</em></div>
         {%= components.ExpandCollapse(3, ps) %} Response
       </label>
-      <div class="bd-animated"><div><div>{%= vhar.RenderResponse(key, r.Response, ps) %}</div></div></div>
+      <div class="bd"><div><div>{%= vhar.RenderResponse(key, r.Response, ps) %}</div></div></div>
     </li>
     <li>
       <input id="accordion-{%s r.ID %}-replacements" type="checkbox" hidden />
@@ -102,7 +102,7 @@
         <div class="right"><em>{%d len(r.Replacements) %}</em></div>
         {%= components.ExpandCollapse(3, ps) %} Replacements
       </label>
-      <div class="bd-animated"><div><div>
+      <div class="bd"><div><div>
         <table>
           <tbody>
             {%- for k, v := range r.Replacements -%}
@@ -127,7 +127,7 @@
         <div class="right"><em>{%d len(r.Variables) %}</em></div>
         {%= components.ExpandCollapse(3, ps) %} Variables
       </label>
-      <div class="bd-animated"><div><div>
+      <div class="bd"><div><div>
         <table>
           <tbody>
             {%- for k, v := range r.Variables -%}
