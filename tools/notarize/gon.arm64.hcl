@@ -3,7 +3,7 @@ source = ["./build/dist/darwin_darwin_arm64/loadtoad"]
 bundle_id = "dev.kyleu.loadtoad"
 
 notarize {
-  path = "./build/dist/loadtoad_0.1.1_darwin_arm64_desktop.dmg"
+  path = "./build/dist/loadtoad_0.1.2_darwin_arm64_desktop.dmg"
   bundle_id = "dev.kyleu.loadtoad"
 }
 
@@ -17,10 +17,10 @@ sign {
 }
 
 dmg {
-  output_path = "./build/dist/loadtoad_0.1.1_darwin_arm64.dmg"
+  output_path = "./build/dist/loadtoad_0.1.2_darwin_arm64.dmg"
   volume_name = "Load Toad"
 }
 
 zip {
-  output_path = "./build/dist/loadtoad_0.1.1_darwin_arm64_notarized.zip"
+  output_path = "./build/dist/loadtoad_0.1.2_darwin_arm64_notarized.zip"
 }
