@@ -17,7 +17,7 @@ brews:
       name: "Kyle U"
       email: "loadtoad@kyleu.com"
     folder: Formula
-    homepage: "https://github.com/kyleu/loadtoad"
+    homepage: "https://loadtoad.kyleu.dev"
     description: "Load Toad helps you test your web application using HTTP Archive (.har) files"
     license: "CC0"
     skip_upload: "false"
@@ -57,7 +57,7 @@ release:
   draft: false
   header: |
     ## {{ .Version }} ({{ .Date }})
-    See https://github.com/kyleu/loadtoad for download links and documentation
+    See https://loadtoad.kyleu.dev for download links and documentation
     ## Main downloads
     - [Linux Intel 64 bit](https://github.com/kyleu/loadtoad/releases/download/{{ .Tag }}/loadtoad_{{ .Version }}_linux_amd64.zip)
     - [MacOS Universal](https://github.com/kyleu/loadtoad/releases/download/{{ .Tag }}/loadtoad_{{ .Version }}_darwin_all.zip)

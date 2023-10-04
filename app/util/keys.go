@@ -7,7 +7,7 @@ const (
 	AppSummary = "Load testing from HAR files"
 	AppPort    = 15550
 	AppContact = "Kyle U <loadtoad@kyleu.com>"
-	AppURL     = "https://github.com/kyleu/loadtoad"
+	AppURL     = "https://loadtoad.kyleu.dev"
 	AppSource  = "https://github.com/kyleu/loadtoad"
 	AppLegal   = `Built by <a href="mailto:loadtoad@kyleu.com">Kyle U</a>, all rights reserved`
 

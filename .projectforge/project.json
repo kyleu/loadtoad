@@ -32,7 +32,7 @@
     "authorName": "Kyle U",
     "authorEmail": "loadtoad@kyleu.com",
     "license": "CC0",
-    "homepage": "https://github.com/kyleu/loadtoad",
+    "homepage": "https://loadtoad.kyleu.dev",
     "sourcecode": "https://github.com/kyleu/loadtoad",
     "summary": "Load testing from HAR files",
     "description": "Load Toad helps you test your web application using HTTP Archive (.har) files",

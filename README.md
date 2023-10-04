@@ -3,7 +3,7 @@
 
 Load testing from HAR files
 
-- https://github.com/kyleu/loadtoad
+- https://loadtoad.kyleu.dev
 - https://github.com/kyleu/loadtoad
 
 Load Toad was built with help from [Project Forge](https://projectforge.dev)
