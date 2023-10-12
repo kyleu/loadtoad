@@ -1,6 +1,16 @@
 # Content managed by Project Forge, see [projectforge.md] for details.
 name: playwright
-on: push
+on:
+  push:
+    tags:
+      - "*"
+    branches:
+      - main
+      - master
+  pull_request:
+    branches:
+      - main
+      - master
 permissions:
   contents: write
 jobs:
