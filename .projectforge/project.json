@@ -14,6 +14,7 @@
     "ios",
     "marketing",
     "notarize",
+    "playwright",
     "process",
     "scripting",
     "search",
@@ -36,6 +37,7 @@
     "sourcecode": "https://github.com/kyleu/loadtoad",
     "summary": "Load testing from HAR files",
     "description": "Load Toad helps you test your web application using HTTP Archive (.har) files",
+    "ci": "all",
     "bundle": "dev.kyleu.loadtoad",
     "signingIdentity": "Developer ID Application: Kyle Unverferth (C6S478FYLD)",
     "notarizeEmail": "kyle@kyleu.com",
@@ -82,6 +84,7 @@
     }
   },
   "build": {
+    "changelog": true,
     "testsFail": true,
     "desktop": true,
     "notarize": true,

@@ -1,9 +1,6 @@
 # Content managed by Project Forge, see [projectforge.md] for details.
 name: release
-on:
-  push:
-    tags:
-      - 'DISABLED_v*'
+on: push
 permissions:
   contents: write
 jobs:

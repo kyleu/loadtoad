@@ -14,6 +14,7 @@ The following modules were used to build this project:
 - [ios](./doc/module/ios.md)
 - [marketing](./doc/module/marketing.md)
 - [notarize](./doc/module/notarize.md)
+- [playwright](./doc/module/playwright.md)
 - [process](./doc/module/process.md)
 - [scripting](./doc/module/scripting.md)
 - [search](./doc/module/search.md)
