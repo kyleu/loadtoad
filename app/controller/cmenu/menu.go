@@ -12,14 +12,14 @@ import (
 )
 
 func MenuFor(
-	ctx context.Context, isAuthed bool, isAdmin bool, profile *user.Profile, params filter.ParamSet, as *app.State, logger util.Logger, //nolint:revive
+		ctx context.Context, isAuthed bool, isAdmin bool, profile *user.Profile, params filter.ParamSet, as *app.State, logger util.Logger, //nolint:revive
 ) (menu.Items, any, error) {
 	var ret menu.Items
 	var data any
 	// $PF_SECTION_START(routes_start)$
 	// $PF_SECTION_END(routes_start)$
 	// $PF_SECTION_START(routes_end)$
-	ret = append(ret, harMenu(as.Services.Har, logger), menu.Separator, loadtoadMenu(as.Services.LoadToad, logger))
+	ret = append(ret, harMenu(as.Services.Har), menu.Separator, loadtoadMenu(as.Services.LoadToad, logger))
 	admin := &menu.Item{Key: "admin", Title: "Settings", Description: "System-wide settings and preferences", Icon: "cog", Route: "/admin"}
 	if len(as.Services.Script.ListScripts(logger)) > 0 {
 		ret = append(ret, menu.Separator, scriptingMenu(as.Services.Script, logger))
