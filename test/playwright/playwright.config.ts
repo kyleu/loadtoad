@@ -26,7 +26,7 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: "html",
   use: {
-    baseURL: process.env.TEST_URL || "http://127.0.0.1:40000",
+    baseURL: process.env.TEST_URL || "http://127.0.0.1:15550",
   },
   projects: [
     prj("chrome", "Desktop Chrome", "chrome", 1280, 720, false, false),
