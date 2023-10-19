@@ -44,8 +44,8 @@ export default defineConfig({
     prj("safari.mobile.landscape.dark", "iPhone 12 landscape", "", 750, 340, true, false),
   ],
   webServer: {
-    command: "../../build/release/projectforge",
-    url: "http://127.0.0.1:40000",
+    command: "../../build/release/loadtoad",
+    url: "http://127.0.0.1:15550",
     reuseExistingServer: !process.env.CI,
     stdout: "pipe",
     stderr: "pipe",
