@@ -16,9 +16,7 @@ func MenuFor(
 ) (menu.Items, any, error) {
 	var ret menu.Items
 	var data any
-	// $PF_SECTION_START(routes_start)$
-	// $PF_SECTION_END(routes_start)$
-	// $PF_SECTION_START(routes_end)$
+	// $PF_SECTION_START(routes)$
 	ret = append(ret, harMenu(as.Services.Har), menu.Separator, loadtoadMenu(as.Services.LoadToad, logger))
 	admin := &menu.Item{Key: "admin", Title: "Settings", Description: "System-wide settings and preferences", Icon: "cog", Route: "/admin"}
 	if len(as.Services.Script.ListScripts(logger)) > 0 {
@@ -30,6 +28,6 @@ func MenuFor(
 	ret = append(ret, menu.Separator, admin)
 	const aboutDesc = "Get assistance and advice for using " + util.AppName
 	ret = append(ret, &menu.Item{Key: "about", Title: "About", Description: aboutDesc, Icon: "question", Route: "/about"})
-	// $PF_SECTION_END(routes_end)$
+	// $PF_SECTION_END(routes)$
 	return ret, data, nil
 }
