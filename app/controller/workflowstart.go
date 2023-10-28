@@ -60,12 +60,12 @@ func loadWorkflowWithRepls(key string, as *app.State, rc *fasthttp.RequestCtx) (
 		if argRes.HasMissing() {
 			return w, nil, argRes, nil
 		}
-		varsStr := argRes.Values["variables"]
+		varsStr := argRes.Values.GetStringOpt("variables")
 		err = util.FromJSON([]byte(varsStr), &w.Variables)
 		if err != nil {
 			return w, repls, argRes, err
 		}
-		repls = maps.Clone(argRes.Values)
+		repls = maps.Clone(argRes.Values.ToStringMap())
 		delete(repls, "variables")
 	}
 	return w, repls, nil, err

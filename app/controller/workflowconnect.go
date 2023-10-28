@@ -34,7 +34,8 @@ func workflowConnect(rc *fasthttp.RequestCtx, key string) func(as *app.State, ps
 			if argRes.HasMissing() {
 				return "", errors.Errorf("missing arguments [%s]", strings.Join(argRes.Missing, ", "))
 			}
-			for k, v := range argRes.Values {
+			for k := range argRes.Values {
+				v := argRes.Values.GetStringOpt(k)
 				switch k {
 				case "count", "concurrency":
 				// noop
