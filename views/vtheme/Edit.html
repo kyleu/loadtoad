@@ -5,6 +5,7 @@
   "github.com/kyleu/loadtoad/app/lib/theme"
   "github.com/kyleu/loadtoad/app/util"
   "github.com/kyleu/loadtoad/views/components"
+  "github.com/kyleu/loadtoad/views/components/edit"
   "github.com/kyleu/loadtoad/views/layout"
 ) %}
 
@@ -31,7 +32,7 @@
       <div class="overflow full-width">
         <table class="mt expanded">
           <tbody>
-            {%= components.TableInput("key", "", "Key", p.Theme.Key, 5) %}
+            {%= edit.StringTable("key", "", "Key", p.Theme.Key, 5) %}
           </tbody>
         </table>
       </div>

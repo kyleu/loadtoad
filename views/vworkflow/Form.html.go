@@ -11,23 +11,24 @@ import (
 	"github.com/kyleu/loadtoad/app/loadtoad"
 	"github.com/kyleu/loadtoad/app/util"
 	"github.com/kyleu/loadtoad/views/components"
+	"github.com/kyleu/loadtoad/views/components/edit"
 	"github.com/kyleu/loadtoad/views/layout"
 )
 
-//line views/vworkflow/Form.html:10
+//line views/vworkflow/Form.html:11
 import (
 	qtio422016 "io"
 
 	qt422016 "github.com/valyala/quicktemplate"
 )
 
-//line views/vworkflow/Form.html:10
+//line views/vworkflow/Form.html:11
 var (
 	_ = qtio422016.Copy
 	_ = qt422016.AcquireByteBuffer
 )
 
-//line views/vworkflow/Form.html:10
+//line views/vworkflow/Form.html:11
 type Form struct {
 	layout.Basic
 	Workflow *loadtoad.Workflow
@@ -35,12 +36,12 @@ type Form struct {
 	Scripts  []string
 }
 
-//line views/vworkflow/Form.html:17
+//line views/vworkflow/Form.html:18
 func (p *Form) StreamBody(qw422016 *qt422016.Writer, as *app.State, ps *cutil.PageState) {
-//line views/vworkflow/Form.html:17
+//line views/vworkflow/Form.html:18
 	qw422016.N().S(`
 `)
-//line views/vworkflow/Form.html:19
+//line views/vworkflow/Form.html:20
 	w := p.Workflow
 	nameHelp := "The name of the workflow"
 	testsHelp := "An array of tests, see example"
@@ -48,157 +49,157 @@ func (p *Form) StreamBody(qw422016 *qt422016.Writer, as *app.State, ps *cutil.Pa
 	varsHelp := "Custom variable keys and values used by the workflow"
 	scriptsHelp := "JavaScript files used by the workflow"
 
-//line views/vworkflow/Form.html:25
+//line views/vworkflow/Form.html:26
 	qw422016.N().S(`  <div class="card">
 `)
-//line views/vworkflow/Form.html:27
+//line views/vworkflow/Form.html:28
 	if w.ID != "" {
-//line views/vworkflow/Form.html:27
+//line views/vworkflow/Form.html:28
 		qw422016.N().S(`    <div class="right">
       <a href="`)
-//line views/vworkflow/Form.html:29
+//line views/vworkflow/Form.html:30
 		qw422016.E().S(w.WebPath())
-//line views/vworkflow/Form.html:29
+//line views/vworkflow/Form.html:30
 		qw422016.N().S(`/delete" class="link-confirm" data-message="Are you sure?"><button>Delete</button></a>
     </div>
 `)
-//line views/vworkflow/Form.html:31
+//line views/vworkflow/Form.html:32
 	}
-//line views/vworkflow/Form.html:31
+//line views/vworkflow/Form.html:32
 	qw422016.N().S(`    <h3>`)
-//line views/vworkflow/Form.html:32
+//line views/vworkflow/Form.html:33
 	components.StreamSVGRefIcon(qw422016, `sitemap`, ps)
-//line views/vworkflow/Form.html:32
+//line views/vworkflow/Form.html:33
 	qw422016.N().S(` `)
-//line views/vworkflow/Form.html:32
+//line views/vworkflow/Form.html:33
 	qw422016.E().S(ps.Title)
-//line views/vworkflow/Form.html:32
+//line views/vworkflow/Form.html:33
 	qw422016.N().S(`</h3>
     <div class="mt">
       <form action="" method="post">
         <table class="expanded min-200">
           <tbody>
             `)
-//line views/vworkflow/Form.html:37
-	components.StreamTableInput(qw422016, "name", "", "Name", w.Name, 6, nameHelp)
-//line views/vworkflow/Form.html:37
+//line views/vworkflow/Form.html:38
+	edit.StreamStringTable(qw422016, "name", "", "Name", w.Name, 6, nameHelp)
+//line views/vworkflow/Form.html:38
 	qw422016.N().S(`
             <tr>
               <td class="shrink">
                 <label for="edit-tests" title="`)
-//line views/vworkflow/Form.html:40
+//line views/vworkflow/Form.html:41
 	qw422016.E().S(testsHelp)
-//line views/vworkflow/Form.html:40
+//line views/vworkflow/Form.html:41
 	qw422016.N().S(`"><strong>Tests</strong></label>
                 <div>(<a href="#modal-tests">example</a>)</div>
 `)
-//line views/vworkflow/Form.html:42
+//line views/vworkflow/Form.html:43
 	if len(p.Archives) > 0 {
-//line views/vworkflow/Form.html:42
+//line views/vworkflow/Form.html:43
 		qw422016.N().S(`                <div class="mt">
                   <select id="archive-select">
                     <option value="">choose an archive</option>
 `)
-//line views/vworkflow/Form.html:46
+//line views/vworkflow/Form.html:47
 		for _, a := range p.Archives {
-//line views/vworkflow/Form.html:46
+//line views/vworkflow/Form.html:47
 			qw422016.N().S(`                    <option>`)
-//line views/vworkflow/Form.html:47
+//line views/vworkflow/Form.html:48
 			qw422016.E().S(a)
-//line views/vworkflow/Form.html:47
+//line views/vworkflow/Form.html:48
 			qw422016.N().S(`</option>
 `)
-//line views/vworkflow/Form.html:48
+//line views/vworkflow/Form.html:49
 		}
-//line views/vworkflow/Form.html:48
+//line views/vworkflow/Form.html:49
 		qw422016.N().S(`                  </select>
                 </div>
                 <div class="mt">
                   <a href="" onclick="addArchive();return false;"><button>Add Archive</button></a>
                 </div>
 `)
-//line views/vworkflow/Form.html:54
+//line views/vworkflow/Form.html:55
 	}
-//line views/vworkflow/Form.html:54
+//line views/vworkflow/Form.html:55
 	qw422016.N().S(`              </td>
               <td>`)
-//line views/vworkflow/Form.html:56
-	components.StreamFormTextarea(qw422016, "tests", "edit-tests", 12, util.ToJSON(w.Tests), testsHelp)
-//line views/vworkflow/Form.html:56
+//line views/vworkflow/Form.html:57
+	edit.StreamTextarea(qw422016, "tests", "edit-tests", 12, util.ToJSON(w.Tests), testsHelp)
+//line views/vworkflow/Form.html:57
 	qw422016.N().S(`</td>
             </tr>
             <tr>
               <td class="shrink">
                 <label for="edit-replacements" title="`)
-//line views/vworkflow/Form.html:60
+//line views/vworkflow/Form.html:61
 	qw422016.E().S(replsHelp)
-//line views/vworkflow/Form.html:60
+//line views/vworkflow/Form.html:61
 	qw422016.N().S(`"><strong>Replacements</strong></label>
                 <div>(<a href="#modal-repls">example</a>)</div>
               </td>
               <td>`)
-//line views/vworkflow/Form.html:63
-	components.StreamFormTextarea(qw422016, "replacements", "edit-replacements", 12, util.ToJSON(w.Replacements), replsHelp)
-//line views/vworkflow/Form.html:63
+//line views/vworkflow/Form.html:64
+	edit.StreamTextarea(qw422016, "replacements", "edit-replacements", 12, util.ToJSON(w.Replacements), replsHelp)
+//line views/vworkflow/Form.html:64
 	qw422016.N().S(`</td>
             </tr>
             <tr>
               <td class="shrink">
                 <label for="edit-variables" title="`)
-//line views/vworkflow/Form.html:67
+//line views/vworkflow/Form.html:68
 	qw422016.E().S(varsHelp)
-//line views/vworkflow/Form.html:67
+//line views/vworkflow/Form.html:68
 	qw422016.N().S(`"><strong>Variables</strong></label>
                 <div>(<a href="#modal-vars">example</a>)</div>
               </td>
               <td>`)
-//line views/vworkflow/Form.html:70
-	components.StreamFormTextarea(qw422016, "variables", "edit-variables", 12, util.ToJSON(w.Variables), varsHelp)
-//line views/vworkflow/Form.html:70
+//line views/vworkflow/Form.html:71
+	edit.StreamTextarea(qw422016, "variables", "edit-variables", 12, util.ToJSON(w.Variables), varsHelp)
+//line views/vworkflow/Form.html:71
 	qw422016.N().S(`</td>
             </tr>
             <tr>
               <td class="shrink">
                 <label for="edit-scripts" title="`)
-//line views/vworkflow/Form.html:74
+//line views/vworkflow/Form.html:75
 	qw422016.E().S(scriptsHelp)
-//line views/vworkflow/Form.html:74
+//line views/vworkflow/Form.html:75
 	qw422016.N().S(`"><strong>Scripts</strong></label>
                 <div>(<a href="#modal-scripts">example</a>)</div>
 `)
-//line views/vworkflow/Form.html:76
+//line views/vworkflow/Form.html:77
 	if len(p.Scripts) > 0 {
-//line views/vworkflow/Form.html:76
+//line views/vworkflow/Form.html:77
 		qw422016.N().S(`                <div class="mt">
                   <select id="script-select">
                     <option value="">choose a script</option>
 `)
-//line views/vworkflow/Form.html:80
+//line views/vworkflow/Form.html:81
 		for _, s := range p.Scripts {
-//line views/vworkflow/Form.html:80
+//line views/vworkflow/Form.html:81
 			qw422016.N().S(`                    <option>`)
-//line views/vworkflow/Form.html:81
+//line views/vworkflow/Form.html:82
 			qw422016.E().S(s)
-//line views/vworkflow/Form.html:81
+//line views/vworkflow/Form.html:82
 			qw422016.N().S(`</option>
 `)
-//line views/vworkflow/Form.html:82
+//line views/vworkflow/Form.html:83
 		}
-//line views/vworkflow/Form.html:82
+//line views/vworkflow/Form.html:83
 		qw422016.N().S(`                  </select>
                 </div>
                 <div class="mt">
                   <a href="" onclick="addScript();return false;"><button>Add Script</button></a>
                 </div>
 `)
-//line views/vworkflow/Form.html:88
+//line views/vworkflow/Form.html:89
 	}
-//line views/vworkflow/Form.html:88
+//line views/vworkflow/Form.html:89
 	qw422016.N().S(`              </td>
               <td>`)
-//line views/vworkflow/Form.html:90
-	components.StreamFormTextarea(qw422016, "scripts", "edit-scripts", 12, util.ToJSON(w.Scripts), scriptsHelp)
-//line views/vworkflow/Form.html:90
+//line views/vworkflow/Form.html:91
+	edit.StreamTextarea(qw422016, "scripts", "edit-scripts", 12, util.ToJSON(w.Scripts), scriptsHelp)
+//line views/vworkflow/Form.html:91
 	qw422016.N().S(`</td>
             </tr>
             <tr>
@@ -210,9 +211,9 @@ func (p *Form) StreamBody(qw422016 *qt422016.Writer, as *app.State, ps *cutil.Pa
     </div>
   </div>
   `)
-//line views/vworkflow/Form.html:100
+//line views/vworkflow/Form.html:101
 	streamformModals(qw422016, w, as, ps)
-//line views/vworkflow/Form.html:100
+//line views/vworkflow/Form.html:101
 	qw422016.N().S(`
   <script>
     function addArchive() {
@@ -242,38 +243,38 @@ func (p *Form) StreamBody(qw422016 *qt422016.Writer, as *app.State, ps *cutil.Pa
     }
   </script>
 `)
-//line views/vworkflow/Form.html:128
+//line views/vworkflow/Form.html:129
 }
 
-//line views/vworkflow/Form.html:128
+//line views/vworkflow/Form.html:129
 func (p *Form) WriteBody(qq422016 qtio422016.Writer, as *app.State, ps *cutil.PageState) {
-//line views/vworkflow/Form.html:128
+//line views/vworkflow/Form.html:129
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line views/vworkflow/Form.html:128
+//line views/vworkflow/Form.html:129
 	p.StreamBody(qw422016, as, ps)
-//line views/vworkflow/Form.html:128
+//line views/vworkflow/Form.html:129
 	qt422016.ReleaseWriter(qw422016)
-//line views/vworkflow/Form.html:128
+//line views/vworkflow/Form.html:129
 }
 
-//line views/vworkflow/Form.html:128
+//line views/vworkflow/Form.html:129
 func (p *Form) Body(as *app.State, ps *cutil.PageState) string {
-//line views/vworkflow/Form.html:128
+//line views/vworkflow/Form.html:129
 	qb422016 := qt422016.AcquireByteBuffer()
-//line views/vworkflow/Form.html:128
+//line views/vworkflow/Form.html:129
 	p.WriteBody(qb422016, as, ps)
-//line views/vworkflow/Form.html:128
+//line views/vworkflow/Form.html:129
 	qs422016 := string(qb422016.B)
-//line views/vworkflow/Form.html:128
+//line views/vworkflow/Form.html:129
 	qt422016.ReleaseByteBuffer(qb422016)
-//line views/vworkflow/Form.html:128
+//line views/vworkflow/Form.html:129
 	return qs422016
-//line views/vworkflow/Form.html:128
+//line views/vworkflow/Form.html:129
 }
 
-//line views/vworkflow/Form.html:130
+//line views/vworkflow/Form.html:131
 func streamformModals(qw422016 *qt422016.Writer, w *loadtoad.Workflow, as *app.State, ps *cutil.PageState) {
-//line views/vworkflow/Form.html:130
+//line views/vworkflow/Form.html:131
 	qw422016.N().S(`
   <div id="modal-tests" class="modal" style="display: none;">
     <a class="backdrop" href="#"></a>
@@ -284,16 +285,16 @@ func streamformModals(qw422016 *qt422016.Writer, w *loadtoad.Workflow, as *app.S
       </div>
       <div class="modal-body">
         <div id="modal-tests-data" hidden="hidden" style="display:none;">`)
-//line views/vworkflow/Form.html:139
+//line views/vworkflow/Form.html:140
 	qw422016.E().S(util.ToJSON(loadtoad.ExampleWorkflow.Tests))
-//line views/vworkflow/Form.html:139
+//line views/vworkflow/Form.html:140
 	qw422016.N().S(`</div>
         <button onclick="clip('tests');">Copy to clipboard</button>
         <div class="mt">
           <pre>`)
-//line views/vworkflow/Form.html:142
+//line views/vworkflow/Form.html:143
 	qw422016.E().S(util.ToJSON(loadtoad.ExampleWorkflow.Tests))
-//line views/vworkflow/Form.html:142
+//line views/vworkflow/Form.html:143
 	qw422016.N().S(`</pre>
         </div>
       </div>
@@ -308,16 +309,16 @@ func streamformModals(qw422016 *qt422016.Writer, w *loadtoad.Workflow, as *app.S
       </div>
       <div class="modal-body">
         <div id="modal-repls-data" hidden="hidden" style="display:none;">`)
-//line views/vworkflow/Form.html:155
+//line views/vworkflow/Form.html:156
 	qw422016.E().S(util.ToJSON(loadtoad.ExampleWorkflow.Replacements))
-//line views/vworkflow/Form.html:155
+//line views/vworkflow/Form.html:156
 	qw422016.N().S(`</div>
         <button onclick="clip('repls');">Copy to clipboard</button>
         <div class="mt">
           <pre>`)
-//line views/vworkflow/Form.html:158
+//line views/vworkflow/Form.html:159
 	qw422016.E().S(util.ToJSON(loadtoad.ExampleWorkflow.Replacements))
-//line views/vworkflow/Form.html:158
+//line views/vworkflow/Form.html:159
 	qw422016.N().S(`</pre>
         </div>
       </div>
@@ -332,16 +333,16 @@ func streamformModals(qw422016 *qt422016.Writer, w *loadtoad.Workflow, as *app.S
       </div>
       <div class="modal-body">
         <div id="modal-vars-data" hidden="hidden" style="display:none;">`)
-//line views/vworkflow/Form.html:171
+//line views/vworkflow/Form.html:172
 	qw422016.E().S(util.ToJSON(loadtoad.ExampleWorkflow.Variables))
-//line views/vworkflow/Form.html:171
+//line views/vworkflow/Form.html:172
 	qw422016.N().S(`</div>
         <button onclick="clip('vars');">Copy to clipboard</button>
         <div class="mt">
           <pre>`)
-//line views/vworkflow/Form.html:174
+//line views/vworkflow/Form.html:175
 	qw422016.E().S(util.ToJSON(loadtoad.ExampleWorkflow.Variables))
-//line views/vworkflow/Form.html:174
+//line views/vworkflow/Form.html:175
 	qw422016.N().S(`</pre>
         </div>
       </div>
@@ -356,16 +357,16 @@ func streamformModals(qw422016 *qt422016.Writer, w *loadtoad.Workflow, as *app.S
       </div>
       <div class="modal-body">
         <div id="modal-scripts-data" hidden="hidden" style="display:none;">`)
-//line views/vworkflow/Form.html:187
+//line views/vworkflow/Form.html:188
 	qw422016.E().S(util.ToJSON(loadtoad.ExampleWorkflow.Scripts))
-//line views/vworkflow/Form.html:187
+//line views/vworkflow/Form.html:188
 	qw422016.N().S(`</div>
         <button onclick="clip('scripts');">Copy to clipboard</button>
         <div class="mt">
           <pre>`)
-//line views/vworkflow/Form.html:190
+//line views/vworkflow/Form.html:191
 	qw422016.E().S(util.ToJSON(loadtoad.ExampleWorkflow.Scripts))
-//line views/vworkflow/Form.html:190
+//line views/vworkflow/Form.html:191
 	qw422016.N().S(`</pre>
         </div>
       </div>
@@ -381,31 +382,31 @@ func streamformModals(qw422016 *qt422016.Writer, w *loadtoad.Workflow, as *app.S
     }
   </script>
 `)
-//line views/vworkflow/Form.html:204
+//line views/vworkflow/Form.html:205
 }
 
-//line views/vworkflow/Form.html:204
+//line views/vworkflow/Form.html:205
 func writeformModals(qq422016 qtio422016.Writer, w *loadtoad.Workflow, as *app.State, ps *cutil.PageState) {
-//line views/vworkflow/Form.html:204
+//line views/vworkflow/Form.html:205
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line views/vworkflow/Form.html:204
+//line views/vworkflow/Form.html:205
 	streamformModals(qw422016, w, as, ps)
-//line views/vworkflow/Form.html:204
+//line views/vworkflow/Form.html:205
 	qt422016.ReleaseWriter(qw422016)
-//line views/vworkflow/Form.html:204
+//line views/vworkflow/Form.html:205
 }
 
-//line views/vworkflow/Form.html:204
+//line views/vworkflow/Form.html:205
 func formModals(w *loadtoad.Workflow, as *app.State, ps *cutil.PageState) string {
-//line views/vworkflow/Form.html:204
+//line views/vworkflow/Form.html:205
 	qb422016 := qt422016.AcquireByteBuffer()
-//line views/vworkflow/Form.html:204
+//line views/vworkflow/Form.html:205
 	writeformModals(qb422016, w, as, ps)
-//line views/vworkflow/Form.html:204
+//line views/vworkflow/Form.html:205
 	qs422016 := string(qb422016.B)
-//line views/vworkflow/Form.html:204
+//line views/vworkflow/Form.html:205
 	qt422016.ReleaseByteBuffer(qb422016)
-//line views/vworkflow/Form.html:204
+//line views/vworkflow/Form.html:205
 	return qs422016
-//line views/vworkflow/Form.html:204
+//line views/vworkflow/Form.html:205
 }

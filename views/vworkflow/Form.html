@@ -4,6 +4,7 @@
   "github.com/kyleu/loadtoad/app/loadtoad"
   "github.com/kyleu/loadtoad/app/util"
   "github.com/kyleu/loadtoad/views/components"
+  "github.com/kyleu/loadtoad/views/components/edit"
   "github.com/kyleu/loadtoad/views/layout"
 ) %}
 
@@ -34,7 +35,7 @@
       <form action="" method="post">
         <table class="expanded min-200">
           <tbody>
-            {%= components.TableInput("name", "", "Name", w.Name, 6, nameHelp) %}
+            {%= edit.StringTable("name", "", "Name", w.Name, 6, nameHelp) %}
             <tr>
               <td class="shrink">
                 <label for="edit-tests" title="{%s testsHelp %}"><strong>Tests</strong></label>
@@ -53,21 +54,21 @@
                 </div>
                 {%- endif -%}
               </td>
-              <td>{%= components.FormTextarea("tests", "edit-tests", 12, util.ToJSON(w.Tests), testsHelp) %}</td>
+              <td>{%= edit.Textarea("tests", "edit-tests", 12, util.ToJSON(w.Tests), testsHelp) %}</td>
             </tr>
             <tr>
               <td class="shrink">
                 <label for="edit-replacements" title="{%s replsHelp %}"><strong>Replacements</strong></label>
                 <div>(<a href="#modal-repls">example</a>)</div>
               </td>
-              <td>{%= components.FormTextarea("replacements", "edit-replacements", 12, util.ToJSON(w.Replacements), replsHelp) %}</td>
+              <td>{%= edit.Textarea("replacements", "edit-replacements", 12, util.ToJSON(w.Replacements), replsHelp) %}</td>
             </tr>
             <tr>
               <td class="shrink">
                 <label for="edit-variables" title="{%s varsHelp %}"><strong>Variables</strong></label>
                 <div>(<a href="#modal-vars">example</a>)</div>
               </td>
-              <td>{%= components.FormTextarea("variables", "edit-variables", 12, util.ToJSON(w.Variables), varsHelp) %}</td>
+              <td>{%= edit.Textarea("variables", "edit-variables", 12, util.ToJSON(w.Variables), varsHelp) %}</td>
             </tr>
             <tr>
               <td class="shrink">
@@ -87,7 +88,7 @@
                 </div>
                 {%- endif -%}
               </td>
-              <td>{%= components.FormTextarea("scripts", "edit-scripts", 12, util.ToJSON(w.Scripts), scriptsHelp) %}</td>
+              <td>{%= edit.Textarea("scripts", "edit-scripts", 12, util.ToJSON(w.Scripts), scriptsHelp) %}</td>
             </tr>
             <tr>
               <td colspan="2"><button type="submit">Save Workflow</button></td>
