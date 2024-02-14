@@ -1,7 +1,7 @@
 // Content managed by Project Forge, see [projectforge.md] for details.
 module github.com/kyleu/loadtoad/tools/desktop
 
-go 1.21
+go 1.22
 
 require (
 	github.com/kyleu/loadtoad v0.0.0
