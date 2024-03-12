@@ -17,21 +17,21 @@ func wireReq(req *http.Request, timing *har.PageTimings) *http.Request {
 	trace := &httptrace.ClientTrace{
 		DNSStart: func(dsi httptrace.DNSStartInfo) { dns = util.TimerStart() },
 		DNSDone: func(ddi httptrace.DNSDoneInfo) {
-			timing.DNS = dns.End()
+			timing.DNS = float64(dns.End())
 		},
 
 		TLSHandshakeStart: func() { tlsHandshake = util.TimerStart() },
 		TLSHandshakeDone: func(cs tls.ConnectionState, err error) {
-			timing.SSL = tlsHandshake.End()
+			timing.SSL = float64(tlsHandshake.End())
 		},
 
 		ConnectStart: func(network, addr string) { connect = util.TimerStart() },
 		ConnectDone: func(network, addr string, err error) {
-			timing.Connect = connect.End()
+			timing.Connect = float64(connect.End())
 		},
 
 		GotFirstResponseByte: func() {
-			timing.Receive = start.End()
+			timing.Receive = float64(start.End())
 		},
 	}
 	return req.WithContext(httptrace.WithClientTrace(req.Context(), trace))

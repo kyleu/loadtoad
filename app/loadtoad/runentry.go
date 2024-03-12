@@ -41,7 +41,7 @@ func (s *Service) RunEntry(
 	if err != nil {
 		return nil, err
 	}
-	ret.Timing.Total = t.End()
+	ret.Timing.Total = float64(t.End())
 	ret.Response, err = har.ResponseFromHTTP(resp)
 	if err != nil {
 		return nil, err

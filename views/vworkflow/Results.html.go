@@ -266,7 +266,7 @@ func StreamRenderResultTable(qw422016 *qt422016.Writer, rIdx int, r *loadtoad.Wo
 	qw422016.N().S(`">
           `)
 //line views/vworkflow/Results.html:69
-	streamrenderBool(qw422016, r.Entry.Time == 0 || r.Timing.Total < int(r.Entry.Time*1000*1.3)+10000, "Duration", ps)
+	streamrenderBool(qw422016, r.Entry.Time == 0 || int(r.Timing.Total) < int(r.Entry.Time*1000*1.3)+10000, "Duration", ps)
 //line views/vworkflow/Results.html:69
 	qw422016.N().S(`
         </th>
@@ -278,7 +278,7 @@ func StreamRenderResultTable(qw422016 *qt422016.Writer, rIdx int, r *loadtoad.Wo
         <td>
           `)
 //line views/vworkflow/Results.html:73
-	qw422016.E().S(util.MicrosToMillis(r.Timing.Total))
+	qw422016.E().S(util.MicrosToMillis(int(r.Timing.Total)))
 //line views/vworkflow/Results.html:73
 	qw422016.N().S(`
           <em>`)

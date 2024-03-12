@@ -32,6 +32,6 @@ type WorkflowResults []*WorkflowResult
 
 func (w WorkflowResults) Duration() int {
 	return lo.SumBy(w, func(x *WorkflowResult) int {
-		return x.Timing.Total
+		return int(x.Timing.Total)
 	})
 }

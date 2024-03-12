@@ -66,11 +66,11 @@
       </tr>
       <tr>
         <th title="duration must be within ({%f float64(r.Entry.Time) %} * 1.3) + 10), which equals {%s util.MicrosToMillis(int(r.Entry.Time * 1000 * 1.3) + 10000) %}">
-          {%= renderBool(r.Entry.Time == 0 || r.Timing.Total < int(r.Entry.Time * 1000 * 1.3) + 10000, "Duration", ps) %}
+          {%= renderBool(r.Entry.Time == 0 || int(r.Timing.Total) < int(r.Entry.Time * 1000 * 1.3) + 10000, "Duration", ps) %}
         </th>
         <td>{%s util.MicrosToMillis(int(r.Entry.Time * 1000)) %}</td>
         <td>
-          {%s util.MicrosToMillis(r.Timing.Total) %}
+          {%s util.MicrosToMillis(int(r.Timing.Total)) %}
           <em>{%s strings.Join(r.Timing.Strings(), ", ") %}</em>
         </td>
       </tr>
