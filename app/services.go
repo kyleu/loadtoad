@@ -1,4 +1,4 @@
-package app
+package app // import github.com/kyleu/loadtoad
 
 import (
 	"context"
