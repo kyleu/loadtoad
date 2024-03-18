@@ -9,7 +9,6 @@ import (
 	"github.com/kyleu/loadtoad/app/controller"
 	"github.com/kyleu/loadtoad/app/controller/clib"
 	"github.com/kyleu/loadtoad/app/controller/cutil"
-	"github.com/kyleu/loadtoad/app/lib/telemetry/httpmetrics"
 	"github.com/kyleu/loadtoad/app/util"
 )
 
@@ -45,8 +44,5 @@ func AppRoutes(as *app.State, logger util.Logger) fasthttp.RequestHandler {
 	r.OPTIONS("/{_:*}", controller.Options)
 	r.NotFound = controller.NotFoundAction
 
-	clib.AppRoutesList = r.List()
-
-	p := httpmetrics.NewMetrics(util.AppKey, logger)
-	return fasthttp.CompressHandlerLevel(p.WrapHandler(r, true), fasthttp.CompressBestSpeed)
+	return clib.WireRouter(r, logger)
 }
