@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"github.com/valyala/fasthttp"
+	"net/http"
 
 	"github.com/kyleu/loadtoad/app"
 	"github.com/kyleu/loadtoad/app/controller/cutil"
@@ -11,9 +11,9 @@ import (
 	"github.com/kyleu/loadtoad/views/vworkflow"
 )
 
-func HarConnect(rc *fasthttp.RequestCtx) {
-	Act("har.connect", rc, func(as *app.State, ps *cutil.PageState) (string, error) {
-		key, err := cutil.RCRequiredString(rc, "key", true)
+func HarConnect(w http.ResponseWriter, r *http.Request) {
+	Act("har.connect", w, r, func(as *app.State, ps *cutil.PageState) (string, error) {
+		key, err := cutil.RCRequiredString(r, "key", true)
 		if err != nil {
 			return "", err
 		}
@@ -21,14 +21,14 @@ func HarConnect(rc *fasthttp.RequestCtx) {
 		if err != nil {
 			return "", err
 		}
-		w := &loadtoad.Workflow{ID: ret.Key, Name: ret.Key, Tests: har.Selectors{{Har: ret.Key}}}
-		return socketConnect(ps.Context, "run", w, map[string]string{}, rc, as, ps)
+		wf := &loadtoad.Workflow{ID: ret.Key, Name: ret.Key, Tests: har.Selectors{{Har: ret.Key}}}
+		return socketConnect(ps.Context, "run", wf, map[string]string{}, w, r, as, ps)
 	})
 }
 
-func HarStartRun(rc *fasthttp.RequestCtx) {
-	Act("har.start.run", rc, func(as *app.State, ps *cutil.PageState) (string, error) {
-		key, err := cutil.RCRequiredString(rc, "key", true)
+func HarStartRun(w http.ResponseWriter, r *http.Request) {
+	Act("har.start.run", w, r, func(as *app.State, ps *cutil.PageState) (string, error) {
+		key, err := cutil.RCRequiredString(r, "key", true)
 		if err != nil {
 			return "", err
 		}
@@ -36,18 +36,18 @@ func HarStartRun(rc *fasthttp.RequestCtx) {
 		if err != nil {
 			return "", err
 		}
-		w := &loadtoad.Workflow{ID: ret.Key, Name: ret.Key, Tests: har.Selectors{{Har: ret.Key}}}
+		wf := &loadtoad.Workflow{ID: ret.Key, Name: ret.Key, Tests: har.Selectors{{Har: ret.Key}}}
 		ps.Title = "Archive [" + key + "]"
 		ps.Data = ret
 		channel := "run-" + util.RandomString(16)
 		pth := "/har/" + ret.Key + "/connect"
-		return Render(rc, as, &vworkflow.Start{Workflow: w, Entries: ret.Entries, Channel: channel, Path: pth}, ps, "har", ret.Key, "Run")
+		return Render(w, r, as, &vworkflow.Start{Workflow: wf, Entries: ret.Entries, Channel: channel, Path: pth}, ps, "har", ret.Key, "Run")
 	})
 }
 
-func HarStartBench(rc *fasthttp.RequestCtx) {
-	Act("har.start.bench", rc, func(as *app.State, ps *cutil.PageState) (string, error) {
-		key, err := cutil.RCRequiredString(rc, "key", true)
+func HarStartBench(w http.ResponseWriter, r *http.Request) {
+	Act("har.start.bench", w, r, func(as *app.State, ps *cutil.PageState) (string, error) {
+		key, err := cutil.RCRequiredString(r, "key", true)
 		if err != nil {
 			return "", err
 		}
@@ -55,11 +55,11 @@ func HarStartBench(rc *fasthttp.RequestCtx) {
 		if err != nil {
 			return "", err
 		}
-		w := &loadtoad.Workflow{ID: ret.Key, Name: ret.Key, Tests: har.Selectors{{Har: ret.Key}}}
+		wf := &loadtoad.Workflow{ID: ret.Key, Name: ret.Key, Tests: har.Selectors{{Har: ret.Key}}}
 		ps.Title = "Archive [" + key + "]"
 		ps.Data = ret
 		channel := "run-" + util.RandomString(16)
 		pth := "/har/" + ret.Key + "/connect"
-		return Render(rc, as, &vworkflow.Start{Workflow: w, Entries: ret.Entries, Channel: channel, Path: pth}, ps, "har", ret.Key, "Benchmark")
+		return Render(w, r, as, &vworkflow.Start{Workflow: wf, Entries: ret.Entries, Channel: channel, Path: pth}, ps, "har", ret.Key, "Benchmark")
 	})
 }

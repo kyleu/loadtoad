@@ -3,8 +3,7 @@ package controller
 import (
 	"fmt"
 	"maps"
-
-	"github.com/valyala/fasthttp"
+	"net/http"
 
 	"github.com/kyleu/loadtoad/app"
 	"github.com/kyleu/loadtoad/app/controller/cutil"
@@ -14,59 +13,59 @@ import (
 	"github.com/kyleu/loadtoad/views/vworkflow"
 )
 
-func WorkflowStartRun(rc *fasthttp.RequestCtx) {
-	Act("workflow.start.run", rc, workflowStart(rc, "run"))
+func WorkflowStartRun(w http.ResponseWriter, r *http.Request) {
+	Act("workflow.start.run", w, r, workflowStart(w, r, "run"))
 }
 
-func WorkflowStartBench(rc *fasthttp.RequestCtx) {
-	Act("workflow.start.bench", rc, workflowStart(rc, "bench"))
+func WorkflowStartBench(w http.ResponseWriter, r *http.Request) {
+	Act("workflow.start.bench", w, r, workflowStart(w, r, "bench"))
 }
 
-func workflowStart(rc *fasthttp.RequestCtx, key string) func(as *app.State, ps *cutil.PageState) (string, error) {
+func workflowStart(w http.ResponseWriter, r *http.Request, key string) func(as *app.State, ps *cutil.PageState) (string, error) {
 	return func(as *app.State, ps *cutil.PageState) (string, error) {
-		w, repls, argRes, err := loadWorkflowWithRepls(key, as, rc)
+		wf, repls, argRes, err := loadWorkflowWithRepls(key, as, r)
 		if err != nil {
 			return "", err
 		}
 		if argRes != nil && argRes.HasMissing() {
-			u := fmt.Sprintf("%s/%s", w.WebPath(), key)
+			u := fmt.Sprintf("%s/%s", wf.WebPath(), key)
 			ps.Data = argRes
-			return Render(rc, as, &vpage.Args{URL: u, Directions: "Choose your benchmark options", ArgRes: argRes}, ps, "workflow", w.ID, "bench")
+			return Render(w, r, as, &vpage.Args{URL: u, Directions: "Choose your benchmark options", ArgRes: argRes}, ps, "workflow", wf.ID, "bench")
 		}
 
-		ents, err := as.Services.LoadToad.LoadEntries(w.Tests...)
+		ents, err := as.Services.LoadToad.LoadEntries(wf.Tests...)
 		if err != nil {
 			return "", err
 		}
-		ents = ents.WithReplacementsMap(repls, w.Variables)
+		ents = ents.WithReplacementsMap(repls, wf.Variables)
 
-		ps.Title = fmt.Sprintf("%s [%s]", w.Title(), key)
+		ps.Title = fmt.Sprintf("%s [%s]", wf.Title(), key)
 		ps.Data = w
 		channel := fmt.Sprintf("%s-%s", key, util.RandomString(16))
-		p := fmt.Sprintf("%s/%s/connect", w.WebPath(), key)
-		page := &vworkflow.Start{Workflow: w, Entries: ents.Cleaned(), Replacements: repls, Channel: channel, Path: p}
-		return Render(rc, as, page, ps, "workflow", w.ID, key)
+		p := fmt.Sprintf("%s/%s/connect", wf.WebPath(), key)
+		page := &vworkflow.Start{Workflow: wf, Entries: ents.Cleaned(), Replacements: repls, Channel: channel, Path: p}
+		return Render(w, r, as, page, ps, "workflow", wf.ID, key)
 	}
 }
 
-func loadWorkflowWithRepls(key string, as *app.State, rc *fasthttp.RequestCtx) (*loadtoad.Workflow, map[string]string, *cutil.ArgResults, error) {
-	w, err := loadWorkflow(as, rc)
+func loadWorkflowWithRepls(key string, as *app.State, r *http.Request) (*loadtoad.Workflow, map[string]string, *cutil.ArgResults, error) {
+	wf, err := loadWorkflow(as, r)
 	if err != nil {
 		return nil, nil, nil, err
 	}
-	repls := maps.Clone(w.Replacements)
-	if string(rc.URI().QueryArgs().Peek("ok")) != util.BoolTrue {
-		argRes := collectArgs(key, w, rc)
+	repls := maps.Clone(wf.Replacements)
+	if r.URL.Query().Get("ok") != util.BoolTrue {
+		argRes := collectArgs(key, wf, r)
 		if argRes.HasMissing() {
-			return w, nil, argRes, nil
+			return wf, nil, argRes, nil
 		}
 		varsStr := argRes.Values.GetStringOpt("variables")
-		err = util.FromJSON([]byte(varsStr), &w.Variables)
+		err = util.FromJSON([]byte(varsStr), &wf.Variables)
 		if err != nil {
-			return w, repls, argRes, err
+			return wf, repls, argRes, err
 		}
 		repls = maps.Clone(argRes.Values.ToStringMap())
 		delete(repls, "variables")
 	}
-	return w, repls, nil, err
+	return wf, repls, nil, err
 }

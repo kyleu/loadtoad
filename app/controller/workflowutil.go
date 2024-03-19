@@ -2,11 +2,11 @@ package controller
 
 import (
 	"fmt"
+	"net/http"
 	"slices"
 	"strings"
 
 	"github.com/pkg/errors"
-	"github.com/valyala/fasthttp"
 
 	"github.com/kyleu/loadtoad/app"
 	"github.com/kyleu/loadtoad/app/controller/cutil"
@@ -26,21 +26,21 @@ var benchArgs = cutil.Args{
 	{Key: "count", Title: "Test Count (per runner)", Description: "The number of workflow runs that will execute for each runner", Default: "1"},
 }
 
-func loadWorkflow(as *app.State, rc *fasthttp.RequestCtx) (*loadtoad.Workflow, error) {
-	key, err := cutil.RCRequiredString(rc, "key", true)
+func loadWorkflow(as *app.State, r *http.Request) (*loadtoad.Workflow, error) {
+	key, err := cutil.RCRequiredString(r, "key", true)
 	if err != nil {
 		return nil, err
 	}
 	return as.Services.LoadToad.LoadWorkflow(key)
 }
 
-func workflowFromForm(w *loadtoad.Workflow, rc *fasthttp.RequestCtx) error {
-	frm, err := cutil.ParseForm(rc)
+func workflowFromForm(wf *loadtoad.Workflow, r *http.Request, b []byte) error {
+	frm, err := cutil.ParseForm(r, b)
 	if err != nil {
 		return err
 	}
-	w.Name = frm.GetStringOpt("name")
-	err = util.FromJSON([]byte(frm.GetStringOpt("tests")), &w.Tests)
+	wf.Name = frm.GetStringOpt("name")
+	err = util.FromJSON([]byte(frm.GetStringOpt("tests")), &wf.Tests)
 	if err != nil {
 		return err
 	}
@@ -49,14 +49,14 @@ func workflowFromForm(w *loadtoad.Workflow, rc *fasthttp.RequestCtx) error {
 	if err != nil {
 		return err
 	}
-	w.Replacements = repls
+	wf.Replacements = repls
 	vars := util.ValueMap{}
 	err = util.FromJSON([]byte(frm.GetStringOpt("variables")), &vars)
 	if err != nil {
 		return err
 	}
-	w.Variables = vars
-	err = util.FromJSON([]byte(frm.GetStringOpt("scripts")), &w.Scripts)
+	wf.Variables = vars
+	err = util.FromJSON([]byte(frm.GetStringOpt("scripts")), &wf.Scripts)
 	if err != nil {
 		return err
 	}
@@ -64,9 +64,9 @@ func workflowFromForm(w *loadtoad.Workflow, rc *fasthttp.RequestCtx) error {
 }
 
 func wireSocketFuncs(
-	rc *fasthttp.RequestCtx, as *app.State, ps *cutil.PageState,
+	w http.ResponseWriter, r *http.Request, as *app.State, ps *cutil.PageState,
 ) (func(cmd string, x any), func(i int, s string), func(i int, err error), func(i int, w *loadtoad.WorkflowResult), error) {
-	channel := string(rc.URI().QueryArgs().Peek("channel"))
+	channel := r.URL.Query().Get("channel")
 	if channel == "" {
 		return nil, nil, nil, nil, errors.New("must provide channel")
 	}
@@ -74,7 +74,7 @@ func wireSocketFuncs(
 		msg := &websocket.Message{Channel: channel, Cmd: cmd, Param: util.ToJSONBytes(x, true)}
 		_ = as.Services.Socket.WriteChannel(msg, ps.Logger)
 	}
-	err := as.Services.Socket.Upgrade(ps.Context, rc, channel, ps.Profile, ps.Logger) //nolint:contextcheck
+	err := as.Services.Socket.Upgrade(ps.Context, w, r, channel, ps.Profile, ps.Logger) //nolint:contextcheck
 	if err != nil {
 		ps.Logger.Warnf("unable to upgrade connection to WebSocket: %s", err.Error())
 		return nil, nil, nil, nil, err
@@ -96,12 +96,12 @@ func wireSocketFuncs(
 	return send, logF, errF, okF, nil
 }
 
-func collectArgs(key string, w *loadtoad.Workflow, rc *fasthttp.RequestCtx) *cutil.ArgResults {
+func collectArgs(key string, wf *loadtoad.Workflow, r *http.Request) *cutil.ArgResults {
 	var args cutil.Args
 	if key == "bench" {
 		args = slices.Clone(benchArgs)
 	}
-	for k, v := range w.Replacements {
+	for k, v := range wf.Replacements {
 		if strings.Contains(v, "||") {
 			choices := util.StringSplitAndTrim(v, "||")
 			args = append(args, &cutil.Arg{Key: k, Title: k, Type: "string", Default: "", Choices: choices})
@@ -109,6 +109,6 @@ func collectArgs(key string, w *loadtoad.Workflow, rc *fasthttp.RequestCtx) *cut
 			args = append(args, &cutil.Arg{Key: k, Title: k, Type: "string", Default: v})
 		}
 	}
-	args = append(args, &cutil.Arg{Key: "variables", Title: "Other Variables", Type: "textarea", Default: util.ToJSON(w.Variables)})
-	return cutil.CollectArgs(rc, args)
+	args = append(args, &cutil.Arg{Key: "variables", Title: "Other Variables", Type: "textarea", Default: util.ToJSON(wf.Variables)})
+	return cutil.CollectArgs(r, args)
 }

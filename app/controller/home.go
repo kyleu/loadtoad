@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"github.com/valyala/fasthttp"
+	"net/http"
 
 	"github.com/kyleu/loadtoad/app"
 	"github.com/kyleu/loadtoad/app/controller/cutil"
@@ -16,12 +16,12 @@ var homeContent = util.ValueMap{
 	},
 }
 
-func Home(rc *fasthttp.RequestCtx) {
-	Act("home", rc, func(as *app.State, ps *cutil.PageState) (string, error) {
+func Home(w http.ResponseWriter, r *http.Request) {
+	Act("home", w, r, func(as *app.State, ps *cutil.PageState) (string, error) {
 		hars := as.Services.Har.List(ps.Logger)
-		w, _ := as.Services.LoadToad.ListWorkflows(ps.Logger)
+		wf, _ := as.Services.LoadToad.ListWorkflows(ps.Logger)
 		s := as.Services.Script.ListScripts(ps.Logger)
 		ps.Data = homeContent
-		return Render(rc, as, &views.Home{Hars: hars, Workflows: w, Scripts: s}, ps)
+		return Render(w, r, as, &views.Home{Hars: hars, Workflows: wf, Scripts: s}, ps)
 	})
 }

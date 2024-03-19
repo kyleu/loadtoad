@@ -3,10 +3,10 @@ package controller
 import (
 	"context"
 	"maps"
+	"net/http"
 	"strings"
 
 	"github.com/pkg/errors"
-	"github.com/valyala/fasthttp"
 
 	"github.com/kyleu/loadtoad/app"
 	"github.com/kyleu/loadtoad/app/controller/cutil"
@@ -14,23 +14,23 @@ import (
 	"github.com/kyleu/loadtoad/app/util"
 )
 
-func WorkflowConnectBench(rc *fasthttp.RequestCtx) {
-	Act("workflow.connect.bench", rc, workflowConnect(rc, "bench"))
+func WorkflowConnectBench(w http.ResponseWriter, r *http.Request) {
+	Act("workflow.connect.bench", w, r, workflowConnect(w, r, "bench"))
 }
 
-func WorkflowConnectRun(rc *fasthttp.RequestCtx) {
-	Act("workflow.connect.run", rc, workflowConnect(rc, "run"))
+func WorkflowConnectRun(w http.ResponseWriter, r *http.Request) {
+	Act("workflow.connect.run", w, r, workflowConnect(w, r, "run"))
 }
 
-func workflowConnect(rc *fasthttp.RequestCtx, key string) func(as *app.State, ps *cutil.PageState) (string, error) {
+func workflowConnect(w http.ResponseWriter, r *http.Request, key string) func(as *app.State, ps *cutil.PageState) (string, error) {
 	return func(as *app.State, ps *cutil.PageState) (string, error) {
-		w, err := loadWorkflow(as, rc)
+		wf, err := loadWorkflow(as, r)
 		if err != nil {
 			return "", err
 		}
-		repls := maps.Clone(w.Replacements)
-		if string(rc.URI().QueryArgs().Peek("ok")) != util.BoolTrue {
-			argRes := collectArgs(key, w, rc)
+		repls := maps.Clone(wf.Replacements)
+		if r.URL.Query().Get("ok") != util.BoolTrue {
+			argRes := collectArgs(key, wf, r)
 			if argRes.HasMissing() {
 				return "", errors.Errorf("missing arguments [%s]", strings.Join(argRes.Missing, ", "))
 			}
@@ -42,20 +42,20 @@ func workflowConnect(rc *fasthttp.RequestCtx, key string) func(as *app.State, ps
 				case "variables":
 					others := util.ValueMap{}
 					_ = util.FromJSON([]byte(v), &others)
-					w.Variables = others.Merge(w.Variables)
+					wf.Variables = others.Merge(wf.Variables)
 				default:
 					repls[k] = v
 				}
 			}
 		}
-		return socketConnect(ps.Context, key, w, repls, rc, as, ps)
+		return socketConnect(ps.Context, key, wf, repls, w, r, as, ps)
 	}
 }
 
 func socketConnect(
-	ctx context.Context, key string, w *loadtoad.Workflow, repls map[string]string, rc *fasthttp.RequestCtx, as *app.State, ps *cutil.PageState,
+	ctx context.Context, key string, wf *loadtoad.Workflow, repls map[string]string, w http.ResponseWriter, r *http.Request, as *app.State, ps *cutil.PageState,
 ) (string, error) {
-	send, logF, errF, okF, err := wireSocketFuncs(rc, as, ps)
+	send, logF, errF, okF, err := wireSocketFuncs(w, r, as, ps)
 	if err != nil {
 		return "", err
 	}
@@ -63,15 +63,15 @@ func socketConnect(
 		var final loadtoad.WorkflowResults
 		var e error
 		if key == "bench" {
-			final, e = as.Services.LoadToad.BenchWorkflow(ctx, w, repls, ps.Logger, logF, errF, okF)
+			final, e = as.Services.LoadToad.BenchWorkflow(ctx, wf, repls, ps.Logger, logF, errF, okF)
 		} else {
-			final, e = as.Services.LoadToad.RunWorkflow(ctx, w, repls, ps.Logger, logF, errF, okF)
+			final, e = as.Services.LoadToad.RunWorkflow(ctx, wf, repls, ps.Logger, logF, errF, okF)
 		}
 		if e != nil {
 			errF(-1, e)
 		}
 		msg := map[string]any{"message": util.MicrosToMillis(final.Duration()), "status": "Success"}
-		ps.Logger.Infof("[COMPLETE] %s", w.ID)
+		ps.Logger.Infof("[COMPLETE] %s", wf.ID)
 		send("complete", &WorkflowMessage{Idx: -1, Ctx: msg})
 	}()
 	return "", nil
