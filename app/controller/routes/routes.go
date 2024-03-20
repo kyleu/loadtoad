@@ -37,9 +37,7 @@ func AppRoutes(as *app.State, logger util.Logger) (http.Handler, error) {
 	loadtoadRoutes(r)
 	// $PF_SECTION_END(routes)$
 
-	makeRoute(r, http.MethodGet, "/admin", clib.Admin)
-	makeRoute(r, http.MethodGet, "/admin/", clib.Admin)
-	makeRoute(r, http.MethodPost, "/admin/", clib.Admin)
+	adminRoutes(r)
 	execRoutes(r)
 	scriptingRoutes(r)
 
