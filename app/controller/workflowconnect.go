@@ -2,10 +2,11 @@ package controller
 
 import (
 	"context"
-	"github.com/pkg/errors"
 	"maps"
 	"net/http"
 	"strings"
+
+	"github.com/pkg/errors"
 
 	"github.com/kyleu/loadtoad/app"
 	"github.com/kyleu/loadtoad/app/controller/cutil"

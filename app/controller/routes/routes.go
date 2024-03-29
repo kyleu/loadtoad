@@ -37,9 +37,9 @@ func AppRoutes(as *app.State, logger util.Logger) (http.Handler, error) {
 	loadtoadRoutes(r)
 	// $PF_SECTION_END(routes)$
 
-	adminRoutes(r)
 	execRoutes(r)
 	scriptingRoutes(r)
+	adminRoutes(r)
 
 	makeRoute(r, http.MethodGet, "/favicon.ico", clib.Favicon)
 	makeRoute(r, http.MethodGet, "/robots.txt", clib.RobotsTxt)
