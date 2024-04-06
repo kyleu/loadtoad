@@ -27,7 +27,7 @@ var benchArgs = cutil.Args{
 }
 
 func loadWorkflow(as *app.State, r *http.Request) (*loadtoad.Workflow, error) {
-	key, err := cutil.RCRequiredString(r, "key", true)
+	key, err := cutil.PathString(r, "key", true)
 	if err != nil {
 		return nil, err
 	}
@@ -64,7 +64,7 @@ func workflowFromForm(wf *loadtoad.Workflow, r *http.Request, b []byte) error {
 }
 
 func wireSocketFuncs(
-	w http.ResponseWriter, r *http.Request, as *app.State, ps *cutil.PageState,
+		w http.ResponseWriter, r *http.Request, as *app.State, ps *cutil.PageState,
 ) (func(cmd string, x any), func(i int, s string), func(i int, err error), func(i int, w *loadtoad.WorkflowResult), error) {
 	channel := r.URL.Query().Get("channel")
 	println("#################: " + channel)

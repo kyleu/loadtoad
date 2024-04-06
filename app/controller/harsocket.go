@@ -13,7 +13,7 @@ import (
 
 func HarConnect(w http.ResponseWriter, r *http.Request) {
 	Act("har.connect", w, r, func(as *app.State, ps *cutil.PageState) (string, error) {
-		key, err := cutil.RCRequiredString(r, "key", true)
+		key, err := cutil.PathString(r, "key", true)
 		if err != nil {
 			return "", err
 		}
@@ -28,7 +28,7 @@ func HarConnect(w http.ResponseWriter, r *http.Request) {
 
 func HarStartRun(w http.ResponseWriter, r *http.Request) {
 	Act("har.start.run", w, r, func(as *app.State, ps *cutil.PageState) (string, error) {
-		key, err := cutil.RCRequiredString(r, "key", true)
+		key, err := cutil.PathString(r, "key", true)
 		if err != nil {
 			return "", err
 		}
@@ -47,7 +47,7 @@ func HarStartRun(w http.ResponseWriter, r *http.Request) {
 
 func HarStartBench(w http.ResponseWriter, r *http.Request) {
 	Act("har.start.bench", w, r, func(as *app.State, ps *cutil.PageState) (string, error) {
-		key, err := cutil.RCRequiredString(r, "key", true)
+		key, err := cutil.PathString(r, "key", true)
 		if err != nil {
 			return "", err
 		}
