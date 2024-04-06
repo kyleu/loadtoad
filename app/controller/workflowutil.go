@@ -64,7 +64,7 @@ func workflowFromForm(wf *loadtoad.Workflow, r *http.Request, b []byte) error {
 }
 
 func wireSocketFuncs(
-		w http.ResponseWriter, r *http.Request, as *app.State, ps *cutil.PageState,
+	w http.ResponseWriter, r *http.Request, as *app.State, ps *cutil.PageState,
 ) (func(cmd string, x any), func(i int, s string), func(i int, err error), func(i int, w *loadtoad.WorkflowResult), error) {
 	channel := r.URL.Query().Get("channel")
 	println("#################: " + channel)
