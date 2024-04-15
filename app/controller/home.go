@@ -22,6 +22,6 @@ func Home(w http.ResponseWriter, r *http.Request) {
 		wf, _ := as.Services.LoadToad.ListWorkflows(ps.Logger)
 		s := as.Services.Script.ListScripts(ps.Logger)
 		ps.Data = homeContent
-		return Render(w, r, as, &views.Home{Hars: hars, Workflows: wf, Scripts: s}, ps)
+		return Render(r, as, &views.Home{Hars: hars, Workflows: wf, Scripts: s}, ps)
 	})
 }

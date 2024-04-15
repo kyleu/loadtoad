@@ -30,7 +30,7 @@ func workflowStart(w http.ResponseWriter, r *http.Request, key string) func(as *
 		if argRes != nil && argRes.HasMissing() {
 			u := fmt.Sprintf("%s/%s", wf.WebPath(), key)
 			ps.Data = argRes
-			return Render(w, r, as, &vpage.Args{URL: u, Directions: "Choose your benchmark options", ArgRes: argRes}, ps, "workflow", wf.ID, "bench")
+			return Render(r, as, &vpage.Args{URL: u, Directions: "Choose your benchmark options", ArgRes: argRes}, ps, "workflow", wf.ID, "bench")
 		}
 
 		ents, err := as.Services.LoadToad.LoadEntries(wf.Tests...)
@@ -44,7 +44,7 @@ func workflowStart(w http.ResponseWriter, r *http.Request, key string) func(as *
 		channel := fmt.Sprintf("%s-%s", key, util.RandomString(16))
 		p := fmt.Sprintf("%s/%s/connect", wf.WebPath(), key)
 		page := &vworkflow.Start{Workflow: wf, Entries: ents.Cleaned(), Replacements: repls, Channel: channel, Path: p}
-		return Render(w, r, as, page, ps, "workflow", wf.ID, key)
+		return Render(r, as, page, ps, "workflow", wf.ID, key)
 	}
 }
 

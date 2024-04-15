@@ -20,7 +20,7 @@ func WorkflowList(w http.ResponseWriter, r *http.Request) {
 			return "", err
 		}
 		ps.Data = ret
-		return Render(w, r, as, &vworkflow.List{Workflows: ret}, ps, "workflow")
+		return Render(r, as, &vworkflow.List{Workflows: ret}, ps, "workflow")
 	})
 }
 
@@ -36,7 +36,7 @@ func WorkflowDetail(w http.ResponseWriter, r *http.Request) {
 		}
 		ps.Title = "Workflows"
 		ps.Data = wf
-		return Render(w, r, as, &vworkflow.Detail{Workflow: wf, Entries: ents}, ps, "workflow", wf.ID)
+		return Render(r, as, &vworkflow.Detail{Workflow: wf, Entries: ents}, ps, "workflow", wf.ID)
 	})
 }
 
@@ -46,7 +46,7 @@ func WorkflowNew(w http.ResponseWriter, r *http.Request) {
 		arcs := as.Services.Har.List(ps.Logger)
 		ps.Title = "New Workflow"
 		ps.Data = wf
-		return Render(w, r, as, &vworkflow.Form{Workflow: wf, Archives: arcs}, ps, "workflow", "New")
+		return Render(r, as, &vworkflow.Form{Workflow: wf, Archives: arcs}, ps, "workflow", "New")
 	})
 }
 
@@ -67,7 +67,7 @@ func WorkflowCreate(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			return "", err
 		}
-		return FlashAndRedir(true, "Workflow created", wf.WebPath(), w, ps)
+		return FlashAndRedir(true, "Workflow created", wf.WebPath(), ps)
 	})
 }
 
@@ -81,7 +81,7 @@ func WorkflowForm(w http.ResponseWriter, r *http.Request) {
 		scripts := as.Services.Script.ListScripts(ps.Logger)
 		ps.Title = "Edit [" + wf.ID + "]"
 		ps.Data = wf
-		return Render(w, r, as, &vworkflow.Form{Workflow: wf, Archives: arcs, Scripts: scripts}, ps, "workflow", wf.ID, "Edit")
+		return Render(r, as, &vworkflow.Form{Workflow: wf, Archives: arcs, Scripts: scripts}, ps, "workflow", wf.ID, "Edit")
 	})
 }
 
@@ -99,7 +99,7 @@ func WorkflowSave(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			return "", err
 		}
-		return FlashAndRedir(true, "Workflow saved", wf.WebPath(), w, ps)
+		return FlashAndRedir(true, "Workflow saved", wf.WebPath(), ps)
 	})
 }
 
@@ -113,6 +113,6 @@ func WorkflowDelete(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			return "", err
 		}
-		return FlashAndRedir(true, "Workflow deleted", "/workflow", w, ps)
+		return FlashAndRedir(true, "Workflow deleted", "/workflow", ps)
 	})
 }

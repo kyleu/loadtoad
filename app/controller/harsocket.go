@@ -41,7 +41,7 @@ func HarStartRun(w http.ResponseWriter, r *http.Request) {
 		ps.Data = ret
 		channel := "run-" + util.RandomString(16)
 		pth := "/har/" + ret.Key + "/connect"
-		return Render(w, r, as, &vworkflow.Start{Workflow: wf, Entries: ret.Entries, Channel: channel, Path: pth}, ps, "har", ret.Key, "Run")
+		return Render(r, as, &vworkflow.Start{Workflow: wf, Entries: ret.Entries, Channel: channel, Path: pth}, ps, "har", ret.Key, "Run")
 	})
 }
 
@@ -60,6 +60,6 @@ func HarStartBench(w http.ResponseWriter, r *http.Request) {
 		ps.Data = ret
 		channel := "run-" + util.RandomString(16)
 		pth := "/har/" + ret.Key + "/connect"
-		return Render(w, r, as, &vworkflow.Start{Workflow: wf, Entries: ret.Entries, Channel: channel, Path: pth}, ps, "har", ret.Key, "Benchmark")
+		return Render(r, as, &vworkflow.Start{Workflow: wf, Entries: ret.Entries, Channel: channel, Path: pth}, ps, "har", ret.Key, "Benchmark")
 	})
 }
