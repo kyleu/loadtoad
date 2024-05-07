@@ -67,16 +67,14 @@ func wireSocketFuncs(
 	w http.ResponseWriter, r *http.Request, as *app.State, ps *cutil.PageState,
 ) (func(cmd string, x any), func(i int, s string), func(i int, err error), func(i int, w *loadtoad.WorkflowResult), error) {
 	channel := r.URL.Query().Get("channel")
-	println("#################: " + channel)
 	if channel == "" {
 		return nil, nil, nil, nil, errors.New("must provide channel")
 	}
 	send := func(cmd string, x any) {
 		msg := &websocket.Message{Channel: channel, Cmd: cmd, Param: util.ToJSONBytes(x, true)}
-		println("@@@@@@@@@@@@@@@@@: " + msg.Channel)
 		_ = as.Services.Socket.WriteChannel(msg, ps.Logger)
 	}
-	err := as.Services.Socket.Upgrade(ps.Context, w, r, channel, ps.Profile, ps.Logger) //nolint:contextcheck
+	_, err := as.Services.Socket.Upgrade(ps.Context, w, r, channel, ps.Profile, nil, ps.Logger) //nolint:contextcheck
 	if err != nil {
 		ps.Logger.Warnf("unable to upgrade connection to WebSocket: %s", err.Error())
 		return nil, nil, nil, nil, err

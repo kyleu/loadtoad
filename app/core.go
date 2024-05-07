@@ -24,6 +24,6 @@ func initCoreServices(ctx context.Context, st *State, logger util.Logger) CoreSe
 		Har:    har.NewService(st.Files),
 		Exec:   exec.NewService(),
 		Script: scripting.NewService(st.Files, "scripts"),
-		Socket: websocket.NewService(nil, nil, nil),
+		Socket: websocket.NewService(nil, nil),
 	}
 }
