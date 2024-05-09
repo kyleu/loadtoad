@@ -6,6 +6,7 @@ import (
 	"slices"
 	"strings"
 
+	"github.com/google/uuid"
 	"github.com/pkg/errors"
 
 	"github.com/kyleu/loadtoad/app"
@@ -65,19 +66,19 @@ func workflowFromForm(wf *loadtoad.Workflow, r *http.Request, b []byte) error {
 
 func wireSocketFuncs(
 	w http.ResponseWriter, r *http.Request, as *app.State, ps *cutil.PageState,
-) (func(cmd string, x any), func(i int, s string), func(i int, err error), func(i int, w *loadtoad.WorkflowResult), error) {
+) (uuid.UUID, func(cmd string, x any), func(i int, s string), func(i int, err error), func(i int, w *loadtoad.WorkflowResult), error) {
 	channel := r.URL.Query().Get("channel")
 	if channel == "" {
-		return nil, nil, nil, nil, errors.New("must provide channel")
+		return uuid.Nil, nil, nil, nil, nil, errors.New("must provide channel")
 	}
 	send := func(cmd string, x any) {
 		msg := &websocket.Message{Channel: channel, Cmd: cmd, Param: util.ToJSONBytes(x, true)}
 		_ = as.Services.Socket.WriteChannel(msg, ps.Logger)
 	}
-	_, err := as.Services.Socket.Upgrade(ps.Context, w, r, channel, ps.Profile, nil, ps.Logger) //nolint:contextcheck
+	id, err := as.Services.Socket.Upgrade(ps.Context, w, r, channel, ps.Profile, nil, ps.Logger) //nolint:contextcheck
 	if err != nil {
 		ps.Logger.Warnf("unable to upgrade connection to WebSocket: %s", err.Error())
-		return nil, nil, nil, nil, err
+		return uuid.Nil, nil, nil, nil, nil, err
 	}
 	logF := func(i int, s string) {
 		ps.Logger.Infof("[%d] [LOG] %s", i, s)
@@ -93,7 +94,7 @@ func wireSocketFuncs(
 		c := util.ValueMap{"table": vworkflow.RenderResultTable(i, w, ps), "result": res}
 		send("ok", &WorkflowMessage{Idx: i, Ctx: c})
 	}
-	return send, logF, errF, okF, nil
+	return id, send, logF, errF, okF, nil
 }
 
 func collectArgs(key string, wf *loadtoad.Workflow, r *http.Request) *cutil.ArgResults {

@@ -55,7 +55,7 @@ func workflowConnect(w http.ResponseWriter, r *http.Request, key string) func(as
 func socketConnect(
 	ctx context.Context, key string, wf *loadtoad.Workflow, repls map[string]string, w http.ResponseWriter, r *http.Request, as *app.State, ps *cutil.PageState,
 ) (string, error) {
-	send, logF, errF, okF, err := wireSocketFuncs(w, r, as, ps)
+	id, send, logF, errF, okF, err := wireSocketFuncs(w, r, as, ps)
 	if err != nil {
 		return "", err
 	}
@@ -74,5 +74,8 @@ func socketConnect(
 		ps.Logger.Infof("[COMPLETE] %s", wf.ID)
 		send("complete", &WorkflowMessage{Idx: -1, Ctx: msg})
 	}()
+	if err = as.Services.Socket.ReadLoop(context.Background(), id, ps.Logger); err != nil {
+		return "", err
+	}
 	return "", nil
 }
