@@ -68,7 +68,7 @@ func (p *Form) StreamBody(qw422016 *qt422016.Writer, as *app.State, ps *cutil.Pa
 //line views/vworkflow/Form.html:32
 	qw422016.N().S(`    <h3>`)
 //line views/vworkflow/Form.html:33
-	components.StreamSVGRefIcon(qw422016, `sitemap`, ps)
+	components.StreamSVGIcon(qw422016, `sitemap`, ps)
 //line views/vworkflow/Form.html:33
 	qw422016.N().S(` `)
 //line views/vworkflow/Form.html:33

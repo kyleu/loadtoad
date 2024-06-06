@@ -61,7 +61,7 @@ func (p *Detail) StreamBody(qw422016 *qt422016.Writer, as *app.State, ps *cutil.
 	qw422016.N().S(`
     <h3>`)
 //line views/vworkflow/Detail.html:30
-	components.StreamSVGRefIcon(qw422016, `sitemap`, ps)
+	components.StreamSVGIcon(qw422016, `sitemap`, ps)
 //line views/vworkflow/Detail.html:30
 	qw422016.N().S(` `)
 //line views/vworkflow/Detail.html:30
@@ -101,7 +101,7 @@ func (p *Detail) StreamBody(qw422016 *qt422016.Writer, as *app.State, ps *cutil.
 		qw422016.N().S(`  <div class="card">
     <h3>`)
 //line views/vworkflow/Detail.html:41
-		components.StreamSVGRefIcon(qw422016, `file-code`, ps)
+		components.StreamSVGIcon(qw422016, `file-code`, ps)
 //line views/vworkflow/Detail.html:41
 		qw422016.N().S(` `)
 //line views/vworkflow/Detail.html:41
@@ -151,7 +151,7 @@ func (p *Detail) StreamBody(qw422016 *qt422016.Writer, as *app.State, ps *cutil.
 		qw422016.N().S(`  <div class="card">
     <h3>`)
 //line views/vworkflow/Detail.html:63
-		components.StreamSVGRefIcon(qw422016, `cog`, ps)
+		components.StreamSVGIcon(qw422016, `cog`, ps)
 //line views/vworkflow/Detail.html:63
 		qw422016.N().S(` `)
 //line views/vworkflow/Detail.html:63
@@ -229,7 +229,7 @@ func (p *Detail) StreamBody(qw422016 *qt422016.Writer, as *app.State, ps *cutil.
 		qw422016.N().S(`  <div class="card">
     <h3>`)
 //line views/vworkflow/Detail.html:96
-		components.StreamSVGRefIcon(qw422016, `sitemap`, ps)
+		components.StreamSVGIcon(qw422016, `sitemap`, ps)
 //line views/vworkflow/Detail.html:96
 		qw422016.N().S(` `)
 //line views/vworkflow/Detail.html:96
@@ -270,7 +270,7 @@ func (p *Detail) StreamBody(qw422016 *qt422016.Writer, as *app.State, ps *cutil.
 	qw422016.N().S(`  <div class="card">
     <h3>`)
 //line views/vworkflow/Detail.html:112
-	components.StreamSVGRefIcon(qw422016, `play`, ps)
+	components.StreamSVGIcon(qw422016, `play`, ps)
 //line views/vworkflow/Detail.html:112
 	qw422016.N().S(` `)
 //line views/vworkflow/Detail.html:112

@@ -40,7 +40,7 @@ func (p *List) StreamBody(qw422016 *qt422016.Writer, as *app.State, ps *cutil.Pa
     <div class="right"><a href="/workflow/new"><button>New</button></a></div>
     <h3>`)
 //line views/vworkflow/List.html:17
-	components.StreamSVGRefIcon(qw422016, `sitemap`, ps)
+	components.StreamSVGIcon(qw422016, `sitemap`, ps)
 //line views/vworkflow/List.html:17
 	qw422016.N().S(` Workflows</h3>
     <div class="mt">`)

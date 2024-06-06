@@ -16,14 +16,14 @@
 
 {% func (p *Home) Body(as *app.State, ps *cutil.PageState) %}
   <div class="card">
-    <h3>{%= components.SVGRefIcon(`app`, ps) %}{%s util.AppName %}</h3>
+    <h3>{%= components.SVGIcon(`app`, ps) %}{%s util.AppName %}</h3>
     <div class="mt">{%s util.AppName %} helps you test your web application using HTTP Archive (.har) files</div>
   </div>
   <div class="card">
     <div class="right"><a href="/har"><button>New</button></a></div>
     <h3>
       <a href="/har">
-        {%= components.SVGRefIcon(`book`, ps) %}
+        {%= components.SVGIcon(`book`, ps) %}
         {%s util.StringPlural(len(p.Hars), "Archive") %}
       </a>
     </h3>
@@ -41,7 +41,7 @@
     <div class="right"><a href="/workflow/new"><button>New</button></a></div>
     <h3>
       <a href="/workflow">
-        {%= components.SVGRefIcon(`sitemap`, ps) %}
+        {%= components.SVGIcon(`sitemap`, ps) %}
         {%s util.StringPlural(len(p.Workflows), "Workflow") %}
       </a>
     </h3>
@@ -59,7 +59,7 @@
     <div class="right"><a href="/admin/scripting/new"><button>New</button></a></div>
     <h3>
       <a href="/admin/scripting">
-        {%= components.SVGRefIcon(`file-code`, ps) %}
+        {%= components.SVGIcon(`file-code`, ps) %}
         {%s util.StringPlural(len(p.Scripts), "Script") %}
       </a>
     </h3>

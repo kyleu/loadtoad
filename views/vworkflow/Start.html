@@ -24,7 +24,7 @@
   <div class="card">
     <div class="right"><a href="#modal-workflow"><button type="button">JSON</button></a></div>
     {%= components.JSONModal("workflow", "Workflow", p.Workflow, 3) %}
-    <h3>{%= components.SVGRefIcon(`sitemap`, ps) %} {%s p.Workflow.Title() %} Results</h3>
+    <h3>{%= components.SVGIcon(`sitemap`, ps) %} {%s p.Workflow.Title() %} Results</h3>
     <div class="mt">
       {%- if len(p.Entries) == 0 -%}
       <div><em>no entries</em></div>
@@ -65,7 +65,7 @@
         </div>
       </div>
     </div>
-    <h3>{%= components.SVGRefIcon(`file`, ps) %}{%s ent.String() %}</h3>
+    <h3>{%= components.SVGIcon(`file`, ps) %}{%s ent.String() %}</h3>
     <div class="clear"></div>
     <div class="mts details">
       <div>

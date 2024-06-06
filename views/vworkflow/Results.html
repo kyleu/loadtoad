@@ -21,7 +21,7 @@
   <div class="card">
     <div class="right"><a href="#modal-workflow"><button type="button">JSON</button></a></div>
     {%= components.JSONModal("workflow", "Workflow", p.Workflow, 3) %}
-    <h3>{%= components.SVGRefIcon(`file-code`, ps) %} {%s p.Workflow.Title() %} Results</h3>
+    <h3>{%= components.SVGIcon(`file-code`, ps) %} {%s p.Workflow.Title() %} Results</h3>
     <div class="mts"><em>{%s util.StringPlural(len(p.Results), "result") %} in {%s util.MicrosToMillis(p.Results.Duration()) %}</em></div>
   </div>
   {%- for rIdx, r := range p.Results -%}
@@ -41,7 +41,7 @@
   <div class="card">
     <div class="right"><a href="#modal-result-{%d rIdx %}"><button type="button">JSON</button></a></div>
     {%= components.JSONModal(fmt.Sprintf("result-%d", rIdx), r.Title(), r, 3) %}
-    <h3>{%= components.SVGRefIcon(`file`, ps) %}{%s r.Title() %}</h3>
+    <h3>{%= components.SVGIcon(`file`, ps) %}{%s r.Title() %}</h3>
     <div class="clear"></div>
     <div class="mts">
       {%= RenderResultTable(rIdx, r, ps) %}

@@ -51,7 +51,7 @@ func (p *Results) StreamBody(qw422016 *qt422016.Writer, as *app.State, ps *cutil
 	qw422016.N().S(`
     <h3>`)
 //line views/vworkflow/Results.html:24
-	components.StreamSVGRefIcon(qw422016, `file-code`, ps)
+	components.StreamSVGIcon(qw422016, `file-code`, ps)
 //line views/vworkflow/Results.html:24
 	qw422016.N().S(` `)
 //line views/vworkflow/Results.html:24
@@ -180,7 +180,7 @@ func StreamRenderResult(qw422016 *qt422016.Writer, rIdx int, r *loadtoad.Workflo
 	qw422016.N().S(`
     <h3>`)
 //line views/vworkflow/Results.html:44
-	components.StreamSVGRefIcon(qw422016, `file`, ps)
+	components.StreamSVGIcon(qw422016, `file`, ps)
 //line views/vworkflow/Results.html:44
 	qw422016.E().S(r.Title())
 //line views/vworkflow/Results.html:44

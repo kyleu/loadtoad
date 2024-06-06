@@ -42,7 +42,7 @@ func (p *Home) StreamBody(qw422016 *qt422016.Writer, as *app.State, ps *cutil.Pa
   <div class="card">
     <h3>`)
 //line views/Home.html:19
-	components.StreamSVGRefIcon(qw422016, `app`, ps)
+	components.StreamSVGIcon(qw422016, `app`, ps)
 //line views/Home.html:19
 	qw422016.E().S(util.AppName)
 //line views/Home.html:19
@@ -59,7 +59,7 @@ func (p *Home) StreamBody(qw422016 *qt422016.Writer, as *app.State, ps *cutil.Pa
       <a href="/har">
         `)
 //line views/Home.html:26
-	components.StreamSVGRefIcon(qw422016, `book`, ps)
+	components.StreamSVGIcon(qw422016, `book`, ps)
 //line views/Home.html:26
 	qw422016.N().S(`
         `)
@@ -99,7 +99,7 @@ func (p *Home) StreamBody(qw422016 *qt422016.Writer, as *app.State, ps *cutil.Pa
       <a href="/workflow">
         `)
 //line views/Home.html:44
-	components.StreamSVGRefIcon(qw422016, `sitemap`, ps)
+	components.StreamSVGIcon(qw422016, `sitemap`, ps)
 //line views/Home.html:44
 	qw422016.N().S(`
         `)
@@ -139,7 +139,7 @@ func (p *Home) StreamBody(qw422016 *qt422016.Writer, as *app.State, ps *cutil.Pa
       <a href="/admin/scripting">
         `)
 //line views/Home.html:62
-	components.StreamSVGRefIcon(qw422016, `file-code`, ps)
+	components.StreamSVGIcon(qw422016, `file-code`, ps)
 //line views/Home.html:62
 	qw422016.N().S(`
         `)

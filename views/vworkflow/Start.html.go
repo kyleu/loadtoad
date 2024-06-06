@@ -54,7 +54,7 @@ func (p *Start) StreamBody(qw422016 *qt422016.Writer, as *app.State, ps *cutil.P
 	qw422016.N().S(`
     <h3>`)
 //line views/vworkflow/Start.html:27
-	components.StreamSVGRefIcon(qw422016, `sitemap`, ps)
+	components.StreamSVGIcon(qw422016, `sitemap`, ps)
 //line views/vworkflow/Start.html:27
 	qw422016.N().S(` `)
 //line views/vworkflow/Start.html:27
@@ -182,7 +182,7 @@ func streamentryPlaceholder(qw422016 *qt422016.Writer, idx int, ent *har.Entry, 
     </div>
     <h3>`)
 //line views/vworkflow/Start.html:68
-	components.StreamSVGRefIcon(qw422016, `file`, ps)
+	components.StreamSVGIcon(qw422016, `file`, ps)
 //line views/vworkflow/Start.html:68
 	qw422016.E().S(ent.String())
 //line views/vworkflow/Start.html:68

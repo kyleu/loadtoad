@@ -27,7 +27,7 @@
       <a href="#modal-workflow"><button type="button">JSON</button></a>
     </div>
     {%= components.JSONModal("workflow", "Workflow", p.Workflow, 3) %}
-    <h3>{%= components.SVGRefIcon(`sitemap`, ps) %} {%s p.Workflow.Title() %}</h3>
+    <h3>{%= components.SVGIcon(`sitemap`, ps) %} {%s p.Workflow.Title() %}</h3>
     <div class="mt">
       <a href="{%s p.Workflow.WebPath() %}/run?ok=true"><button>Run</button></a>
       {%- if len(p.Workflow.Replacements) > 0 -%}
@@ -38,7 +38,7 @@
   </div>
   {%- if len(p.Workflow.Scripts) > 0 -%}
   <div class="card">
-    <h3>{%= components.SVGRefIcon(`file-code`, ps) %} {%s util.StringPlural(len(p.Workflow.Scripts), "Script") %}</h3>
+    <h3>{%= components.SVGIcon(`file-code`, ps) %} {%s util.StringPlural(len(p.Workflow.Scripts), "Script") %}</h3>
     <div class="mt">
       <table class="min-200">
         <tbody>
@@ -60,7 +60,7 @@
   {%- endif -%}
   {%- if len(p.Workflow.Replacements) > 0 -%}
   <div class="card">
-    <h3>{%= components.SVGRefIcon(`cog`, ps) %} {%s util.StringPlural(len(p.Workflow.Replacements), "Replacement") %}</h3>
+    <h3>{%= components.SVGIcon(`cog`, ps) %} {%s util.StringPlural(len(p.Workflow.Replacements), "Replacement") %}</h3>
     <div class="mt">
       <table class="min-200">
         <tbody>
@@ -93,7 +93,7 @@
   {%- endif -%}
   {%- if len(p.Workflow.Variables) > 0 -%}
   <div class="card">
-    <h3>{%= components.SVGRefIcon(`sitemap`, ps) %} {%s util.StringPlural(len(p.Workflow.Variables), "Variable") %}</h3>
+    <h3>{%= components.SVGIcon(`sitemap`, ps) %} {%s util.StringPlural(len(p.Workflow.Variables), "Variable") %}</h3>
     <div class="mt">
       <table class="min-200">
         <tbody>
@@ -109,7 +109,7 @@
   </div>
   {%- endif -%}
   <div class="card">
-    <h3>{%= components.SVGRefIcon(`play`, ps) %} {%s util.StringPlural(len(p.Entries), "Request") %}</h3>
+    <h3>{%= components.SVGIcon(`play`, ps) %} {%s util.StringPlural(len(p.Entries), "Request") %}</h3>
     <div class="mt">
       {%= showEntries(p.Entries, ps) %}
     </div>
