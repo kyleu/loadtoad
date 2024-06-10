@@ -10,6 +10,7 @@ import (
 	"github.com/kyleu/loadtoad/app/controller/csession"
 	"github.com/kyleu/loadtoad/app/controller/cutil"
 	"github.com/kyleu/loadtoad/app/lib/theme"
+	"github.com/kyleu/loadtoad/app/util"
 	"github.com/kyleu/loadtoad/views/vprofile"
 )
 
@@ -51,10 +52,7 @@ func ProfileSave(w http.ResponseWriter, r *http.Request) {
 
 		n := ps.Profile.Clone()
 
-		referrerDefault := frm.GetStringOpt("referrer")
-		if referrerDefault == "" {
-			referrerDefault = cutil.DefaultProfilePath
-		}
+		referrerDefault := util.OrDefault(frm.GetStringOpt("referrer"), cutil.DefaultProfilePath)
 
 		n.Name = frm.GetStringOpt("name")
 		n.Mode = frm.GetStringOpt("mode")
