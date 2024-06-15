@@ -11,6 +11,7 @@ const (
 	AppSource  = "https://github.com/kyleu/loadtoad"
 	AppLegal   = `Built by <a href="mailto:loadtoad@kyleu.com">Kyle U</a>, all rights reserved`
 
+	KeyDebug   = "debug"
 	KeyError   = "error"
 	KeyRandom  = "random"
 	KeyUnknown = "unknown"
