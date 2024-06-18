@@ -1,4 +1,3 @@
-// Content managed by Project Forge, see [projectforge.md] for details.
 package dev.kyleu.loadtoad
 
 import android.os.Bundle
