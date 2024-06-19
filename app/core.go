@@ -17,7 +17,6 @@ type CoreServices struct {
 	Socket *websocket.Service
 }
 
-//nolint:revive
 func initCoreServices(ctx context.Context, st *State, logger util.Logger) CoreServices {
 	return CoreServices{
 		Har:    har.NewService(st.Files),
