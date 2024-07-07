@@ -23,14 +23,14 @@ func WorkflowStartBench(w http.ResponseWriter, r *http.Request) {
 
 func workflowStart(w http.ResponseWriter, r *http.Request, key string) func(as *app.State, ps *cutil.PageState) (string, error) {
 	return func(as *app.State, ps *cutil.PageState) (string, error) {
-		wf, repls, argRes, err := loadWorkflowWithRepls(key, as, r)
+		wf, repls, res, err := loadWorkflowWithRepls(key, as, r)
 		if err != nil {
 			return "", err
 		}
-		if argRes != nil && argRes.HasMissing() {
+		if res != nil && res.HasMissing() {
 			u := fmt.Sprintf("%s/%s", wf.WebPath(), key)
-			ps.Data = argRes
-			return Render(r, as, &vpage.Args{URL: u, Directions: "Choose your benchmark options", ArgRes: argRes}, ps, "workflow", wf.ID, "bench")
+			ps.Data = res
+			return Render(r, as, &vpage.Args{URL: u, Directions: "Choose your benchmark options", Results: res}, ps, "workflow", wf.ID, "bench")
 		}
 
 		ents, err := as.Services.LoadToad.LoadEntries(wf.Tests...)
@@ -48,7 +48,7 @@ func workflowStart(w http.ResponseWriter, r *http.Request, key string) func(as *
 	}
 }
 
-func loadWorkflowWithRepls(key string, as *app.State, r *http.Request) (*loadtoad.Workflow, map[string]string, *cutil.ArgResults, error) {
+func loadWorkflowWithRepls(key string, as *app.State, r *http.Request) (*loadtoad.Workflow, map[string]string, *util.FieldDescResults, error) {
 	wf, err := loadWorkflow(as, r)
 	if err != nil {
 		return nil, nil, nil, err

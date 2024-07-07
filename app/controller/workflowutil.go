@@ -22,7 +22,7 @@ type WorkflowMessage struct {
 	Ctx any `json:"ctx,omitempty"`
 }
 
-var benchArgs = cutil.Args{
+var benchArgs = util.FieldDescs{
 	{Key: "concurrency", Title: "Concurrent Runners", Description: "The number of workflow runners that will execute at once", Default: "1"},
 	{Key: "count", Title: "Test Count (per runner)", Description: "The number of workflow runs that will execute for each runner", Default: "1"},
 }
@@ -97,19 +97,19 @@ func wireSocketFuncs(
 	return id, send, logF, errF, okF, nil
 }
 
-func collectArgs(key string, wf *loadtoad.Workflow, r *http.Request) *cutil.ArgResults {
-	var args cutil.Args
+func collectArgs(key string, wf *loadtoad.Workflow, r *http.Request) *util.FieldDescResults {
+	var args util.FieldDescs
 	if key == "bench" {
 		args = slices.Clone(benchArgs)
 	}
 	for k, v := range wf.Replacements {
 		if strings.Contains(v, "||") {
 			choices := util.StringSplitAndTrim(v, "||")
-			args = append(args, &cutil.Arg{Key: k, Title: k, Type: "string", Default: "", Choices: choices})
+			args = append(args, &util.FieldDesc{Key: k, Title: k, Type: "string", Default: "", Choices: choices})
 		} else {
-			args = append(args, &cutil.Arg{Key: k, Title: k, Type: "string", Default: v})
+			args = append(args, &util.FieldDesc{Key: k, Title: k, Type: "string", Default: v})
 		}
 	}
-	args = append(args, &cutil.Arg{Key: "variables", Title: "Other Variables", Type: "textarea", Default: util.ToJSON(wf.Variables)})
-	return cutil.CollectArgs(r, args)
+	args = append(args, &util.FieldDesc{Key: "variables", Title: "Other Variables", Type: "textarea", Default: util.ToJSON(wf.Variables)})
+	return util.FieldDescsCollect(r, args)
 }
