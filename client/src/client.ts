@@ -14,7 +14,7 @@ import {socketInit} from "./socket";
 import {appInit} from "./app";
 
 declare global {
-  interface Window { // eslint-disable-line @typescript-eslint/consistent-type-definitions
+  interface Window {
     "loadtoad": {
       wireTime: (el: HTMLElement) => void;
       relativeTime: (el: HTMLElement) => string;
