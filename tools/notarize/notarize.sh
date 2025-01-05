@@ -6,7 +6,7 @@ cd "$dir/../.."
 
 if [ "$PUBLISH_TEST" != "true" ]
 then
-  xcrun notarytool submit --apple-id $APPLE_EMAIL --team-id $APPLE_TEAM_ID --password $APPLE_PASSWORD ./build/dist/loadtoad_0.1.45_darwin_amd64_desktop.dmg
-  xcrun notarytool submit --apple-id $APPLE_EMAIL --team-id $APPLE_TEAM_ID --password $APPLE_PASSWORD ./build/dist/loadtoad_0.1.45_darwin_arm64_desktop.dmg
-  xcrun notarytool submit --apple-id $APPLE_EMAIL --team-id $APPLE_TEAM_ID --password $APPLE_PASSWORD ./build/dist/loadtoad_0.1.45_darwin_all_desktop.dmg
+  xcrun notarytool submit --apple-id $APPLE_EMAIL --team-id $APPLE_TEAM_ID --password $APPLE_PASSWORD ./build/dist/loadtoad_0.2.0_darwin_amd64_desktop.dmg
+  xcrun notarytool submit --apple-id $APPLE_EMAIL --team-id $APPLE_TEAM_ID --password $APPLE_PASSWORD ./build/dist/loadtoad_0.2.0_darwin_arm64_desktop.dmg
+  xcrun notarytool submit --apple-id $APPLE_EMAIL --team-id $APPLE_TEAM_ID --password $APPLE_PASSWORD ./build/dist/loadtoad_0.2.0_darwin_all_desktop.dmg
 fi
