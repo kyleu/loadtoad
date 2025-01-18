@@ -79,7 +79,7 @@ signs:
   - artifacts: checksum
 
 snapshot:
-  name_template: "{{ .Tag }}"
+  version_template: "{{ .Tag }}"
 
 source:
   enabled: true
