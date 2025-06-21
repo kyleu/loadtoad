@@ -5,6 +5,7 @@ const (
 	AppName    = "Load Toad"
 	AppSummary = "Load testing from HAR files"
 	AppPort    = 15550
+	AppCmd     = AppKey
 	AppContact = "Kyle U <loadtoad@kyleu.com>"
 	AppURL     = "https://loadtoad.kyleu.dev"
 	AppSource  = "https://github.com/kyleu/loadtoad"
