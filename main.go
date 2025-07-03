@@ -1,6 +1,8 @@
 package main // import github.com/kyleu/loadtoad
 
 import (
+	"context"
+
 	"github.com/kyleu/loadtoad/app"
 	"github.com/kyleu/loadtoad/app/cmd"
 )
@@ -12,5 +14,5 @@ var (
 )
 
 func main() {
-	cmd.Entrypoint(&app.BuildInfo{Version: version, Commit: commit, Date: date})
+	cmd.Entrypoint(context.Background(), &app.BuildInfo{Version: version, Commit: commit, Date: date})
 }
