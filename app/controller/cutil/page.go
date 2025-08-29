@@ -18,6 +18,7 @@ import (
 	"github.com/kyleu/loadtoad/app/lib/theme"
 	"github.com/kyleu/loadtoad/app/lib/user"
 	"github.com/kyleu/loadtoad/app/util"
+	"github.com/kyleu/loadtoad/assets"
 )
 
 const (
@@ -184,4 +185,12 @@ func (p *PageState) MainClasses() string {
 		ret = append(ret, "nomenu")
 	}
 	return util.StringJoin(ret, " ")
+}
+
+func (p *PageState) AddHeaderScript(path string, deferFlag bool) {
+	p.HeaderContent += "\n  " + assets.ScriptElement(path, deferFlag)
+}
+
+func (p *PageState) AddHeaderStylesheet(path string) {
+	p.HeaderContent += "\n  " + assets.StylesheetElement(path)
 }
