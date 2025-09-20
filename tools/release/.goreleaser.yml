@@ -53,6 +53,9 @@ dockers:
 
 dist: "build/dist"
 
+env:
+  - GOEXPERIMENT=jsonv2
+
 release:
   draft: false
   header: |

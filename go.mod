@@ -1,6 +1,6 @@
 module github.com/kyleu/loadtoad
 
-go 1.24.4
+go 1.25.0
 
 require (
 	github.com/CAFxX/httpcompression v0.0.9
