@@ -15,7 +15,6 @@ import { themeInit } from "./theme";
 import { timeInit } from "./time";
 
 declare global {
-  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface Window {
     loadtoad: {
       wireTime: (el: HTMLElement) => void;
@@ -37,7 +36,7 @@ declare global {
         parentEl: HTMLElement,
         terminal: boolean,
         url: string,
-        extraHandlers: Array<(m: SocketMessage) => void>
+        extraHandlers: ((m: SocketMessage) => void)[]
       ) => void;
     };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
