@@ -46,8 +46,8 @@ cp -R "./template/darwin/icons.icns" "./Load Toad.app/Contents/Resources/icons.i
 cp "loadtoad.darwin" "./Load Toad.app/Contents/MacOS/loadtoad"
 
 echo "signing amd64 desktop binary..."
-codesign -f --options=runtime --verbose=4 --deep --force --strict -s 'Developer ID Application: Kyle Unverferth (C6S478FYLD)' "./Load Toad.app/Contents/MacOS/loadtoad"
-codesign -f --options=runtime --verbose=4 --deep --force --strict -s 'Developer ID Application: Kyle Unverferth (C6S478FYLD)' "./Load Toad.app"
+codesign -f --options=runtime --verbose=4 --deep --force --strict -s "${APPLE_SIGNING_IDENTITY}" "./Load Toad.app/Contents/MacOS/loadtoad"
+codesign -f --options=runtime --verbose=4 --deep --force --strict -s "${APPLE_SIGNING_IDENTITY}" "./Load Toad.app"
 
 cp "./template/darwin/appdmg.config.json" "./appdmg.config.json"
 
@@ -59,8 +59,8 @@ zip -r "loadtoad_${TGT}_darwin_amd64_desktop.zip" "./Load Toad.app"
 cp "loadtoad.darwin.arm64" "./Load Toad.app/Contents/MacOS/loadtoad"
 
 echo "signing arm64 desktop binary..."
-codesign -f --options=runtime --verbose=4 --deep --force --strict -s 'Developer ID Application: Kyle Unverferth (C6S478FYLD)' "./Load Toad.app/Contents/MacOS/loadtoad"
-codesign -f --options=runtime --verbose=4 --deep --force --strict -s 'Developer ID Application: Kyle Unverferth (C6S478FYLD)' "./Load Toad.app"
+codesign -f --options=runtime --verbose=4 --deep --force --strict -s "${APPLE_SIGNING_IDENTITY}" "./Load Toad.app/Contents/MacOS/loadtoad"
+codesign -f --options=runtime --verbose=4 --deep --force --strict -s "${APPLE_SIGNING_IDENTITY}" "./Load Toad.app"
 
 echo "building macOS arm64 DMG..."
 appdmg "appdmg.config.json" "./loadtoad_${TGT}_darwin_arm64_desktop.dmg"
@@ -71,8 +71,8 @@ rm "./Load Toad.app/Contents/MacOS/loadtoad"
 lipo -create -output "./Load Toad.app/Contents/MacOS/loadtoad" loadtoad.darwin loadtoad.darwin.arm64
 
 echo "signing universal desktop binary..."
-codesign -f --options=runtime --verbose=4 --deep --force --strict -s 'Developer ID Application: Kyle Unverferth (C6S478FYLD)' "./Load Toad.app/Contents/MacOS/loadtoad"
-codesign -f --options=runtime --verbose=4 --deep --force --strict -s 'Developer ID Application: Kyle Unverferth (C6S478FYLD)' "./Load Toad.app"
+codesign -f --options=runtime --verbose=4 --deep --force --strict -s "${APPLE_SIGNING_IDENTITY}" "./Load Toad.app/Contents/MacOS/loadtoad"
+codesign -f --options=runtime --verbose=4 --deep --force --strict -s "${APPLE_SIGNING_IDENTITY}" "./Load Toad.app"
 
 echo "building macOS universal DMG..."
 appdmg "appdmg.config.json" "./loadtoad_${TGT}_darwin_all_desktop.dmg"
