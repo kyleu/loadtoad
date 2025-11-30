@@ -1,6 +1,6 @@
 {
   "name": "client",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "type": "module",
   "description": "Load Toad helps you test your web application using HTTP Archive (.har) files",
   "repository": {
