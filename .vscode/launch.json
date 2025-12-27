@@ -16,7 +16,7 @@
     {
       "mode": "auto",
       "name": "Start Load Toad",
-      "program": "Load Toad",
+      "program": "main.go",
       "request": "launch",
       "substitutePath": [
         {
@@ -31,8 +31,8 @@
         "upgrade"
       ],
       "mode": "auto",
-      "name": "Start Load Toad",
-      "program": "Load Toad",
+      "name": "Upgrade Load Toad",
+      "program": "main.go",
       "request": "launch",
       "substitutePath": [
         {
