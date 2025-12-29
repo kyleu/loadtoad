@@ -2,7 +2,7 @@
   "key": "loadtoad",
   "name": "Load Toad",
   "icon": "frog",
-  "version": "0.3.5",
+  "version": "0.3.6",
   "package": "github.com/kyleu/loadtoad",
   "port": 15550,
   "modules": [
