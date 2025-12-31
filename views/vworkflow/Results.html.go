@@ -182,6 +182,8 @@ func StreamRenderResult(qw422016 *qt422016.Writer, rIdx int, r *loadtoad.Workflo
 //line views/vworkflow/Results.html:44
 	components.StreamSVGIcon(qw422016, `file`, ps)
 //line views/vworkflow/Results.html:44
+	qw422016.N().S(` `)
+//line views/vworkflow/Results.html:44
 	qw422016.E().S(r.Title())
 //line views/vworkflow/Results.html:44
 	qw422016.N().S(`</h3>

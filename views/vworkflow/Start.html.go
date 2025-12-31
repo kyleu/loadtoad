@@ -184,6 +184,8 @@ func streamentryPlaceholder(qw422016 *qt422016.Writer, idx int, ent *har.Entry, 
 //line views/vworkflow/Start.html:68
 	components.StreamSVGIcon(qw422016, `file`, ps)
 //line views/vworkflow/Start.html:68
+	qw422016.N().S(` `)
+//line views/vworkflow/Start.html:68
 	qw422016.E().S(ent.String())
 //line views/vworkflow/Start.html:68
 	qw422016.N().S(`</h3>
