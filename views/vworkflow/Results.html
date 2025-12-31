@@ -41,7 +41,7 @@
   <div class="card">
     <div class="right"><a href="#modal-result-{%d rIdx %}"><button type="button">JSON</button></a></div>
     {%= components.JSONModal(fmt.Sprintf("result-%d", rIdx), r.Title(), r, 3) %}
-    <h3>{%= components.SVGIcon(`file`, ps) %}{%s r.Title() %}</h3>
+    <h3>{%= components.SVGIcon(`file`, ps) %} {%s r.Title() %}</h3>
     <div class="clear"></div>
     <div class="mts">
       {%= RenderResultTable(rIdx, r, ps) %}
