@@ -40,28 +40,16 @@ checksum:
     # $PF_SECTION_START(checksums)$
     # $PF_SECTION_END(checksums)$
 
-dockers_v2:
+dockers:
   -
-    id: release
-    images:
-      - "ghcr.io/kyleu/loadtoad"
-    tags:
-      - "{{ trimprefix .Tag \"v\" }}"
-      - "latest"
-    sbom: false
-    flags:
-      - "--provenance=false"
+    image_templates:
+      - "ghcr.io/kyleu/loadtoad:{{ trimprefix .Tag \"v\" }}"
+      - "ghcr.io/kyleu/loadtoad:latest"
     dockerfile: ./tools/release/Dockerfile.release
   -
-    id: debug
-    images:
-      - "ghcr.io/kyleu/loadtoad"
-    tags:
-      - "{{ trimprefix .Tag \"v\" }}-debug"
-      - "latest-debug"
-    sbom: false
-    flags:
-      - "--provenance=false"
+    image_templates:
+      - "ghcr.io/kyleu/loadtoad:{{ trimprefix .Tag \"v\" }}-debug"
+      - "ghcr.io/kyleu/loadtoad:latest-debug"
     dockerfile: ./tools/release/Dockerfile.debug
 
 dist: "build/dist"
