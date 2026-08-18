@@ -75,7 +75,7 @@ func wireSocketFuncs(
 		msg := &websocket.Message{Channel: channel, Cmd: cmd, Param: util.ToJSONBytes(x, true)}
 		_ = as.Services.Socket.WriteChannel(msg, ps.Logger)
 	}
-	id, err := as.Services.Socket.Upgrade(ps.Context, w, r, channel, ps.Profile, nil, ps.Logger) //nolint:contextcheck
+	id, err := as.Services.Socket.Upgrade(ps.Context, w, r, nil, channel, ps.Profile, nil, ps.Logger) //nolint:contextcheck
 	if err != nil {
 		ps.Logger.Warnf("unable to upgrade connection to WebSocket: %s", err.Error())
 		return uuid.Nil, nil, nil, nil, nil, err
